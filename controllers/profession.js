@@ -45,7 +45,7 @@ const deleteProfession = asyncWrapper(async (req, res) => {
   await Profession.destroy({
     where: { id: req.body.id },
   });
-  res.send("Deleted");
+  res.send("Profession Deleted");
 });
 
 module.exports = {
