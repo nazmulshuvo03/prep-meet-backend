@@ -1,36 +1,35 @@
 const asyncWrapper = require("../middlewares/async");
-const { User } = require("../models/user");
+const { User, Profile } = require("../models/user");
 
-const getAllUsers = asyncWrapper(async (req, res) => {
-  const userList = await User.findAll();
+const getAllUserProfiles = asyncWrapper(async (req, res) => {
+  const userList = await Profile.findAll();
   res.send(userList);
 });
 
 const createUser = asyncWrapper(async (req, res) => {
-  const { name } = req.body;
   const model = {
-    name,
+    ...req.body,
   };
   const pf = await User.create(model);
   res.send(pf);
 });
 
-const getSingleUser = asyncWrapper(async (req, res) => {
+const getSingleUserProfile = asyncWrapper(async (req, res) => {
   const { id } = req.body;
-  const user = await User.findOne({
+  const user = await Profile.findOne({
     where: { id },
   });
   res.send(user);
 });
 
-const updateUser = asyncWrapper(async (req, res) => {
+const updateUserProfile = asyncWrapper(async (req, res) => {
   const { id, ...updatedFields } = req.body;
 
   if (Object.keys(updatedFields).length === 0) {
     return res.status(400).send({ message: "No fields provided for update." });
   }
 
-  const [rowsAffected] = await User.update(updatedFields, {
+  const [rowsAffected] = await Profile.update(updatedFields, {
     where: { id },
   });
 
@@ -48,10 +47,16 @@ const deleteUser = asyncWrapper(async (req, res) => {
   res.send("User Deleted");
 });
 
+const deleteAllUser = asyncWrapper(async (req, res) => {
+  await User.destroy({ where: {} });
+  res.send("User table cleared");
+});
+
 module.exports = {
-  getAllUsers,
+  getAllUserProfiles,
   createUser,
-  getSingleUser,
-  updateUser,
+  getSingleUserProfile,
+  updateUserProfile,
   deleteUser,
+  deleteAllUser,
 };
