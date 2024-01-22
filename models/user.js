@@ -23,6 +23,10 @@ const Profile = sequelize.define("profile", {
       deferrable: Deferrable.INITIALLY_IMMEDIATE,
     },
   },
+  email: {
+    type: DataTypes.STRING,
+    allowNull: false,
+  },
   firstName: DataTypes.STRING,
   lastName: DataTypes.STRING,
   gender: DataTypes.STRING,
@@ -35,13 +39,8 @@ const Profile = sequelize.define("profile", {
   fieldOfStudy: DataTypes.STRING,
   degree: DataTypes.STRING,
   university: DataTypes.STRING,
-  profession: {
+  professionId: {
     type: DataTypes.UUID,
-    references: {
-      model: Profession,
-      key: "id",
-      deferrable: Deferrable.INITIALLY_IMMEDIATE,
-    },
   },
   currentCompany: DataTypes.STRING,
   yearsOfExperience: DataTypes.INTEGER,
@@ -51,11 +50,45 @@ const Profile = sequelize.define("profile", {
 Profile.belongsTo(User, { foreignKey: "id", onDelete: "CASCADE" });
 User.hasOne(Profile, { foreignKey: "id", onDelete: "CASCADE" });
 
+Profile.belongsTo(Profession, {
+  foreignKey: "professionId",
+  onDelete: "SET NULL",
+});
+Profession.hasOne(Profile, {
+  foreignKey: "professionId",
+  onDelete: "SET NULL",
+});
+
+// Hook to update the email in the Profile table before updating a User
+User.beforeUpdate(async (user, options) => {
+  try {
+    await Profile.update({ email: user.email }, { where: { id: user.id } });
+  } catch (error) {
+    console.error("Error updating Profile:", error);
+    throw new Error("Failed to update Profile during user update.");
+  }
+});
+
+// Hook to create profile table with same user id after creating user table
 User.afterCreate(async (user, options) => {
   try {
     await Profile.create({ id: user.id, email: user.email });
   } catch (error) {
     console.error("Error creating Profile:", error);
+  }
+});
+
+// Hook to check if the new email in the Profile table matches the existing email in the User table
+Profile.beforeUpdate(async (profile, options) => {
+  try {
+    const user = await User.findOne({ where: { id: profile.id } });
+
+    if (profile.email !== user.email) {
+      throw new Error("Email should be updated in User table only");
+    }
+  } catch (error) {
+    console.error("Error checking email update:", error);
+    throw new Error("Failed to check email update.");
   }
 });
 

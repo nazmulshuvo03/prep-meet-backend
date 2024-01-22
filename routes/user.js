@@ -6,6 +6,8 @@ const {
   deleteUser,
   getAllUserProfiles,
   deleteAllUser,
+  getAllUserData,
+  updateUserData,
 } = require("../controllers/user");
 
 const router = Router();
@@ -17,6 +19,6 @@ router
   .put(updateUserProfile)
   .delete(deleteUser);
 router.route("/all").get(getAllUserProfiles).delete(deleteAllUser);
-router.route("/users").get(getAllUserProfiles);
+router.route("/users").get(getAllUserData).put(updateUserData);
 
 module.exports = router;

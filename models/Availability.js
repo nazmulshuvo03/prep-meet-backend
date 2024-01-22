@@ -16,6 +16,10 @@ const Availability = sequelize.define("availability", {
 Availability.belongsTo(Profile, {
   foreignKey: "uid",
   targetKey: "id",
+  onDelete: "SET NULL",
+});
+Profile.hasOne(Availability, {
+  foreignKey: "uid",
   onDelete: "CASCADE",
 });
 
