@@ -1,5 +1,6 @@
 const { DataTypes, Sequelize } = require("sequelize");
 const sequelize = require("../db");
+const { Profile } = require("./user");
 
 const Meeting = sequelize.define("meeting", {
   id: {
@@ -18,9 +19,37 @@ const Meeting = sequelize.define("meeting", {
   },
   status: {
     type: DataTypes.ENUM("REQUESTED", "ACCEPTED", "REJECTED"),
-    allowNull: false,
+    defaultValue: "REQUESTED",
   },
   url: DataTypes.STRING,
+});
+
+Meeting.belongsTo(Profile, {
+  foreignKey: "initiator",
+  targetKey: "id",
+  onDelete: "SET NULL",
+  as: "initiatorProfile",
+});
+
+Meeting.belongsTo(Profile, {
+  foreignKey: "acceptor",
+  targetKey: "id",
+  onDelete: "SET NULL",
+  as: "acceptorProfile",
+});
+
+Profile.hasMany(Meeting, {
+  foreignKey: "initiator",
+  sourceKey: "id",
+  onDelete: "CASCADE",
+  as: "initiatedMeetings",
+});
+
+Profile.hasMany(Meeting, {
+  foreignKey: "acceptor",
+  sourceKey: "id",
+  onDelete: "CASCADE",
+  as: "acceptedMeetings",
 });
 
 module.exports = {

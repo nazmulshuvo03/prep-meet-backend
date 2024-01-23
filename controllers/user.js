@@ -1,5 +1,6 @@
 const asyncWrapper = require("../middlewares/async");
-const { Availability } = require("../models/Availability");
+const { Availability } = require("../models/availability");
+const { Meeting } = require("../models/meeting");
 const { Profession } = require("../models/profession");
 const { User, Profile } = require("../models/user");
 
@@ -25,7 +26,12 @@ const getSingleUserProfile = asyncWrapper(async (req, res) => {
   const { id } = req.body;
   const user = await Profile.findOne({
     where: { id },
-    include: [Profession, Availability],
+    include: [
+      Profession,
+      Availability,
+      { model: Meeting, as: "initiatedMeetings", foreignKey: "initiator" },
+      { model: Meeting, as: "acceptedMeetings", foreignKey: "acceptor" },
+    ],
   });
   res.send(user);
 });

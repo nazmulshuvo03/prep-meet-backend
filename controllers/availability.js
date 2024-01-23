@@ -1,5 +1,5 @@
 const asyncWrapper = require("../middlewares/async");
-const { Availability } = require("../models/Availability");
+const { Availability } = require("../models/availability");
 
 const getAllAvailabilityData = asyncWrapper(async (req, res) => {
   const data = await Availability.findAll();
