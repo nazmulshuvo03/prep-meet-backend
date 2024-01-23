@@ -9,8 +9,11 @@ const Availability = sequelize.define("availability", {
     primaryKey: true,
     allowNull: false,
   },
-  day: DataTypes.BIGINT,
-  hours: DataTypes.ARRAY(DataTypes.INTEGER),
+  day: { type: DataTypes.BIGINT, allowNull: false },
+  hours: {
+    type: DataTypes.ARRAY(DataTypes.INTEGER),
+    defaultValue: [],
+  },
 });
 
 Availability.belongsTo(Profile, {
