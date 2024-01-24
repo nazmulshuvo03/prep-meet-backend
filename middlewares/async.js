@@ -3,12 +3,7 @@ const asyncWrapper = (fn) => {
     try {
       await fn(req, res, next);
     } catch (error) {
-      console.log(
-        error,
-        "\n",
-        `Error source { METHOD: ${req.method},  URL: ${req.originalUrl}}`
-      );
-      res.failResponse(error.message);
+      res.fail(error.message);
     }
   };
 };

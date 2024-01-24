@@ -21,9 +21,8 @@ const failResponse = (
 };
 
 const responseMiddleware = (req, res, next) => {
-  res.successResponse = (data, statusCode) =>
-    successResponse(res, data, statusCode);
-  res.failResponse = (data, statusCode) => failResponse(res, data, statusCode);
+  res.success = (data, statusCode) => successResponse(res, data, statusCode);
+  res.fail = (data, statusCode) => failResponse(res, data, statusCode);
 
   next();
 };

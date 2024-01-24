@@ -6,12 +6,12 @@ const { User, Profile } = require("../models/user");
 
 const getAllUserData = asyncWrapper(async (req, res) => {
   const userList = await User.findAll();
-  res.send(userList);
+  res.success(userList);
 });
 
 const getAllUserProfiles = asyncWrapper(async (req, res) => {
   const userList = await Profile.findAll();
-  res.send(userList);
+  res.success(userList);
 });
 
 const createUser = asyncWrapper(async (req, res) => {
@@ -19,7 +19,9 @@ const createUser = asyncWrapper(async (req, res) => {
     ...req.body,
   };
   const pf = await User.create(model);
-  res.send(pf);
+  if (!pf) res.fail("User data not created");
+
+  res.success(pf);
 });
 
 const getSingleUserProfile = asyncWrapper(async (req, res) => {
@@ -33,53 +35,51 @@ const getSingleUserProfile = asyncWrapper(async (req, res) => {
       { model: Meeting, as: "acceptedMeetings", foreignKey: "acceptor" },
     ],
   });
-  res.send(user);
+  if (!user) res.fail("User data not found");
+
+  res.success(user);
 });
 
 const updateUserData = asyncWrapper(async (req, res) => {
   const { id, ...updatedFields } = req.body;
 
-  if (Object.keys(updatedFields).length === 0) {
-    return res.status(400).send({ message: "No fields provided for update." });
-  }
+  if (Object.keys(updatedFields).length === 0)
+    res.fail("No fields provided for update");
 
   const user = await User.findByPk(id);
+  if (!user) res.fail("User data not found");
 
-  if (user) {
-    const rowsAffected = await user.update(updatedFields);
-    res.send(rowsAffected);
-  } else {
-    res.status(404).send({ message: "User not found" });
-  }
+  const rowsAffected = await user.update(updatedFields);
+  if (!rowsAffected) res.fail("User data update failed");
+
+  res.success(rowsAffected);
 });
 
 const updateUserProfile = asyncWrapper(async (req, res) => {
   const { id, ...updatedFields } = req.body;
 
-  if (Object.keys(updatedFields).length === 0) {
-    return res.status(400).send({ message: "No fields provided for update." });
-  }
+  if (Object.keys(updatedFields).length === 0)
+    res.fail("No fields provided for update");
 
   const user = await Profile.findByPk(id);
+  if (!user) res.fail("User data not found");
 
-  if (user) {
-    const updatedUser = await user.update(updatedFields);
-    res.send(updatedUser);
-  } else {
-    res.status(404).send({ message: "User not found" });
-  }
+  const updatedUser = await user.update(updatedFields);
+  if (!updatedUser) res.fail("User data update failed");
+
+  res.success(updatedUser);
 });
 
 const deleteUser = asyncWrapper(async (req, res) => {
   await User.destroy({
     where: { id: req.body.id },
   });
-  res.send("User Deleted");
+  res.success("User Deleted");
 });
 
 const deleteAllUser = asyncWrapper(async (req, res) => {
   await User.destroy({ where: {} });
-  res.send("User table cleared");
+  res.success("User table cleared");
 });
 
 module.exports = {

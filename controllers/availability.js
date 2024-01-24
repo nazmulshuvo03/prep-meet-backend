@@ -3,47 +3,49 @@ const { Availability } = require("../models/availability");
 
 const getAllAvailabilityData = asyncWrapper(async (req, res) => {
   const data = await Availability.findAll();
-  res.send(data);
+  res.success(data);
 });
 
 const createAvailabilityData = asyncWrapper(async (req, res) => {
   const model = {
     ...req.body,
   };
+
   const data = await Availability.create(model);
-  res.send(data);
+  res.success(data);
 });
 
 const getSingleAvailabilityData = asyncWrapper(async (req, res) => {
   const { id } = req.body;
   const data = await Availability.findByPk(id);
-  res.send(data);
+
+  if (!data) res.fail("Availability data not found");
+  res.success(data);
 });
 
 const updateAvailabilityData = asyncWrapper(async (req, res) => {
   const { id, ...updatedFields } = req.body;
 
-  if (Object.keys(updatedFields).length === 0) {
-    return res.status(400).send({ message: "No fields provided for update." });
-  }
+  if (Object.keys(updatedFields).length === 0)
+    res.fail("No fields provided for update.");
 
   const item = await Availability.findByPk(id);
-  if (item) {
-    const data = await item.update(updatedFields);
-    res.send(data);
-  } else {
-    res.status(404).send({ message: "Data not found" });
-  }
+  if (!item) res.fail("Availability data not found");
+
+  const data = await item.update(updatedFields);
+  if (!data) res.fail("Availability update failed");
+
+  res.success(data);
 });
 
 const deleteSingleAvailabilityData = asyncWrapper(async (req, res) => {
   await Availability.destroy({ where: { id: req.body.id } });
-  res.send("Availability data deleted");
+  res.success("Availability data deleted");
 });
 
 const deleteAllAvailabilityData = asyncWrapper(async (req, res) => {
   await Availability.destroy({ where: {} });
-  res.send("Availability table cleared");
+  res.success("Availability table cleared");
 });
 
 module.exports = {
