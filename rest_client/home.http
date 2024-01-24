@@ -1,0 +1,8 @@
+@base = http://localhost
+@port = 4000
+@extension = api/v1
+@url = {{base}}:{{port}}/{{extension}}
+@contentType = application/json
+
+###
+GET {{url}}

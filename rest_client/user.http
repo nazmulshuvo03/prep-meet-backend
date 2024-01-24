@@ -1,0 +1,16 @@
+@base = http://localhost
+@port = 4000
+@extension = api/v1/user
+@url = {{base}}:{{port}}/{{extension}}
+@contentType = application/json
+
+GET {{url}}/all
+
+###
+GET {{url}}
+content-type: application/json
+
+{
+  "id": "4d1917d6-fe24-46ad-b9fa-0059f16a64c5"
+}
+
