@@ -1,5 +1,6 @@
 const { Router } = require("express");
 const userRoutes = require("./user");
+const authRoutes = require("./auth");
 const professionRoutes = require("./profession");
 const availabilityRoutes = require("./availability");
 const meetingRoutes = require("./meeting");
@@ -11,6 +12,7 @@ router.route("/").get((req, res) => {
 });
 
 router.use("/user", userRoutes);
+router.use("/auth", authRoutes);
 router.use("/profession", professionRoutes);
 router.use("/availability", availabilityRoutes);
 router.use("/meeting", meetingRoutes);

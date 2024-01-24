@@ -27,28 +27,28 @@ const Meeting = sequelize.define("meeting", {
 Meeting.belongsTo(Profile, {
   foreignKey: "initiator",
   targetKey: "id",
-  onDelete: "SET NULL",
+  onDelete: "CASCADE",
   as: "initiatorProfile",
 });
 
 Meeting.belongsTo(Profile, {
   foreignKey: "acceptor",
   targetKey: "id",
-  onDelete: "SET NULL",
+  onDelete: "CASCADE",
   as: "acceptorProfile",
 });
 
 Profile.hasMany(Meeting, {
   foreignKey: "initiator",
   sourceKey: "id",
-  onDelete: "CASCADE",
+  onDelete: "SET NULL",
   as: "initiatedMeetings",
 });
 
 Profile.hasMany(Meeting, {
   foreignKey: "acceptor",
   sourceKey: "id",
-  onDelete: "CASCADE",
+  onDelete: "SET NULL",
   as: "acceptedMeetings",
 });
 

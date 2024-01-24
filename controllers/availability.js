@@ -38,10 +38,12 @@ const updateAvailabilityData = asyncWrapper(async (req, res) => {
 
 const deleteSingleAvailabilityData = asyncWrapper(async (req, res) => {
   await Availability.destroy({ where: { id: req.body.id } });
+  res.send("Availability data deleted");
 });
 
 const deleteAllAvailabilityData = asyncWrapper(async (req, res) => {
   await Availability.destroy({ where: {} });
+  res.send("Availability table cleared");
 });
 
 module.exports = {

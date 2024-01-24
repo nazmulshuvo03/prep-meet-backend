@@ -45,10 +45,12 @@ const updateMeetingData = asyncWrapper(async (req, res) => {
 
 const deleteSingleMeetingData = asyncWrapper(async (req, res) => {
   await Meeting.destroy({ where: { id: req.body.id } });
+  res.send("Meeting data deleted");
 });
 
 const deleteAllMeetingData = asyncWrapper(async (req, res) => {
   await Meeting.destroy({ where: {} });
+  res.send("Meeting table cleared");
 });
 
 module.exports = {

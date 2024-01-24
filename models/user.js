@@ -10,6 +10,9 @@ const User = sequelize.define("user", {
     allowNull: false,
   },
   email: { type: DataTypes.STRING, allowNull: false, unique: true },
+  password: DataTypes.STRING,
+  email_varified: { type: DataTypes.BOOLEAN, defaultValue: false },
+  role: { type: DataTypes.ENUM("USER", "ADMIN"), defaultValue: "USER" },
 });
 
 const Profile = sequelize.define("profile", {
@@ -31,7 +34,6 @@ const Profile = sequelize.define("profile", {
   lastName: DataTypes.STRING,
   gender: DataTypes.STRING,
   photoURL: DataTypes.STRING,
-  role: DataTypes.STRING,
   profileHeadline: DataTypes.TEXT,
   country: DataTypes.STRING,
   language: DataTypes.STRING,
