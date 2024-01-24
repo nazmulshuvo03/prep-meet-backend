@@ -6,6 +6,7 @@ const cookieParser = require("cookie-parser");
 const config = require("./config");
 const Routes = require("./routes");
 const sequelize = require("./db");
+const { responseMiddleware } = require("./middlewares/Response");
 
 const app = express();
 const port = config.PORT;
@@ -14,7 +15,20 @@ app.use(cors());
 app.use(bodyParser.json());
 app.use(cookieParser());
 
+app.use((req, res, next) => {
+  console.log(
+    `-----> ${req.method} REQUEST     (${req.protocol}) ${req.originalUrl}`
+  );
+  next();
+});
+
+app.use(responseMiddleware);
+
 app.use("/api/v1", Routes);
+
+app.use((customResponse, req, res, next) => {
+  console.log("!!!!!!!!!!!!!!!!!!!", customResponse);
+});
 
 sequelize
   .sync({ alter: true })

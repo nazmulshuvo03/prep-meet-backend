@@ -4,7 +4,7 @@ const bcrypt = require("bcrypt");
 const asyncWrapper = require("../middlewares/async");
 const { User } = require("../models/user");
 
-const MAX_AGE = 3 * 24 * 60 * 60;
+const MAX_AGE = 30 * 24 * 60 * 60;
 
 const createToken = (id) => {
   return jwt.sign({ id }, process.env.JWT_SECRET, {
@@ -36,23 +36,18 @@ const signupUser = asyncWrapper(async (req, res) => {
 
 const loginUser = asyncWrapper(async (req, res) => {
   const { email, password } = req.body;
-  try {
-    const user = await User.findOne({ where: { email } });
-    if (user) {
-      const auth = await bcrypt.compare(password, user.password);
-      if (auth) {
-        const token = createToken(user.id);
-        res.cookie("jwt", token, { httpOnly: true, maxAge: MAX_AGE * 1000 });
-        res.send({ userId: user.id });
-      } else {
-        throw Error("Incorrect password");
-      }
+  const user = await User.findOne({ where: { email } });
+  if (user) {
+    const auth = await bcrypt.compare(password, user.password);
+    if (auth) {
+      const token = createToken(user.id);
+      res.cookie("jwt", token, { httpOnly: true, maxAge: MAX_AGE * 1000 });
+      res.send({ userId: user.id });
     } else {
-      throw Error("Incorrect email");
+      throw Error("Incorrect password");
     }
-  } catch (err) {
-    console.log("Error in login: ", err);
-    res.send(err);
+  } else {
+    throw Error("Incorrect email");
   }
 });
 
