@@ -3,6 +3,7 @@ const bcrypt = require("bcrypt");
 
 const asyncWrapper = require("../middlewares/async");
 const { User } = require("../models/user");
+const { sendVerificationEmail } = require("../helpers/emailVerification");
 
 const MAX_AGE = 30 * 24 * 60 * 60;
 
@@ -49,11 +50,21 @@ const loginUser = asyncWrapper(async (req, res) => {
 const logoutUser = asyncWrapper(async (req, res) => {
   res.cookie("jwt", "", { maxAge: 1 });
   res.cookie("user", null, { maxAge: 1 });
-  res.send("User logged out");
+  res.success("User logged out");
+});
+
+const verifyEmail = asyncWrapper(async (req, res) => {
+  try {
+    const data = await sendVerificationEmail();
+    res.success(data);
+  } catch (err) {
+    res.fail(err.message);
+  }
 });
 
 module.exports = {
   signupUser,
   loginUser,
   logoutUser,
+  verifyEmail,
 };
