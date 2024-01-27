@@ -1,0 +1,35 @@
+<div id="joinModal" style="display: none;"
+  class="bg-transparent fixed top-0 left-0 h-full w-full justify-center items-center">
+  <div id="joinModalBg" class="fixed top-0 left-0 h-full w-full bg-[#333] opacity-70 z-0"></div>
+  <div class="min-h-72 min-w-96 bg-white shadow-md rounded-md z-50">
+    <%- include('./signup') %>
+      <%- include('./login') %>
+        <div class="py-4 gap-2 text-center">
+          <div id="switchLoginLabel">Already have an account?</div>
+          <button id="switchLoginButton" class="text-primary font-medium text-lg underline">Login</button>
+        </div>
+  </div>
+</div>
+
+<script>
+  const modalBg = document.getElementById('joinModalBg');
+  const joinModal = document.getElementById('joinModal');
+  const loginSwitchButton = document.getElementById("switchLoginButton");
+  const loginSwitchLabel = document.getElementById("switchLoginLabel");
+  const signupForm = document.getElementById("signupForm");
+  const loginForm = document.getElementById("loginForm");
+
+  modalBg.addEventListener('click', function () {
+    joinModal.style.display =
+      (joinModal.style.display === 'none' || joinModal.style.display === '')
+        ? 'flex' : 'none';
+  });
+  loginSwitchButton.addEventListener('click', function () {
+    signupForm.style.display = (signupForm.style.display === 'none' || signupForm.style.display === '')
+      ? 'block' : 'none';
+    loginForm.style.display = (loginForm.style.display === 'none' || loginForm.style.display === '')
+      ? 'block' : 'none';
+    loginSwitchButton.innerText = loginSwitchButton.innerText === "Login" ? "Signup" : "Login";
+    loginSwitchLabel.innerText = loginSwitchLabel.innerText === "Already have an account?" ? `Don't have an account?` : "Already have an account?";
+  })
+</script>

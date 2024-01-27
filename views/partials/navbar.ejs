@@ -1,6 +1,20 @@
-<nav>
-  <ul class="bg-primary text-white">
-    <li><a href="/">Landing</a></li>
-    <li><a href="/">Join Us</a></li>
-  </ul>
+<nav class="w-full h-24 flex justify-between items-center px-5">
+  <div class="text-4xl font-bold opacity-75 ">
+    <span class="text-secondary">prep</span>
+    <span> </span>
+    <span class="text-primary">meet</span>
+  </div>
+  <button id="joinUsButton"
+    class="border-2 border-accent rounded-full px-6 py-2 bg-accent text-white font-semibold text-lg">Join
+    Us</button>
 </nav>
+<%- include('./joinModal') %>
+
+  <script>
+    document.getElementById('joinUsButton').addEventListener('click', function () {
+      const joinModal = document.getElementById('joinModal');
+      joinModal.style.display =
+        (joinModal.style.display === 'none' || joinModal.style.display === '')
+          ? 'flex' : 'none';
+    });
+  </script>
