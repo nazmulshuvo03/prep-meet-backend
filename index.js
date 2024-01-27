@@ -3,7 +3,6 @@ const path = require("path");
 const bodyParser = require("body-parser");
 const cors = require("cors");
 const cookieParser = require("cookie-parser");
-const ejs = require("ejs");
 
 const config = require("./config");
 const Routes = require("./routes");
@@ -14,20 +13,11 @@ const { requestLogger } = require("./middlewares/logger");
 const app = express();
 const port = config.PORT;
 
-app.set("view engine", "ejs");
-app.set("views", path.join(__dirname, "views", "ejs-frontend"));
-
-app.use(express.static(path.join(__dirname, "public")));
-
 app.use(cors());
 app.use(bodyParser.json());
 app.use(cookieParser());
 app.use(requestLogger);
 app.use(responseMiddleware);
-
-app.get("/", (req, res) => {
-  res.render("index", { title: "Express with EJS", message: "Hello, EJS!" });
-});
 
 app.use("/api/v1", Routes);
 
