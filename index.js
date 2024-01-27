@@ -3,6 +3,8 @@ const path = require("path");
 const bodyParser = require("body-parser");
 const cors = require("cors");
 const cookieParser = require("cookie-parser");
+const livereload = require("livereload");
+const connectLiveReload = require("connect-livereload");
 
 const config = require("./config");
 const Routes = require("./routes");
@@ -10,6 +12,14 @@ const sequelize = require("./db");
 const { responseMiddleware } = require("./middlewares/Response");
 const { requestLogger } = require("./middlewares/logger");
 const viewRoutes = require("./routes/view");
+
+const liveReloadServer = livereload.createServer();
+liveReloadServer.watch(path.join(__dirname, "views"));
+liveReloadServer.server.once("connection", () => {
+  setTimeout(() => {
+    liveReloadServer.refresh("/");
+  }, 100);
+});
 
 const app = express();
 const port = config.PORT;
@@ -24,9 +34,11 @@ app.use(bodyParser.json());
 app.use(cookieParser());
 app.use(requestLogger);
 app.use(responseMiddleware);
+app.use(connectLiveReload());
 
 app.use("/", viewRoutes);
 app.use("/api/v1", Routes);
+
 
 sequelize
   .sync({ alter: true })
