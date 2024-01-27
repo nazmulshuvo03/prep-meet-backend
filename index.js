@@ -9,9 +9,15 @@ const Routes = require("./routes");
 const sequelize = require("./db");
 const { responseMiddleware } = require("./middlewares/Response");
 const { requestLogger } = require("./middlewares/logger");
+const viewRoutes = require("./routes/view");
 
 const app = express();
 const port = config.PORT;
+
+app.set("view engine", "ejs");
+app.set("views", path.join(__dirname, "views"));
+
+app.use(express.static(path.join(__dirname, "public")));
 
 app.use(cors());
 app.use(bodyParser.json());
@@ -19,6 +25,7 @@ app.use(cookieParser());
 app.use(requestLogger);
 app.use(responseMiddleware);
 
+app.use("/", viewRoutes);
 app.use("/api/v1", Routes);
 
 sequelize
