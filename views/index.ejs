@@ -5,15 +5,23 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="/style.css" />
   <script>
     tailwind.config = {
+      content: ["./views/*.{ejs}", "./views/**/*.{ejs}"],
+      darkMode: "class",
       theme: {
         extend: {
           colors: {
-            clifford: '#da373d',
-          }
-        }
-      }
+            text: "var(--text)",
+            background: "var(--background)",
+            primary: "var(--primary)",
+            secondary: "var(--secondary)",
+            accent: "var(--accent)",
+          },
+        },
+      },
+      plugins: [],
     }
   </script>
   <title>
@@ -25,7 +33,7 @@
   <%- include('./partials/navbar') %>
     <h1>
       <%= message %>
-        <h1 class="text-3xl font-bold underline text-clifford">
+        <h1 class="text-3xl font-bold underline text-primary">
           Hello world!
         </h1>
     </h1>

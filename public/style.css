@@ -1,0 +1,36 @@
+:root {
+  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+@layer base {
+  :root {
+    --text: #0a1a17;
+    --background: #f9fdfc;
+    --primary: #58bca8;
+    --secondary: #97bad5;
+    --accent: #7289c7;
+  }
+
+  .dark {
+    --text: #e5f5f2;
+    --background: #030806;
+    --primary: #43a894;
+    --secondary: #2b4e69;
+    --accent: #394f8e;
+  }
+}
+
+input {
+  outline: none;
+}
+
+textarea {
+  outline: none;
+}
