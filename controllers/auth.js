@@ -4,6 +4,7 @@ const bcrypt = require("bcrypt");
 const asyncWrapper = require("../middlewares/async");
 const { User } = require("../models/user");
 const { sendVerificationEmail } = require("../helpers/emailVerification");
+const { _updateUserProfile } = require("./user");
 
 const MAX_AGE = 30 * 24 * 60 * 60;
 
@@ -14,7 +15,7 @@ const createToken = (id) => {
 };
 
 const signupUser = asyncWrapper(async (req, res) => {
-  const { email, password } = req.body;
+  const { email, password, firstName, lastName } = req.body;
   const exists = await User.findOne({ where: { email } });
   if (exists) {
     res.fail("Email already exists");
@@ -27,7 +28,12 @@ const signupUser = asyncWrapper(async (req, res) => {
   const user = await User.create(model);
   const token = createToken(user.id);
   res.cookie("jwt", token, { httpOnly: true, maxAge: MAX_AGE * 1000 });
-  res.success({ userId: user.id });
+  const updatedProfile = await _updateUserProfile({
+    id: user.id,
+    firstName,
+    lastName,
+  });
+  res.success({ ...updatedProfile.dataValues });
 });
 
 const loginUser = asyncWrapper(async (req, res) => {

@@ -55,8 +55,8 @@ const updateUserData = asyncWrapper(async (req, res) => {
   res.success(rowsAffected);
 });
 
-const updateUserProfile = asyncWrapper(async (req, res) => {
-  const { id, ...updatedFields } = req.body;
+const _updateUserProfile = async (data) => {
+  const { id, ...updatedFields } = data;
 
   if (Object.keys(updatedFields).length === 0)
     res.fail("No fields provided for update");
@@ -67,6 +67,11 @@ const updateUserProfile = asyncWrapper(async (req, res) => {
   const updatedUser = await user.update(updatedFields);
   if (!updatedUser) res.fail("User data update failed");
 
+  return updatedUser;
+};
+
+const updateUserProfile = asyncWrapper(async (req, res) => {
+  const updatedUser = _updateUserProfile(req.body);
   res.success(updatedUser);
 });
 
@@ -88,6 +93,7 @@ module.exports = {
   createUser,
   getSingleUserProfile,
   updateUserData,
+  _updateUserProfile,
   updateUserProfile,
   deleteUser,
   deleteAllUser,
