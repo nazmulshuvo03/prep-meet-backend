@@ -1,8 +1,9 @@
 const jwt = require("jsonwebtoken");
 const { User } = require("../models/user");
+const { TOKEN_COOKIE_NAME } = require("../controllers/auth");
 
 const requireAuth = (req, res, next) => {
-  const token = req.cookies.jwt;
+  const token = req.cookies[TOKEN_COOKIE_NAME];
 
   if (token) {
     jwt.verify(token, process.env.JWT_SECRET, async (err, decoded) => {
@@ -15,12 +16,12 @@ const requireAuth = (req, res, next) => {
       }
     });
   } else {
-    res.send("You have to login");
+    res.fail("You are not authorized", 401);
   }
 };
 
 const checkUser = (req, res, next) => {
-  const token = req.cookies.jwt;
+  const token = req.cookies[TOKEN_COOKIE_NAME];
 
   if (token) {
     jwt.verify(token, process.env.JWT_SECRET, async (err, decoded) => {
