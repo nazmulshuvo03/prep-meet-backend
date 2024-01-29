@@ -4,7 +4,6 @@ const { TOKEN_COOKIE_NAME } = require("../controllers/auth");
 
 const requireAuth = (req, res, next) => {
   const token = req.cookies[TOKEN_COOKIE_NAME];
-
   if (token) {
     jwt.verify(token, process.env.JWT_SECRET, async (err, decoded) => {
       if (err) {
@@ -22,7 +21,6 @@ const requireAuth = (req, res, next) => {
 
 const checkUser = (req, res, next) => {
   const token = req.cookies[TOKEN_COOKIE_NAME];
-
   if (token) {
     jwt.verify(token, process.env.JWT_SECRET, async (err, decoded) => {
       if (err) {

@@ -29,7 +29,12 @@ app.set("views", path.join(__dirname, "views"));
 
 app.use(express.static(path.join(__dirname, "public")));
 
-app.use(cors());
+app.use(
+  cors({
+    origin: process.env.ALLOWED_ORIGINS.split(","),
+    credentials: true,
+  })
+);
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
@@ -39,7 +44,6 @@ app.use(connectLiveReload());
 
 app.use("/", viewRoutes);
 app.use("/api/v1", Routes);
-
 
 sequelize
   .sync({ alter: true })

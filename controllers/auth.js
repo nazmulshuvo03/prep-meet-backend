@@ -8,11 +8,26 @@ const { _updateUserProfile } = require("./user");
 
 const TOKEN_COOKIE_NAME = "prepMeetToken";
 const MAX_AGE = 30 * 24 * 60 * 60;
+const COOKIE_OPTIONS = {
+  httpOnly: true,
+  maxAge: MAX_AGE * 1000,
+};
 
-const createToken = (id) => {
-  return jwt.sign({ id }, process.env.JWT_SECRET, {
+const _createToken = (data) => {
+  return jwt.sign(data, process.env.JWT_SECRET, {
     expiresIn: MAX_AGE,
   });
+};
+
+const _handleLoginResponse = (req, res, profile) => {
+  const contentType = req.headers["content-type"];
+  if (contentType.startsWith("application/json")) {
+    res.success({ ...profile.dataValues });
+  } else if (contentType.startsWith("application/x-www-form-urlencoded")) {
+    res.redirect(`${process.env.DASHBOARD_URL}/dashboard`);
+  } else {
+    res.success({ ...profile.dataValues });
+  }
 };
 
 const signupUser = asyncWrapper(async (req, res) => {
@@ -28,24 +43,14 @@ const signupUser = asyncWrapper(async (req, res) => {
     password: hashedPassword,
   };
   const user = await User.create(model);
-  const token = createToken(user.id);
-  res.cookie(TOKEN_COOKIE_NAME, token, {
-    httpOnly: true,
-    maxAge: MAX_AGE * 1000,
-  });
+  const token = _createToken({ id: user.id });
+  res.cookie(TOKEN_COOKIE_NAME, token, COOKIE_OPTIONS);
   const updatedProfile = await _updateUserProfile({
     id: user.id,
     firstName,
     lastName,
   });
-  const contentType = req.headers["content-type"];
-  if (contentType.startsWith("application/json")) {
-    res.success({ ...updatedProfile.dataValues });
-  } else if (contentType.startsWith("application/x-www-form-urlencoded")) {
-    res.redirect(`${process.env.DASHBOARD_URL}/dashboard`);
-  } else {
-    res.success({ ...updatedProfile.dataValues });
-  }
+  _handleLoginResponse(req, res, updatedProfile);
 });
 
 const loginUser = asyncWrapper(async (req, res) => {
@@ -54,12 +59,9 @@ const loginUser = asyncWrapper(async (req, res) => {
   if (user) {
     const auth = await bcrypt.compare(password, user.password);
     if (auth) {
-      const token = createToken(user.id);
-      res.cookie(TOKEN_COOKIE_NAME, token, {
-        httpOnly: true,
-        maxAge: MAX_AGE * 1000,
-      });
-      res.success({ userId: user.id });
+      const token = _createToken({ id: user.id });
+      res.cookie(TOKEN_COOKIE_NAME, token, COOKIE_OPTIONS);
+      _handleLoginResponse(req, res, user);
     } else {
       res.fail("Incorrect password");
     }
