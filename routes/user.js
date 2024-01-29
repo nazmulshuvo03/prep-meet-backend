@@ -9,7 +9,6 @@ const {
   getAllUserData,
   updateUserData,
 } = require("../controllers/user");
-const { requireAuth } = require("../middlewares/auth");
 
 const router = Router();
 
@@ -20,6 +19,6 @@ router
   .put(updateUserProfile)
   .delete(deleteUser);
 router.route("/all").get(getAllUserProfiles).delete(deleteAllUser);
-router.route("/users").get(requireAuth, getAllUserData).put(updateUserData);
+router.route("/users").get(getAllUserData).put(updateUserData);
 
 module.exports = router;
