@@ -2,7 +2,7 @@ const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
 
 const asyncWrapper = require("../middlewares/async");
-const { User } = require("../models/user");
+const { User, Profile } = require("../models/user");
 const { sendVerificationEmail } = require("../helpers/emailVerification");
 const { _updateUserProfile } = require("./user");
 
@@ -24,7 +24,7 @@ const _handleLoginResponse = (req, res, profile) => {
   if (contentType.startsWith("application/json")) {
     res.success({ ...profile.dataValues });
   } else if (contentType.startsWith("application/x-www-form-urlencoded")) {
-    res.redirect(`${process.env.DASHBOARD_URL}/dashboard`);
+    res.redirect(`${process.env.DASHBOARD_URL}/${profile.dataValues.id}`);
   } else {
     res.success({ ...profile.dataValues });
   }
@@ -45,8 +45,7 @@ const signupUser = asyncWrapper(async (req, res) => {
   const user = await User.create(model);
   const token = _createToken({ id: user.id });
   res.cookie(TOKEN_COOKIE_NAME, token, COOKIE_OPTIONS);
-  const updatedProfile = await _updateUserProfile({
-    id: user.id,
+  const updatedProfile = await _updateUserProfile(res, user.id, {
     firstName,
     lastName,
   });
@@ -61,12 +60,13 @@ const loginUser = asyncWrapper(async (req, res) => {
     if (auth) {
       const token = _createToken({ id: user.id });
       res.cookie(TOKEN_COOKIE_NAME, token, COOKIE_OPTIONS);
-      _handleLoginResponse(req, res, user);
+      const profile = await Profile.findByPk(user.id);
+      _handleLoginResponse(req, res, profile);
     } else {
-      res.fail("Incorrect password");
+      res.fail("Incorrect password", 422);
     }
   } else {
-    res.fail("Incorrect email");
+    res.fail("Email does not exist", 422);
   }
 });
 

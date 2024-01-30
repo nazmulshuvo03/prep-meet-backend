@@ -1,3 +1,4 @@
+const { BAD_REQUEST, NOT_FOUND } = require("../constants/errorCodes");
 const asyncWrapper = require("../middlewares/async");
 const { Availability } = require("../models/availability");
 const { Meeting } = require("../models/meeting");
@@ -25,9 +26,10 @@ const createUser = asyncWrapper(async (req, res) => {
 });
 
 const getSingleUserProfile = asyncWrapper(async (req, res) => {
-  const { id } = req.body;
+  const { userId } = req.params;
+  if (!userId) res.fail("Invalid user ID", BAD_REQUEST);
   const user = await Profile.findOne({
-    where: { id },
+    where: { id: userId },
     include: [
       Profession,
       Availability,
@@ -35,34 +37,19 @@ const getSingleUserProfile = asyncWrapper(async (req, res) => {
       { model: Meeting, as: "acceptedMeetings", foreignKey: "acceptor" },
     ],
   });
-  if (!user) res.fail("User data not found");
+  if (!user) res.fail("User data not found", NOT_FOUND);
 
   res.success(user);
 });
 
-const updateUserData = asyncWrapper(async (req, res) => {
-  const { id, ...updatedFields } = req.body;
+const _updateUserProfile = async (res, userId, data) => {
+  const { ...updatedFields } = data;
 
   if (Object.keys(updatedFields).length === 0)
-    res.fail("No fields provided for update");
+    res.fail("No fields provided for update", BAD_REQUEST);
 
-  const user = await User.findByPk(id);
-  if (!user) res.fail("User data not found");
-
-  const rowsAffected = await user.update(updatedFields);
-  if (!rowsAffected) res.fail("User data update failed");
-
-  res.success(rowsAffected);
-});
-
-const _updateUserProfile = async (data) => {
-  const { id, ...updatedFields } = data;
-
-  if (Object.keys(updatedFields).length === 0)
-    res.fail("No fields provided for update");
-
-  const user = await Profile.findByPk(id);
-  if (!user) res.fail("User data not found");
+  const user = await Profile.findByPk(userId);
+  if (!user) res.fail("User data not found", NOT_FOUND);
 
   const updatedUser = await user.update(updatedFields);
   if (!updatedUser) res.fail("User data update failed");
@@ -71,13 +58,17 @@ const _updateUserProfile = async (data) => {
 };
 
 const updateUserProfile = asyncWrapper(async (req, res) => {
-  const updatedUser = _updateUserProfile(req.body);
+  const { userId } = req.params;
+  if (!userId) res.fail("Invalid user ID", BAD_REQUEST);
+  const updatedUser = await _updateUserProfile(res, userId, req.body);
   res.success(updatedUser);
 });
 
 const deleteUser = asyncWrapper(async (req, res) => {
+  const { userId } = req.params;
+  if (!userId) res.fail("Invalid user ID", BAD_REQUEST);
   await User.destroy({
-    where: { id: req.body.id },
+    where: { id: userId },
   });
   res.success("User Deleted");
 });
@@ -92,7 +83,6 @@ module.exports = {
   getAllUserProfiles,
   createUser,
   getSingleUserProfile,
-  updateUserData,
   _updateUserProfile,
   updateUserProfile,
   deleteUser,

@@ -13,7 +13,7 @@ router.route("/").get((req, res) => {
 });
 
 router.use("/auth", authRoutes);
-router.use(requireAuth);
+// router.use(requireAuth);
 router.use("/user", userRoutes);
 router.use("/profession", professionRoutes);
 router.use("/availability", availabilityRoutes);

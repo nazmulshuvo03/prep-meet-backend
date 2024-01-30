@@ -1,3 +1,5 @@
+const { SERVER_ERROR } = require("../constants/errorCodes");
+
 class Response {
   constructor(data, statusCode = 200) {
     this.data = data;
@@ -14,7 +16,7 @@ const successResponse = (res, data = {}, statusCode = 200) => {
 const failResponse = (
   res,
   data = "Internal Server Error",
-  statusCode = 500
+  statusCode = SERVER_ERROR
 ) => {
   const response = new Response(data, statusCode);
   res.status(statusCode).json(response);
