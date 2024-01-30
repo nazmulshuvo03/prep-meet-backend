@@ -24,7 +24,9 @@ const _handleLoginResponse = (req, res, profile) => {
   if (contentType.startsWith("application/json")) {
     res.success({ ...profile.dataValues });
   } else if (contentType.startsWith("application/x-www-form-urlencoded")) {
-    res.redirect(`${process.env.DASHBOARD_URL}/${profile.dataValues.id}`);
+    res.redirect(
+      `${process.env.DASHBOARD_URL}/dashboard/${profile.dataValues.id}`
+    );
   } else {
     res.success({ ...profile.dataValues });
   }

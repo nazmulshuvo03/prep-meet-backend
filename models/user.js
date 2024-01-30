@@ -33,7 +33,11 @@ const Profile = sequelize.define("profile", {
   firstName: DataTypes.STRING,
   lastName: DataTypes.STRING,
   gender: DataTypes.STRING,
-  photoURL: DataTypes.STRING,
+  photoURL: {
+    type: DataTypes.STRING,
+    defaultValue:
+      "https://cdn1.iconfinder.com/data/icons/mix-color-3/502/Untitled-7-1024.png",
+  },
   profileHeadline: DataTypes.TEXT,
   country: DataTypes.STRING,
   language: DataTypes.STRING,
