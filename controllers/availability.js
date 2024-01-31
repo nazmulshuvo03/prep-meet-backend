@@ -1,6 +1,7 @@
 const { Op } = require("sequelize");
 const asyncWrapper = require("../middlewares/async");
 const { Availability } = require("../models/availability");
+const { NOT_FOUND } = require("../constants/errorCodes");
 
 const _findAvailabilityOfUserByDay = async (userId, day) => {
   const found = await Availability.findOne({ where: { userId, day } });
@@ -24,6 +25,7 @@ const getAllAvailabilityData = asyncWrapper(async (req, res) => {
 
 const getUserAvailability = asyncWrapper(async (req, res) => {
   const { userId } = req.params;
+  if (!userId) res.fail("Invalid user ID", BAD_REQUEST);
   const today = new Date();
   const todayMidnight = today.setHours(0, 0, 0, 0);
   const data = await Availability.findAll({
@@ -34,11 +36,13 @@ const getUserAvailability = asyncWrapper(async (req, res) => {
       },
     },
   });
+  // if (!data) res.fail("User availability data not found", NOT_FOUND);
   res.success(data);
 });
 
 const createOrUpdateAvailabilityData = asyncWrapper(async (req, res) => {
   const { userId } = req.params;
+  if (!userId) res.fail("Invalid user ID", BAD_REQUEST);
   const model = {
     ...req.body,
   };
@@ -51,20 +55,19 @@ const createOrUpdateAvailabilityData = asyncWrapper(async (req, res) => {
       availabilityDayOfUser,
       model
     );
+    if (!updated) res.fail("Availability data update failed");
     res.success(updated);
   } else {
     const created = await _createAvailability(model);
+    if (!created)
+      res.fail("Availability data could not be created for this user");
     res.success(created);
   }
 });
 
-const deleteSingleAvailabilityData = asyncWrapper(async (req, res) => {
-  await Availability.destroy({ where: { id: req.body.id } });
-  res.success("Availability data deleted");
-});
-
 const deleteUserAvailability = asyncWrapper(async (req, res) => {
   const { userId } = req.params;
+  if (!userId) res.fail("Invalid user ID", BAD_REQUEST);
   await Availability.destroy({ where: { userId } });
   res.success("Users all availability data deleted");
 });
@@ -78,7 +81,6 @@ module.exports = {
   getAllAvailabilityData,
   getUserAvailability,
   createOrUpdateAvailabilityData,
-  deleteSingleAvailabilityData,
   deleteUserAvailability,
   deleteAllAvailabilityData,
 };
