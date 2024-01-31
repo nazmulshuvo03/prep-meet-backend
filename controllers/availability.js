@@ -1,41 +1,46 @@
 const asyncWrapper = require("../middlewares/async");
 const { Availability } = require("../models/availability");
 
+const _findAvailabilityOfUserByDay = async (userId, day) => {
+  const found = await Availability.findOne({ where: { userId, day } });
+  return found;
+};
+
+const _createAvailability = async (data) => {
+  const created = await Availability.create(data);
+  return created;
+};
+
+const _updateAvailabilityOfUserOfDay = async (oldData, newData) => {
+  const updated = await oldData.update(newData);
+  return updated;
+};
+
 const getAllAvailabilityData = asyncWrapper(async (req, res) => {
   const data = await Availability.findAll();
   res.success(data);
 });
 
-const createAvailabilityData = asyncWrapper(async (req, res) => {
+const createOrUpdateAvailabilityData = asyncWrapper(async (req, res) => {
   const model = {
     ...req.body,
   };
-
-  const data = await Availability.create(model);
-  res.success(data);
-});
-
-const getSingleAvailabilityData = asyncWrapper(async (req, res) => {
-  const { id } = req.body;
-  const data = await Availability.findByPk(id);
-
-  if (!data) res.fail("Availability data not found");
-  res.success(data);
-});
-
-const updateAvailabilityData = asyncWrapper(async (req, res) => {
-  const { id, ...updatedFields } = req.body;
-
-  if (Object.keys(updatedFields).length === 0)
-    res.fail("No fields provided for update.");
-
-  const item = await Availability.findByPk(id);
-  if (!item) res.fail("Availability data not found");
-
-  const data = await item.update(updatedFields);
-  if (!data) res.fail("Availability update failed");
-
-  res.success(data);
+  const availabilityDayOfUser = await _findAvailabilityOfUserByDay(
+    model.userId,
+    model.day
+  );
+  if (availabilityDayOfUser) {
+    const updated = await _updateAvailabilityOfUserOfDay(
+      availabilityDayOfUser,
+      model
+    );
+    // const data = await Availability.create(model);
+    res.success(model);
+  } else {
+    const created = await _createAvailability(model);
+    // const data = await Availability.create(model);
+    res.success(model);
+  }
 });
 
 const deleteSingleAvailabilityData = asyncWrapper(async (req, res) => {
@@ -50,9 +55,7 @@ const deleteAllAvailabilityData = asyncWrapper(async (req, res) => {
 
 module.exports = {
   getAllAvailabilityData,
-  createAvailabilityData,
-  getSingleAvailabilityData,
-  updateAvailabilityData,
+  createOrUpdateAvailabilityData,
   deleteSingleAvailabilityData,
   deleteAllAvailabilityData,
 };

@@ -1,9 +1,7 @@
 const { Router } = require("express");
 const {
   getAllAvailabilityData,
-  getSingleAvailabilityData,
-  createAvailabilityData,
-  updateAvailabilityData,
+  createOrUpdateAvailabilityData,
   deleteSingleAvailabilityData,
   deleteAllAvailabilityData,
 } = require("../controllers/availability");
@@ -12,9 +10,7 @@ const router = Router();
 
 router
   .route("/")
-  .get(getSingleAvailabilityData)
-  .post(createAvailabilityData)
-  .put(updateAvailabilityData)
+  .post(createOrUpdateAvailabilityData)
   .delete(deleteSingleAvailabilityData);
 router
   .route("/all")
