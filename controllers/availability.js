@@ -1,3 +1,4 @@
+const { Op } = require("sequelize");
 const asyncWrapper = require("../middlewares/async");
 const { Availability } = require("../models/availability");
 
@@ -21,12 +22,28 @@ const getAllAvailabilityData = asyncWrapper(async (req, res) => {
   res.success(data);
 });
 
+const getUserAvailability = asyncWrapper(async (req, res) => {
+  const { userId } = req.params;
+  const today = new Date();
+  const todayMidnight = today.setHours(0, 0, 0, 0);
+  const data = await Availability.findAll({
+    where: {
+      userId,
+      day: {
+        [Op.gte]: todayMidnight,
+      },
+    },
+  });
+  res.success(data);
+});
+
 const createOrUpdateAvailabilityData = asyncWrapper(async (req, res) => {
+  const { userId } = req.params;
   const model = {
     ...req.body,
   };
   const availabilityDayOfUser = await _findAvailabilityOfUserByDay(
-    model.userId,
+    userId,
     model.day
   );
   if (availabilityDayOfUser) {
@@ -34,18 +51,22 @@ const createOrUpdateAvailabilityData = asyncWrapper(async (req, res) => {
       availabilityDayOfUser,
       model
     );
-    // const data = await Availability.create(model);
-    res.success(model);
+    res.success(updated);
   } else {
     const created = await _createAvailability(model);
-    // const data = await Availability.create(model);
-    res.success(model);
+    res.success(created);
   }
 });
 
 const deleteSingleAvailabilityData = asyncWrapper(async (req, res) => {
   await Availability.destroy({ where: { id: req.body.id } });
   res.success("Availability data deleted");
+});
+
+const deleteUserAvailability = asyncWrapper(async (req, res) => {
+  const { userId } = req.params;
+  await Availability.destroy({ where: { userId } });
+  res.success("Users all availability data deleted");
 });
 
 const deleteAllAvailabilityData = asyncWrapper(async (req, res) => {
@@ -55,7 +76,9 @@ const deleteAllAvailabilityData = asyncWrapper(async (req, res) => {
 
 module.exports = {
   getAllAvailabilityData,
+  getUserAvailability,
   createOrUpdateAvailabilityData,
   deleteSingleAvailabilityData,
+  deleteUserAvailability,
   deleteAllAvailabilityData,
 };

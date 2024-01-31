@@ -21,10 +21,10 @@ Availability.belongsTo(Profile, {
   targetKey: "id",
   onDelete: "SET NULL",
 });
-Profile.hasOne(Availability, {
-  foreignKey: "userId",
-  onDelete: "CASCADE",
-});
+// Profile.hasMany(Availability, {
+//   foreignKey: "userId",
+//   onDelete: "CASCADE",
+// });
 
 module.exports = {
   Availability,

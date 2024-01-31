@@ -32,7 +32,7 @@ const getSingleUserProfile = asyncWrapper(async (req, res) => {
     where: { id: userId },
     include: [
       Profession,
-      Availability,
+      // Availability,
       { model: Meeting, as: "initiatedMeetings", foreignKey: "initiator" },
       { model: Meeting, as: "acceptedMeetings", foreignKey: "acceptor" },
     ],
