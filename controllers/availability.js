@@ -2,20 +2,22 @@ const { Op } = require("sequelize");
 const asyncWrapper = require("../middlewares/async");
 const { Availability } = require("../models/availability");
 const { NOT_FOUND } = require("../constants/errorCodes");
+const { convertToUnixDateTime } = require("../helpers/timeDate");
 
-const _findAvailabilityOfUserByDay = async (userId, day) => {
-  const found = await Availability.findOne({ where: { userId, day } });
-  return found;
-};
-
-const _createAvailability = async (data) => {
-  const created = await Availability.create(data);
-  return created;
-};
-
-const _updateAvailabilityOfUserOfDay = async (oldData, newData) => {
-  const updated = await oldData.update(newData);
-  return updated;
+const _updateAvailabilityState = async (
+  avaiabilityId,
+  userId,
+  dayHour,
+  state
+) => {
+  const found = await Availability.findOne({
+    where: {
+      id: avaiabilityId,
+      userId,
+      dayHour,
+    },
+  });
+  return found.update({ state });
 };
 
 const getAllAvailabilityData = asyncWrapper(async (req, res) => {
@@ -40,36 +42,39 @@ const getUserAvailability = asyncWrapper(async (req, res) => {
   res.success(data);
 });
 
-const createOrUpdateAvailabilityData = asyncWrapper(async (req, res) => {
-  const { userId } = req.params;
-  if (!userId) res.fail("Invalid user ID", BAD_REQUEST);
-  const model = {
-    ...req.body,
-  };
-  const availabilityDayOfUser = await _findAvailabilityOfUserByDay(
-    userId,
-    model.day
-  );
-  if (availabilityDayOfUser) {
-    const updated = await _updateAvailabilityOfUserOfDay(
-      availabilityDayOfUser,
-      model
-    );
-    if (!updated) res.fail("Availability data update failed");
-    res.success(updated);
+const createAvailabilityData = asyncWrapper(async (req, res) => {
+  const { userId, day, hour } = req.body;
+  const found = await Availability.findOne({
+    where: {
+      userId,
+      day,
+      hour,
+    },
+  });
+  console.log("found: ", found);
+  if (found) {
+    found.destroy();
+    res.success("Deleted");
   } else {
-    const created = await _createAvailability(model);
+    const dateTime = convertToUnixDateTime(parseInt(day), parseInt(hour));
+    const model = {
+      userId,
+      day,
+      hour,
+      dayHour: dateTime,
+    };
+    const created = await Availability.create(model);
     if (!created)
       res.fail("Availability data could not be created for this user");
     res.success(created);
   }
 });
 
-const deleteUserAvailability = asyncWrapper(async (req, res) => {
-  const { userId } = req.params;
-  if (!userId) res.fail("Invalid user ID", BAD_REQUEST);
-  await Availability.destroy({ where: { userId } });
-  res.success("Users all availability data deleted");
+const deleteAvailabilityData = asyncWrapper(async (req, res) => {
+  const { avaiabilityId } = req.params;
+  if (!avaiabilityId) res.fail("Invalid availability ID", BAD_REQUEST);
+  await Availability.destroy({ where: { id: avaiabilityId } });
+  res.success("Availability data deleted");
 });
 
 const deleteAllAvailabilityData = asyncWrapper(async (req, res) => {
@@ -78,9 +83,10 @@ const deleteAllAvailabilityData = asyncWrapper(async (req, res) => {
 });
 
 module.exports = {
+  _updateAvailabilityState,
   getAllAvailabilityData,
   getUserAvailability,
-  createOrUpdateAvailabilityData,
-  deleteUserAvailability,
+  createAvailabilityData,
+  deleteAvailabilityData,
   deleteAllAvailabilityData,
 };

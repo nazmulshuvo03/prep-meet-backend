@@ -10,9 +10,15 @@ const Availability = sequelize.define("availability", {
     allowNull: false,
   },
   day: { type: DataTypes.BIGINT, allowNull: false },
-  hours: {
-    type: DataTypes.ARRAY(DataTypes.INTEGER),
-    defaultValue: [],
+  // hours: {
+  //   type: DataTypes.ARRAY(DataTypes.INTEGER),
+  //   defaultValue: [],
+  // },
+  hour: { type: DataTypes.INTEGER, allowNull: false },
+  dayHour: { type: DataTypes.BIGINT, allowNull: false },
+  state: {
+    type: DataTypes.ENUM("OPEN", "BOOKED", "COMPLETED"),
+    defaultValue: "OPEN",
   },
 });
 
