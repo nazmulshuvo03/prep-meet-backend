@@ -1,3 +1,4 @@
+const { Op } = require("sequelize");
 const asyncWrapper = require("../middlewares/async");
 const { Meeting } = require("../models/meeting");
 const { Profile } = require("../models/user");
@@ -8,6 +9,30 @@ const {
 
 const getAllMeetingData = asyncWrapper(async (req, res) => {
   const data = await Meeting.findAll();
+  res.success(data);
+});
+
+const getUsersMeetingData = asyncWrapper(async (req, res) => {
+  const { userId } = req.params;
+  const data = await Meeting.findAll({
+    where: {
+      [Op.and]: [
+        {
+          [Op.or]: [{ initiator: userId }, { acceptor: userId }],
+        },
+        {
+          day: {
+            [Op.gte]: new Date().getTime(),
+          },
+        },
+      ],
+    },
+    include: [
+      { model: Profile, as: "initiatorProfile", foreignKey: "initiator" },
+      { model: Profile, as: "acceptorProfile", foreignKey: "acceptor" },
+    ],
+    order: [["dayHour", "ASC"]],
+  });
   res.success(data);
 });
 
@@ -70,6 +95,7 @@ const deleteAllMeetingData = asyncWrapper(async (req, res) => {
 
 module.exports = {
   getAllMeetingData,
+  getUsersMeetingData,
   createMeetingData,
   getSingleMeetingData,
   updateMeetingData,
