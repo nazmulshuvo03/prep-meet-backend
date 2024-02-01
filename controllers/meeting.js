@@ -1,6 +1,10 @@
 const asyncWrapper = require("../middlewares/async");
 const { Meeting } = require("../models/meeting");
 const { Profile } = require("../models/user");
+const {
+  _getAvailabilityById,
+  _updateAvailabilityState,
+} = require("./availability");
 
 const getAllMeetingData = asyncWrapper(async (req, res) => {
   const data = await Meeting.findAll();
@@ -8,12 +12,21 @@ const getAllMeetingData = asyncWrapper(async (req, res) => {
 });
 
 const createMeetingData = asyncWrapper(async (req, res) => {
-  const model = {
-    ...req.body,
-  };
+  const { availabilityId, acceptorId } = req.body;
+  const availabilityData = await _getAvailabilityById(availabilityId);
+  await _updateAvailabilityState(availabilityId, "BOOKED");
 
-  const data = await Meeting.create(model);
-  res.success(data);
+  const model = {
+    initiator: availabilityData.userId,
+    acceptor: acceptorId,
+    day: parseInt(availabilityData.day),
+    hour: availabilityData.hour,
+    dayHour: parseInt(availabilityData.dayHour),
+    url: "https://www.google.com",
+  };
+  const meetingCreated = await Meeting.create(model);
+  if (!meetingCreated) res.fail("Meeting could not be created for this user");
+  res.success(meetingCreated);
 });
 
 const getSingleMeetingData = asyncWrapper(async (req, res) => {

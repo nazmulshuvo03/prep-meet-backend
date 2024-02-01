@@ -4,19 +4,19 @@ const { Availability } = require("../models/availability");
 const { NOT_FOUND } = require("../constants/errorCodes");
 const { convertToUnixDateTime } = require("../helpers/timeDate");
 
-const _updateAvailabilityState = async (
-  avaiabilityId,
-  userId,
-  dayHour,
-  state
-) => {
+const _getAvailabilityById = async (id) => {
+  const found = await Availability.findByPk(id);
+  if (!found) res.fail("Availability data not found with this ID", NOT_FOUND);
+  return found;
+};
+
+const _updateAvailabilityState = async (avaiabilityId, state) => {
   const found = await Availability.findOne({
     where: {
       id: avaiabilityId,
-      userId,
-      dayHour,
     },
   });
+  if (!found) res.fail("Availability data not found with this ID", NOT_FOUND);
   return found.update({ state });
 };
 
@@ -83,6 +83,7 @@ const deleteAllAvailabilityData = asyncWrapper(async (req, res) => {
 });
 
 module.exports = {
+  _getAvailabilityById,
   _updateAvailabilityState,
   getAllAvailabilityData,
   getUserAvailability,

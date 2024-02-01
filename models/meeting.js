@@ -17,11 +17,17 @@ const Meeting = sequelize.define("meeting", {
     type: DataTypes.UUID,
     allowNull: false,
   },
-  status: {
-    type: DataTypes.ENUM("REQUESTED", "ACCEPTED", "REJECTED"),
-    defaultValue: "REQUESTED",
+  day: { type: DataTypes.BIGINT, allowNull: false },
+  hour: { type: DataTypes.INTEGER, allowNull: false },
+  dayHour: { type: DataTypes.BIGINT, allowNull: false },
+  url: {
+    type: DataTypes.STRING,
+    allowNull: false,
   },
-  url: DataTypes.STRING,
+  status: {
+    type: DataTypes.ENUM("SCHEDULED", "COMPLETED"),
+    defaultValue: "SCHEDULED",
+  },
 });
 
 Meeting.belongsTo(Profile, {
