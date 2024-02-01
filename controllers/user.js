@@ -1,3 +1,4 @@
+const { Op } = require("sequelize");
 const { BAD_REQUEST, NOT_FOUND } = require("../constants/errorCodes");
 const asyncWrapper = require("../middlewares/async");
 const { Availability } = require("../models/availability");
@@ -10,11 +11,6 @@ const getAllUserData = asyncWrapper(async (req, res) => {
   res.success(userList);
 });
 
-const getAllUserProfiles = asyncWrapper(async (req, res) => {
-  const userList = await Profile.findAll();
-  res.success(userList);
-});
-
 const createUser = asyncWrapper(async (req, res) => {
   const model = {
     ...req.body,
@@ -23,6 +19,54 @@ const createUser = asyncWrapper(async (req, res) => {
   if (!pf) res.fail("User data not created");
 
   res.success(pf);
+});
+
+const getAllUserProfiles = asyncWrapper(async (req, res) => {
+  const { userId } = req.params;
+  const queryParameters = req.query;
+  const queryOptions = {
+    where: userId // user should not get profile in dashbaord
+      ? {
+          id: {
+            [Op.ne]: userId,
+          },
+        }
+      : {},
+  };
+  if (Object.keys(queryParameters).length) {
+    Object.keys(queryParameters).forEach((param) => {
+      const value = queryParameters[param];
+
+      // Check if the value is a number
+      if (!isNaN(value)) {
+        // If it's a number, check if it's prefixed with "_lt" or "_gt" or "_lte" or "_gte"
+        if (param.endsWith("_lt")) {
+          queryOptions.where[param.slice(0, -3)] = {
+            [Op.lt]: value,
+          };
+        } else if (param.endsWith("_gt")) {
+          queryOptions.where[param.slice(0, -3)] = {
+            [Op.gt]: value,
+          };
+        } else if (param.endsWith("_lte")) {
+          queryOptions.where[param.slice(0, -4)] = {
+            [Op.lte]: value,
+          };
+        } else if (param.endsWith("_gte")) {
+          queryOptions.where[param.slice(0, -4)] = {
+            [Op.gte]: value,
+          };
+        } else {
+          queryOptions.where[param] = value;
+        }
+      } else {
+        // If it's not a number, use equality
+        queryOptions.where[param] = value;
+      }
+    });
+  }
+  const userList = await Profile.findAll(queryOptions);
+  res.success(userList);
 });
 
 const getSingleUserProfile = asyncWrapper(async (req, res) => {

@@ -15,7 +15,8 @@ router
   .get(getSingleUserProfile)
   .put(updateUserProfile)
   .delete(deleteUser);
-router.route("/all").get(getAllUserProfiles).delete(deleteAllUser);
+router.route("/all/:userId?").get(getAllUserProfiles);
+router.route("/all").delete(deleteAllUser);
 router.route("/users").get(getAllUserData);
 
 module.exports = router;
