@@ -1,12 +1,15 @@
 const { Op } = require("sequelize");
 const asyncWrapper = require("../middlewares/async");
 const { Availability } = require("../models/availability");
-const { NOT_FOUND } = require("../constants/errorCodes");
 const { convertToUnixDateTime } = require("../helpers/timeDate");
 
 const _getAvailabilityById = async (id) => {
   const found = await Availability.findByPk(id);
-  if (!found) res.fail("Availability data not found with this ID", NOT_FOUND);
+  return found;
+};
+
+const _getAvailabilityByBody = async (body) => {
+  const found = await Availability.findOne({ where: { ...body } });
   return found;
 };
 
@@ -16,7 +19,6 @@ const _updateAvailabilityState = async (avaiabilityId, state) => {
       id: avaiabilityId,
     },
   });
-  if (!found) res.fail("Availability data not found with this ID", NOT_FOUND);
   return found.update({ state });
 };
 
@@ -84,6 +86,7 @@ const deleteAllAvailabilityData = asyncWrapper(async (req, res) => {
 
 module.exports = {
   _getAvailabilityById,
+  _getAvailabilityByBody,
   _updateAvailabilityState,
   getAllAvailabilityData,
   getUserAvailability,

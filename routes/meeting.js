@@ -7,6 +7,7 @@ const {
   deleteSingleMeetingData,
   deleteAllMeetingData,
   getUsersMeetingData,
+  cancelMeeting,
 } = require("../controllers/meeting");
 
 const router = Router();
@@ -18,6 +19,7 @@ router
   .put(updateMeetingData)
   .delete(deleteSingleMeetingData);
 router.route("/:userId").get(getUsersMeetingData);
+router.route("/cancel").post(cancelMeeting);
 router.route("/all").get(getAllMeetingData).delete(deleteAllMeetingData);
 
 module.exports = router;

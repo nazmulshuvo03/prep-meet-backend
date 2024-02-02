@@ -5,7 +5,11 @@ const { Profile } = require("../models/user");
 const {
   _getAvailabilityById,
   _updateAvailabilityState,
+  _getAvailabilityByBody,
 } = require("./availability");
+const { NOT_FOUND, UNPROCESSABLE_DATA } = require("../constants/errorCodes");
+const { sendMeetingEmail } = require("../helpers/emailMeeting");
+const { _getUserProfile } = require("./user");
 
 const getAllMeetingData = asyncWrapper(async (req, res) => {
   const data = await Meeting.findAll();
@@ -39,7 +43,12 @@ const getUsersMeetingData = asyncWrapper(async (req, res) => {
 const createMeetingData = asyncWrapper(async (req, res) => {
   const { availabilityId, acceptorId } = req.body;
   const availabilityData = await _getAvailabilityById(availabilityId);
-  await _updateAvailabilityState(availabilityId, "BOOKED");
+  if (!availabilityData)
+    res.fail("Availability data not found with this ID", NOT_FOUND);
+
+  const updated = await _updateAvailabilityState(availabilityId, "BOOKED");
+  if (!updated)
+    res.fail("Availability state could not be updated", UNPROCESSABLE_DATA);
 
   const model = {
     initiator: availabilityData.userId,
@@ -51,7 +60,33 @@ const createMeetingData = asyncWrapper(async (req, res) => {
   };
   const meetingCreated = await Meeting.create(model);
   if (!meetingCreated) res.fail("Meeting could not be created for this user");
+  const initiatorProfile = await _getUserProfile(model.initiator);
+  const acceptorProfile = await _getUserProfile(model.acceptor);
+  sendMeetingEmail(initiatorProfile.email, meetingCreated);
+  sendMeetingEmail(acceptorProfile.email, meetingCreated);
   res.success(meetingCreated);
+});
+
+const cancelMeeting = asyncWrapper(async (req, res) => {
+  const { meetingId, userId } = req.body;
+  const found = await Meeting.findByPk(meetingId);
+  if (!found) res.fail("Meeting data not found");
+  if (userId === found.acceptor || userId === found.initiator) {
+    const availability = await _getAvailabilityByBody({
+      userId: found.initiator,
+      day: found.day,
+      hour: found.hour,
+      dayHour: found.dayHour,
+    });
+    if (!availability) res.fail("Availability data not found");
+    const updated = await _updateAvailabilityState(availability.id, "OPEN");
+    if (!updated)
+      res.fail("Availability state could not be updated", UNPROCESSABLE_DATA);
+    found.destroy();
+    res.success("Meeting canceled");
+  } else {
+    res.fail("This meeting does not belong to you");
+  }
 });
 
 const getSingleMeetingData = asyncWrapper(async (req, res) => {
@@ -99,6 +134,7 @@ module.exports = {
   createMeetingData,
   getSingleMeetingData,
   updateMeetingData,
+  cancelMeeting,
   deleteSingleMeetingData,
   deleteAllMeetingData,
 };

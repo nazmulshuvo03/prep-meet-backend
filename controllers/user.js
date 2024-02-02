@@ -1,10 +1,14 @@
 const { Op } = require("sequelize");
 const { BAD_REQUEST, NOT_FOUND } = require("../constants/errorCodes");
 const asyncWrapper = require("../middlewares/async");
-const { Availability } = require("../models/availability");
+// const { Availability } = require("../models/availability");
 const { Meeting } = require("../models/meeting");
 const { Profession } = require("../models/profession");
 const { User, Profile } = require("../models/user");
+
+const _getUserProfile = async(userId) => {
+  return User.findByPk(userId)
+}
 
 const getAllUserData = asyncWrapper(async (req, res) => {
   const userList = await User.findAll();
@@ -121,11 +125,12 @@ const deleteAllUser = asyncWrapper(async (req, res) => {
 });
 
 module.exports = {
+  _getUserProfile,
+  _updateUserProfile,
   getAllUserData,
   getAllUserProfiles,
   createUser,
   getSingleUserProfile,
-  _updateUserProfile,
   updateUserProfile,
   deleteUser,
   deleteAllUser,
