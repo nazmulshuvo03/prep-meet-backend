@@ -49,7 +49,7 @@ sequelize
   .sync({ alter: true })
   .then(() => {
     try {
-      console.log("Database connected!!!");
+      console.log("Database connected!!");
       app.listen(port, () => {
         console.log(`Server is running on http://localhost:${port}`);
       });
