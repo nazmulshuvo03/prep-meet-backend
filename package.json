@@ -2,11 +2,11 @@
   "name": "prep-meet-backend",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "app.js",
   "scripts": {
-    "start": "node index",
-    "dev": "cross-env NODE_ENV=local nodemon -e js,ejs,json index",
-    "prod": "cross-env NODE_ENV=prod node index"
+    "start": "node app",
+    "dev": "cross-env NODE_ENV=local nodemon -e js,ejs,json app",
+    "prod": "cross-env NODE_ENV=prod node app"
   },
   "keywords": [],
   "author": "",
