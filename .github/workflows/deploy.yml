@@ -23,4 +23,4 @@ jobs:
 
       - name: Deploy to Server
         run: |
-          ssh -i /home/nazmul/.ssh/meet-prep-ec2-keypair.pem ${{ secrets.USER }}@${{ secrets.SERVER_IP }} "cd ${{ secrets.APP_PATH }} && git pull && npm install && pm2 restart ${{ secrets.APP_NAME }}"
+          ssh -i ~/.ssh/meet-prep-ec2-keypair.pem ${{ secrets.USER }}@${{ secrets.SERVER_IP }} "cd ${{ secrets.APP_PATH }} && git pull && npm install && pm2 restart ${{ secrets.APP_NAME }}"
