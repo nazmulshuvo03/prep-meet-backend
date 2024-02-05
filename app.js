@@ -32,8 +32,6 @@ app.use(express.static(path.join(__dirname, "public")));
 app.use(
   cors({
     origin: function (origin, callback) {
-      // allow requests with no origin
-      // (like mobile apps or curl requests)
       console.log(origin);
       if (!origin) {
         console.log("no origin");
