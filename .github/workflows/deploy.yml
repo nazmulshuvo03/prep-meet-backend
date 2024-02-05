@@ -29,4 +29,4 @@ jobs:
 
       - name: Deploy to Server
         run: |
-          ssh -i $HOME/.ssh/private-key.pem ${{ secrets.USER }}@${{ secrets.SERVER_IP }} "cd ${{ secrets.APP_PATH }} && git pull && npm install && pm2 restart ${{ secrets.APP_NAME }}"
+          ssh -o StrictHostKeyChecking=no -i $HOME/.ssh/private-key.pem ${{ secrets.USER }}@${{ secrets.SERVER_IP }} "cd ${{ secrets.APP_PATH }} && git pull && npm install && pm2 restart ${{ secrets.APP_NAME }}"
