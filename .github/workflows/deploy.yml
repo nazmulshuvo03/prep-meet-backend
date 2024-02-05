@@ -21,6 +21,12 @@ jobs:
       - name: Install dependencies
         run: npm install
 
+      - name: Set up SSH
+        run: |
+          mkdir -p $HOME/.ssh
+          echo "${{ secrets.PRIVATE_KEY_PEM }}" > $HOME/.ssh/private-key.pem
+          chmod 400 $HOME/.ssh/private-key.pem
+
       - name: Deploy to Server
         run: |
-          ssh -i ~/.ssh/meet-prep-ec2-keypair.pem ${{ secrets.USER }}@${{ secrets.SERVER_IP }} "cd ${{ secrets.APP_PATH }} && git pull && npm install && pm2 restart ${{ secrets.APP_NAME }}"
+          ssh -i $HOME/.ssh/private-key.pem ${{ secrets.USER }}@${{ secrets.SERVER_IP }} "cd ${{ secrets.APP_PATH }} && git pull && npm install && pm2 restart ${{ secrets.APP_NAME }}"
