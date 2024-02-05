@@ -1,0 +1,26 @@
+name: Meet Prep Backend deployment
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '21.6.1'
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Deploy to Server
+        run: |
+          ssh -i ${{ secrets.PRIVATE_KEY }} ${{ secrets.USER }}@${{ secrets.SERVER_IP }} "cd ${{ secrets.APP_PATH }} && git pull && npm install && pm2 restart ${{ secrets.APP_NAME }}"
