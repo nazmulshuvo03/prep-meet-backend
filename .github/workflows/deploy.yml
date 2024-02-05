@@ -10,11 +10,17 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      - name: Debugging
+        run: ls -la $HOME/.ssh
+
+      - name: Debugging
+        run: ls -la ~/.ssh
+
+      - name: Debugging
+        run: ls -la /home/nazmul/.ssh
+
       - name: Checkout repository
         uses: actions/checkout@v3
-      
-      - name: Copy Private Key
-        run: cp /home/nazmul/.ssh/meet-prep-ec2-keypair.pem $HOME/.ssh/meet-prep-ec2-keypair.pem
 
       - name: Setup Node.js
         uses: actions/setup-node@v3
@@ -26,4 +32,4 @@ jobs:
 
       - name: Deploy to Server
         run: |
-          ssh -i $HOME/.ssh/meet-prep-ec2-keypair.pem ${{ secrets.USER }}@${{ secrets.SERVER_IP }} "cd ${{ secrets.APP_PATH }} && git pull && npm install && pm2 restart ${{ secrets.APP_NAME }}"
+          ssh -i /home/nazmul/.ssh/meet-prep-ec2-keypair.pem ${{ secrets.USER }}@${{ secrets.SERVER_IP }} "cd ${{ secrets.APP_PATH }} && git pull && npm install && pm2 restart ${{ secrets.APP_NAME }}"
