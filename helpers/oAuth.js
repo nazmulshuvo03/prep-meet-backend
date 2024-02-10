@@ -59,18 +59,15 @@ const getAccessTokenFromAuth = (authCode) => {
     .post("https://oauth2.googleapis.com/token", data)
     .then((response) => {
       const token = response.data;
-      console.log("Token data: ", token);
       const refresh_token = token.refresh_token;
       fs.writeFile(TOKEN_PATH, JSON.stringify(token), (err) => {
         if (err) return console.error(err);
-        console.log("Token stored to", TOKEN_PATH);
       });
       fs.writeFile(
         REFRESH_TOKEN_PATH,
         JSON.stringify({ refresh_token }),
         (err) => {
           if (err) return console.error(err);
-          console.log("Refresh Token stored to", REFRESH_TOKEN_PATH);
         }
       );
     })
@@ -79,7 +76,7 @@ const getAccessTokenFromAuth = (authCode) => {
     });
 };
 
-const getAccessTokenFromRefreshToken = () => {
+const getAccessTokenFromRefreshToken = async () => {
   const ref_token = require("../refresh_token.json");
   const data = {
     client_id: keys.web.client_id,
@@ -92,10 +89,8 @@ const getAccessTokenFromRefreshToken = () => {
     .post("https://oauth2.googleapis.com/token", data)
     .then((response) => {
       const token = response.data;
-      console.log("Token data: ", token);
       fs.writeFile(TOKEN_PATH, JSON.stringify(token), (err) => {
         if (err) return console.error(err);
-        console.log("Token stored to", TOKEN_PATH);
       });
     })
     .catch((error) => {
