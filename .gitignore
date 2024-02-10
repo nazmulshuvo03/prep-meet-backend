@@ -2,3 +2,7 @@ node_modules
 
 .env
 .env.*
+
+keys.json
+token.json
+refresh_token.json

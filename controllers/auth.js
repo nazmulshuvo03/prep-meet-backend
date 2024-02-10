@@ -5,6 +5,11 @@ const asyncWrapper = require("../middlewares/async");
 const { User, Profile } = require("../models/user");
 const { sendVerificationEmail } = require("../helpers/emailVerification");
 const { _updateUserProfile } = require("./user");
+const {
+  getAccessTokenFromAuth,
+  getAccessTokenFromRefreshToken,
+  redirectToOAuthURL,
+} = require("../helpers/oAuth");
 
 const TOKEN_COOKIE_NAME = "prepMeetToken";
 const MAX_AGE = 30 * 24 * 60 * 60;
@@ -87,10 +92,38 @@ const verifyEmail = asyncWrapper(async (req, res) => {
   }
 });
 
+const meetAuth = asyncWrapper(async (req, res) => {
+  const fs = require("fs");
+  const filePath = "./token.json";
+  fs.access(filePath, fs.constants.F_OK, (err) => {
+    // if no token file -> redirect to OAuth page to generate token file with access token
+    if (err) {
+      console.error("Error: File does not exist");
+      redirectToOAuthURL();
+    }
+    // if there is a token file -> try to create meet
+
+    // if create meeting fails -> try using refresh token to create new access token
+    console.log("File exists");
+  });
+});
+
+const oauthCallback = asyncWrapper(async (req, res) => {
+  const authorizationCode = req.query.code;
+  if (authorizationCode) {
+    getAccessTokenFromAuth(authorizationCode);
+    // getAccessTokenFromRefreshToken();
+    res.send("Authorization code received: " + authorizationCode);
+  } else {
+    res.status(400).send("Error: Authorization code not found");
+  }
+});
+
 module.exports = {
   TOKEN_COOKIE_NAME,
   signupUser,
   loginUser,
   logoutUser,
   verifyEmail,
+  oauthCallback,
 };
