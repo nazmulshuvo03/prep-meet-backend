@@ -20,7 +20,11 @@ const Meeting = sequelize.define("meeting", {
   day: { type: DataTypes.BIGINT, allowNull: false },
   hour: { type: DataTypes.INTEGER, allowNull: false },
   dayHour: { type: DataTypes.BIGINT, allowNull: false },
-  url: {
+  event: {
+    type: DataTypes.STRING,
+    allowNull: false,
+  },
+  meet: {
     type: DataTypes.STRING,
     allowNull: false,
   },

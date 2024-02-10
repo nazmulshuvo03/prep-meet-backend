@@ -47,10 +47,6 @@ const createMeetingData = asyncWrapper(async (req, res) => {
   if (!availabilityData)
     res.fail("Availability data not found with this ID", NOT_FOUND);
 
-  const updated = await _updateAvailabilityState(availabilityId, "BOOKED");
-  if (!updated)
-    res.fail("Availability state could not be updated", UNPROCESSABLE_DATA);
-
   const initiatorProfile = await _getUserProfile(availabilityData.userId);
   const acceptorProfile = await _getUserProfile(acceptorId);
   const meetingCreation = await createMeeting(
@@ -71,10 +67,16 @@ const createMeetingData = asyncWrapper(async (req, res) => {
     day: parseInt(availabilityData.day),
     hour: availabilityData.hour,
     dayHour: parseInt(availabilityData.dayHour),
-    url: meetingCreation.meetLink,
+    event: meetingCreated.eventLink,
+    meet: meetingCreation.meetLink,
   };
   const meetingCreated = await Meeting.create(model);
   if (!meetingCreated) res.fail("Meeting could not be created for this user");
+
+  const updated = await _updateAvailabilityState(availabilityId, "BOOKED");
+  if (!updated)
+    res.fail("Availability state could not be updated", UNPROCESSABLE_DATA);
+  
   res.success(model);
 });
 
