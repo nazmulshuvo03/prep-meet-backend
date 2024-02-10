@@ -10,6 +10,7 @@ const {
 const { NOT_FOUND, UNPROCESSABLE_DATA } = require("../constants/errorCodes");
 const { sendMeetingEmail } = require("../helpers/emailMeeting");
 const { _getUserProfile } = require("./user");
+const { createMeeting } = require("../helpers/meeting");
 
 const getAllMeetingData = asyncWrapper(async (req, res) => {
   const data = await Meeting.findAll();
@@ -50,21 +51,31 @@ const createMeetingData = asyncWrapper(async (req, res) => {
   if (!updated)
     res.fail("Availability state could not be updated", UNPROCESSABLE_DATA);
 
+  const initiatorProfile = await _getUserProfile(availabilityData.userId);
+  const acceptorProfile = await _getUserProfile(acceptorId);
+  const meetingCreation = await createMeeting(
+    initiatorProfile.dataValues.email,
+    acceptorProfile.dataValues.email,
+    availabilityData.dataValues
+  );
+  if (!meetingCreation.created) {
+    if (meetingCreation.redirect) {
+      res.fail(meetingCreation.redirectUrl);
+    } else {
+      res.fail(meetingCreation.message);
+    }
+  }
   const model = {
     initiator: availabilityData.userId,
     acceptor: acceptorId,
     day: parseInt(availabilityData.day),
     hour: availabilityData.hour,
     dayHour: parseInt(availabilityData.dayHour),
-    url: "https://www.google.com",
+    url: meetingCreation.meetLink,
   };
   const meetingCreated = await Meeting.create(model);
   if (!meetingCreated) res.fail("Meeting could not be created for this user");
-  const initiatorProfile = await _getUserProfile(model.initiator);
-  const acceptorProfile = await _getUserProfile(model.acceptor);
-  sendMeetingEmail(initiatorProfile.email, meetingCreated);
-  sendMeetingEmail(acceptorProfile.email, meetingCreated);
-  res.success(meetingCreated);
+  res.success(model);
 });
 
 const cancelMeeting = asyncWrapper(async (req, res) => {

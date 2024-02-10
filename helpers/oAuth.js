@@ -7,9 +7,26 @@ const CLIENTS_SECRET_FILE_PATH = "./keys.json";
 const TOKEN_PATH = "./token.json";
 const REFRESH_TOKEN_PATH = "./refresh_token.json";
 
-const redirectToOAuthURL = () => {
-  fs.readFile(CLIENTS_SECRET_FILE_PATH, (err, content) => {
-    if (err) return console.error("Error loading client secret file:", err);
+const createOAuthClient = async () => {
+  try {
+    const keyContent = await fs.promises.readFile(CLIENTS_SECRET_FILE_PATH);
+    const credentials = JSON.parse(keyContent);
+    const { client_secret, client_id, redirect_uris } = credentials.web;
+    const oAuth2Client = new google.auth.OAuth2(
+      client_id,
+      client_secret,
+      redirect_uris[0]
+    );
+    return oAuth2Client;
+  } catch (err) {
+    console.error("Error creating OAuth client:", err);
+    throw err; // Rethrow the error to propagate it
+  }
+};
+
+const generateOAuthURL = async () => {
+  try {
+    const content = await fs.promises.readFile(CLIENTS_SECRET_FILE_PATH);
     const credentials = JSON.parse(content);
     const { client_secret, client_id, redirect_uris } = credentials.web;
     const oAuth2Client = new google.auth.OAuth2(
@@ -17,13 +34,16 @@ const redirectToOAuthURL = () => {
       client_secret,
       redirect_uris[0]
     );
-    const authUrl = oAuth2Client.generateAuthUrl({
+    const authUrl = await oAuth2Client.generateAuthUrl({
       access_type: "offline",
       scope: ["https://www.googleapis.com/auth/calendar"],
     });
     console.log("Auth URL: ", authUrl);
-    res.redirect(authUrl);
-  });
+    return authUrl;
+  } catch (err) {
+    console.error("Error loading client secret file:", err);
+    throw err;
+  }
 };
 
 const getAccessTokenFromAuth = (authCode) => {
@@ -84,7 +104,8 @@ const getAccessTokenFromRefreshToken = () => {
 };
 
 module.exports = {
-  redirectToOAuthURL,
+  createOAuthClient,
+  generateOAuthURL,
   getAccessTokenFromAuth,
   getAccessTokenFromRefreshToken,
 };

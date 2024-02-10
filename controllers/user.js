@@ -7,7 +7,7 @@ const { Profession } = require("../models/profession");
 const { User, Profile } = require("../models/user");
 
 const _getUserProfile = async(userId) => {
-  return User.findByPk(userId)
+  return Profile.findByPk(userId);
 }
 
 const getAllUserData = asyncWrapper(async (req, res) => {

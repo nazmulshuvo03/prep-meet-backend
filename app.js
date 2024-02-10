@@ -48,6 +48,7 @@ app.use(
       }
       return callback(null, true);
     },
+    credentials: true,
   })
 );
 app.use(bodyParser.json());
