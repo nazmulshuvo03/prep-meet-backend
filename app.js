@@ -1,7 +1,6 @@
 const express = require("express");
 const path = require("path");
 const bodyParser = require("body-parser");
-const cors = require("cors");
 const cookieParser = require("cookie-parser");
 const livereload = require("livereload");
 const connectLiveReload = require("connect-livereload");
@@ -12,6 +11,7 @@ const sequelize = require("./db");
 const { responseMiddleware } = require("./middlewares/Response");
 const { requestLogger } = require("./middlewares/logger");
 const viewRoutes = require("./routes/view");
+const configureCors = require("./middlewares/cors");
 
 const liveReloadServer = livereload.createServer();
 liveReloadServer.watch(path.join(__dirname, "views"));
@@ -29,28 +29,7 @@ app.set("views", path.join(__dirname, "views"));
 
 app.use(express.static(path.join(__dirname, "public")));
 
-app.use(
-  cors({
-    origin: function (origin, callback) {
-      console.log(origin);
-      if (!origin) {
-        console.log("no origin");
-        return callback(null, true);
-      }
-      const allowedOrigins = process.env.ALLOWED_ORIGINS.split(",");
-      if (allowedOrigins.indexOf(origin) === -1) {
-        console.log("cors issue", origin);
-        var msg =
-          "The CORS policy for this site does not " +
-          "allow access from the specified Origin." +
-          origin;
-        return callback(new Error(msg), false);
-      }
-      return callback(null, true);
-    },
-    credentials: true,
-  })
-);
+app.use(configureCors());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());

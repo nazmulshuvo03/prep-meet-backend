@@ -6,9 +6,9 @@ const { Meeting } = require("../models/meeting");
 const { Profession } = require("../models/profession");
 const { User, Profile } = require("../models/user");
 
-const _getUserProfile = async(userId) => {
+const _getUserProfile = async (userId) => {
   return Profile.findByPk(userId);
-}
+};
 
 const getAllUserData = asyncWrapper(async (req, res) => {
   const userList = await User.findAll();
@@ -87,7 +87,7 @@ const getSingleUserProfile = asyncWrapper(async (req, res) => {
   });
   if (!user) res.fail("User data not found", NOT_FOUND);
 
-  res.success(user);
+  return res.success(user);
 });
 
 const _updateUserProfile = async (res, userId, updatedFields) => {
