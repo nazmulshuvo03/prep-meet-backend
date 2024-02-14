@@ -4,6 +4,7 @@ const authRoutes = require("./auth");
 const professionRoutes = require("./profession");
 const availabilityRoutes = require("./availability");
 const meetingRoutes = require("./meeting");
+const fileRoutes = require("./file");
 const { requireAuth } = require("../middlewares/auth");
 
 const router = Router();
@@ -13,6 +14,7 @@ router.route("/").get((req, res) => {
 });
 
 router.use("/auth", authRoutes);
+router.use("/file", fileRoutes);
 // router.use(requireAuth);
 router.use("/user", userRoutes);
 router.use("/profession", professionRoutes);

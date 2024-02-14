@@ -6,3 +6,5 @@ node_modules
 keys.json
 token.json
 refresh_token.json
+
+uploads
