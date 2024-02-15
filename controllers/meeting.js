@@ -84,6 +84,7 @@ const cancelMeeting = asyncWrapper(async (req, res) => {
   const { meetingId, userId } = req.body;
   const found = await Meeting.findByPk(meetingId);
   if (!found) res.fail("Meeting data not found");
+  await Meeting.destroy({ where: { id: meetingId } });
   if (userId === found.acceptor || userId === found.initiator) {
     const availability = await _getAvailabilityByBody({
       userId: found.initiator,
