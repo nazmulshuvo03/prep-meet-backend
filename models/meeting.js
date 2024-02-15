@@ -17,8 +17,6 @@ const Meeting = sequelize.define("meeting", {
     type: DataTypes.UUID,
     allowNull: false,
   },
-  day: { type: DataTypes.BIGINT, allowNull: false },
-  hour: { type: DataTypes.INTEGER, allowNull: false },
   dayHour: { type: DataTypes.BIGINT, allowNull: false },
   event: {
     type: DataTypes.STRING,

@@ -1,7 +1,6 @@
 const { Op } = require("sequelize");
 const asyncWrapper = require("../middlewares/async");
 const { Availability } = require("../models/availability");
-const { convertToUnixDateTime } = require("../helpers/timeDate");
 
 const _getAvailabilityById = async (id) => {
   const found = await Availability.findByPk(id);
@@ -35,7 +34,7 @@ const getUserAvailability = asyncWrapper(async (req, res) => {
   const data = await Availability.findAll({
     where: {
       userId,
-      day: {
+      dayHour: {
         [Op.gte]: todayMidnight,
       },
     },
@@ -45,12 +44,11 @@ const getUserAvailability = asyncWrapper(async (req, res) => {
 });
 
 const createAvailabilityData = asyncWrapper(async (req, res) => {
-  const { userId, day, hour } = req.body;
+  const { userId, dayHour } = req.body;
   const found = await Availability.findOne({
     where: {
       userId,
-      day,
-      hour,
+      dayHour,
     },
   });
   console.log("found: ", found);
@@ -58,12 +56,9 @@ const createAvailabilityData = asyncWrapper(async (req, res) => {
     found.destroy();
     res.success("Deleted");
   } else {
-    const dateTime = convertToUnixDateTime(parseInt(day), parseInt(hour));
     const model = {
       userId,
-      day,
-      hour,
-      dayHour: dateTime,
+      dayHour,
     };
     const created = await Availability.create(model);
     if (!created)

@@ -8,7 +8,6 @@ const {
   _getAvailabilityByBody,
 } = require("./availability");
 const { NOT_FOUND, UNPROCESSABLE_DATA } = require("../constants/errorCodes");
-const { sendMeetingEmail } = require("../helpers/emailMeeting");
 const { _getUserProfile } = require("./user");
 const { createMeeting } = require("../helpers/meeting");
 
@@ -26,7 +25,7 @@ const getUsersMeetingData = asyncWrapper(async (req, res) => {
           [Op.or]: [{ initiator: userId }, { acceptor: userId }],
         },
         {
-          day: {
+          dayHour: {
             [Op.gte]: new Date().getTime(),
           },
         },
@@ -64,8 +63,6 @@ const createMeetingData = asyncWrapper(async (req, res) => {
   const model = {
     initiator: availabilityData.userId,
     acceptor: acceptorId,
-    day: parseInt(availabilityData.day),
-    hour: availabilityData.hour,
     dayHour: parseInt(availabilityData.dayHour),
     event: meetingCreation.eventLink,
     meet: meetingCreation.meetLink,
@@ -80,7 +77,7 @@ const createMeetingData = asyncWrapper(async (req, res) => {
       "Availability state could not be updated",
       UNPROCESSABLE_DATA
     );
-  res.success(model);
+  res.success(meetingCreated);
 });
 
 const cancelMeeting = asyncWrapper(async (req, res) => {
@@ -90,8 +87,6 @@ const cancelMeeting = asyncWrapper(async (req, res) => {
   if (userId === found.acceptor || userId === found.initiator) {
     const availability = await _getAvailabilityByBody({
       userId: found.initiator,
-      day: found.day,
-      hour: found.hour,
       dayHour: found.dayHour,
     });
     if (!availability) res.fail("Availability data not found");
