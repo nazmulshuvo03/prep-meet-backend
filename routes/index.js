@@ -18,7 +18,7 @@ router.route("/").get((req, res) => {
 
 router.use("/auth", authRoutes);
 router.use("/file", fileRoutes);
-router.use(requireAuth);
+// router.use(requireAuth);
 router.use("/user", userRoutes);
 router.use("/profession", professionRoutes);
 router.use("/availability", availabilityRoutes);
