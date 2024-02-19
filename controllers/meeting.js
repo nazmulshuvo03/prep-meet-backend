@@ -83,7 +83,7 @@ const createMeetingData = asyncWrapper(async (req, res) => {
       "Availability state could not be updated",
       UNPROCESSABLE_DATA
     );
-  res.success("meetingCreated");
+  res.success(meetingCreated);
 });
 
 const cancelMeeting = asyncWrapper(async (req, res) => {

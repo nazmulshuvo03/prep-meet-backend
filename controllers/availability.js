@@ -44,14 +44,14 @@ const getUserAvailability = asyncWrapper(async (req, res) => {
 });
 
 const createAvailabilityData = asyncWrapper(async (req, res) => {
-  const { userId, dayHour } = req.body;
+  const { userId, day, hour, dayHourUTC } = req.body;
+  const dayHour = new Date(dayHourUTC).getTime();
   const found = await Availability.findOne({
     where: {
       userId,
       dayHour,
     },
   });
-  console.log("found: ", found);
   if (found) {
     found.destroy();
     res.success("Deleted");
@@ -59,6 +59,7 @@ const createAvailabilityData = asyncWrapper(async (req, res) => {
     const model = {
       userId,
       dayHour,
+      dayHourUTC,
     };
     const created = await Availability.create(model);
     if (!created)

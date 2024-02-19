@@ -10,6 +10,7 @@ const Availability = sequelize.define("availability", {
     allowNull: false,
   },
   dayHour: { type: DataTypes.BIGINT, allowNull: false },
+  dayHourUTC: { type: DataTypes.DATE, allowNull: false },
   state: {
     type: DataTypes.ENUM("OPEN", "BOOKED", "COMPLETED"),
     defaultValue: "OPEN",
