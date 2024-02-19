@@ -1,3 +1,4 @@
+const axios = require("axios");
 const { google } = require("googleapis");
 const fs = require("fs");
 const {
@@ -5,6 +6,7 @@ const {
   createOAuthClient,
   getAccessTokenFromRefreshToken,
 } = require("./oAuth");
+const { meetingEmail } = require("../constants/emails");
 
 const TOKEN_PATH = "./token.json";
 
@@ -53,15 +55,17 @@ const performMeetingInsert = async (event) => {
   }
 };
 
-const createMeeting = async (initiator, acceptor, timeData) => {
+const createEvent = async (initiator, acceptor, timeData, meetingLink) => {
   const dayHour = parseInt(timeData.dayHour);
-  const startTime = new Date(dayHour);
-  const endTime = new Date(dayHour + 1 * 3600 * 1000);
+  const startTimeUnix = new Date(dayHour);
+  const endTimeUnix = new Date(dayHour + 1 * 3600 * 1000);
+  const startTime = new Date(startTimeUnix).toISOString();
+  const endTime = new Date(endTimeUnix).toISOString();
 
   const event = {
     summary: "Meet Prep Meeting",
     location: "Google Meet",
-    description: "Talk about the topics that you have prepared for",
+    description: meetingEmail(meetingLink),
     start: {
       dateTime: startTime,
     },
@@ -69,11 +73,11 @@ const createMeeting = async (initiator, acceptor, timeData) => {
       dateTime: endTime,
     },
     attendees: [{ email: initiator }, { email: acceptor }],
-    conferenceData: {
-      createRequest: {
-        requestId: timeData.id,
-      },
-    },
+    // conferenceData: {
+    //   createRequest: {
+    //     requestId: timeData.id,
+    //   },
+    // },
   };
   const insertResponse = await performMeetingInsert(event);
   if (insertResponse.message === "Invalid Credentials") {
@@ -82,6 +86,24 @@ const createMeeting = async (initiator, acceptor, timeData) => {
   } else return insertResponse;
 };
 
+const createMeeting = async () => {
+  try {
+    const response = await axios.post(
+      "https://sfu.mirotalk.com/api/v1/meeting",
+      {},
+      {
+        headers: {
+          Authorization: "mirotalksfu_default_secret",
+        },
+      }
+    );
+    return response.data;
+  } catch (err) {
+    return err.response.data;
+  }
+};
+
 module.exports = {
   createMeeting,
+  createEvent,
 };

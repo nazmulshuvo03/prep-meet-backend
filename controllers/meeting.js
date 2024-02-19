@@ -9,7 +9,7 @@ const {
 } = require("./availability");
 const { NOT_FOUND, UNPROCESSABLE_DATA } = require("../constants/errorCodes");
 const { _getUserProfile } = require("./user");
-const { createMeeting } = require("../helpers/meeting");
+const { createEvent, createMeeting } = require("../helpers/meeting");
 
 const getAllMeetingData = asyncWrapper(async (req, res) => {
   const data = await Meeting.findAll();
@@ -48,24 +48,30 @@ const createMeetingData = asyncWrapper(async (req, res) => {
 
   const initiatorProfile = await _getUserProfile(availabilityData.userId);
   const acceptorProfile = await _getUserProfile(acceptorId);
-  const meetingCreation = await createMeeting(
+
+  const meetingData = await createMeeting();
+  if (meetingData.error)
+    return res.fail(`Meeting creation error: ${meetingData.error}`);
+
+  const createdEvent = await createEvent(
     initiatorProfile.dataValues.email,
     acceptorProfile.dataValues.email,
-    availabilityData.dataValues
+    availabilityData.dataValues,
+    meetingData.meeting
   );
-  if (!meetingCreation.created) {
-    if (meetingCreation.redirect) {
-      return res.fail(meetingCreation.redirectUrl);
+  if (!createdEvent.created) {
+    if (createdEvent.redirect) {
+      return res.fail(createdEvent.redirectUrl);
     } else {
-      return res.fail(meetingCreation.message);
+      return res.fail(createdEvent.message);
     }
   }
   const model = {
     initiator: availabilityData.userId,
     acceptor: acceptorId,
     dayHour: parseInt(availabilityData.dayHour),
-    event: meetingCreation.eventLink,
-    meet: meetingCreation.meetLink,
+    event: createdEvent.eventLink,
+    meet: meetingData.meeting,
   };
   const meetingCreated = await Meeting.create(model);
   if (!meetingCreated)
@@ -77,7 +83,7 @@ const createMeetingData = asyncWrapper(async (req, res) => {
       "Availability state could not be updated",
       UNPROCESSABLE_DATA
     );
-  res.success(meetingCreated);
+  res.success("meetingCreated");
 });
 
 const cancelMeeting = asyncWrapper(async (req, res) => {
