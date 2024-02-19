@@ -55,8 +55,13 @@ const performMeetingInsert = async (event) => {
   }
 };
 
-const createEvent = async (initiator, acceptor, timeData, meetingLink) => {
-  const dayHour = parseInt(timeData.dayHour);
+const createEvent = async (
+  initiator,
+  acceptor,
+  availabilityData,
+  meetingLink
+) => {
+  const dayHour = parseInt(availabilityData.dayHour);
   const startTimeUnix = new Date(dayHour);
   const endTimeUnix = new Date(dayHour + 1 * 3600 * 1000);
   const startTime = new Date(startTimeUnix).toISOString();
@@ -75,7 +80,7 @@ const createEvent = async (initiator, acceptor, timeData, meetingLink) => {
     attendees: [{ email: initiator }, { email: acceptor }],
     // conferenceData: {
     //   createRequest: {
-    //     requestId: timeData.id,
+    //     requestId: availabilityData.id,
     //   },
     // },
   };

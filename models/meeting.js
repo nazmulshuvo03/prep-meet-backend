@@ -18,6 +18,7 @@ const Meeting = sequelize.define("meeting", {
     allowNull: false,
   },
   dayHour: { type: DataTypes.BIGINT, allowNull: false },
+  dayHourUTC: { type: DataTypes.DATE },
   event: {
     type: DataTypes.STRING,
     allowNull: false,

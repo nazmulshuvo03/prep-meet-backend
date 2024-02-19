@@ -70,6 +70,7 @@ const createMeetingData = asyncWrapper(async (req, res) => {
     initiator: availabilityData.userId,
     acceptor: acceptorId,
     dayHour: parseInt(availabilityData.dayHour),
+    dayHourUTC: availabilityData.dayHourUTC,
     event: createdEvent.eventLink,
     meet: meetingData.meeting,
   };
