@@ -5,15 +5,17 @@ const {
   getSingleSkill,
   getAllExperienceTypes,
   createExperienceType,
-  getSingleExperienceType
+  getSingleExperienceType,
+  deleteExperienceType,
+  deleteSkill
 } = require("../controllers/skill");
 
 const router = Router();
 
-router.route("/experience-type/:id").get(getSingleExperienceType);
+router.route("/experience-type/:id").get(getSingleExperienceType).delete(deleteExperienceType);
 router.route("/experience-type/").get(getAllExperienceTypes).post(createExperienceType);
 
-router.route("/:id").get(getSingleSkill);
+router.route("/:id").get(getSingleSkill).delete(deleteSkill);
 router.route("/").get(getAllSkills).post(createSkill);
 
 module.exports = router;
