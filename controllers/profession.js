@@ -4,7 +4,12 @@ const { Profession } = require("../models/profession");
 const { Skill, ExperienceType } = require("../models/skill");
 
 const getAllProfessions = asyncWrapper(async (_req, res) => {
-  const pfList = await Profession.findAll();
+  const pfList = await Profession.findAll({
+    include: [
+      { model: Skill, as: "skills", foreignKey: "profession_id" },
+      { model: ExperienceType, as: "experienceTypes", foreignKey: "profession_id" },
+    ]
+  });
   res.success(pfList);
 });
 
