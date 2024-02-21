@@ -19,6 +19,24 @@ const Skill = sequelize.define("skill", {
   }
 });
 
+const ExperienceType = sequelize.define("experienceType", {
+  id: {
+    type: DataTypes.UUID,
+    defaultValue: Sequelize.UUIDV4,
+    primaryKey: true,
+    allowNull: false,
+  },
+  name: {
+    type: DataTypes.STRING,
+    allowNull: false
+  },
+  profession_id: {
+    type: DataTypes.UUID,
+    allowNull: false
+  }
+});
+
+
 Skill.belongsTo(Profession, {
   foreignKey: "profession_id",
   targetKey: "id",
@@ -31,6 +49,20 @@ Profession.hasMany(Skill, {
   onDelete: "CASCADE",
 })
 
+ExperienceType.belongsTo(Profession, {
+  foreignKey: "profession_id",
+  targetKey: "id",
+  onDelete: "SET NULL",
+})
+
+Profession.hasMany(ExperienceType, {
+  foreignKey: "profession_id",
+  sourceKey: "id",
+  onDelete: "CASCADE",
+})
+
+
 module.exports = {
-  Skill
+  Skill,
+  ExperienceType
 }

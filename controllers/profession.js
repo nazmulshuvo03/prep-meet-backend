@@ -1,7 +1,7 @@
 const { BAD_REQUEST } = require("../constants/errorCodes");
 const asyncWrapper = require("../middlewares/async");
 const { Profession } = require("../models/profession");
-const { Skill } = require("../models/skill");
+const { Skill, ExperienceType } = require("../models/skill");
 
 const getAllProfessions = asyncWrapper(async (_req, res) => {
   const pfList = await Profession.findAll();
@@ -24,6 +24,7 @@ const getSingleProfession = asyncWrapper(async (req, res) => {
     where: { id },
     include: [
       { model: Skill, as: "skills", foreignKey: "profession_id" },
+      { model: ExperienceType, as: "experienceTypes", foreignKey: "profession_id" },
     ]
   });
   if (!prof) res.fail("Profession data not found");
