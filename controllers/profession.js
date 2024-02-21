@@ -1,3 +1,4 @@
+const { Op } = require("sequelize");
 const { BAD_REQUEST } = require("../constants/errorCodes");
 const asyncWrapper = require("../middlewares/async");
 const { Profession } = require("../models/profession");
@@ -7,8 +8,12 @@ const getAllProfessions = asyncWrapper(async (_req, res) => {
   const pfList = await Profession.findAll({
     include: [
       { model: Skill, as: "skills", foreignKey: "profession_id" },
-      { model: ExperienceType, as: "experienceTypes", foreignKey: "profession_id" },
-    ]
+      {
+        model: ExperienceType,
+        as: "experienceTypes",
+        foreignKey: "profession_id",
+      },
+    ],
   });
   res.success(pfList);
 });
@@ -16,6 +21,13 @@ const getAllProfessions = asyncWrapper(async (_req, res) => {
 const createProfession = asyncWrapper(async (req, res) => {
   const { name } = req.body;
   if (!name) return res.fail("Profession name is not provided", BAD_REQUEST);
+  const searchClause = {
+    name: {
+      [Op.iLike]: `%${name.toLowerCase().trim()}%`,
+    },
+  };
+  const found = await Profession.findOne({ where: searchClause });
+  if (found) return res.success(found);
   const model = { name };
   const pf = await Profession.create(model);
   if (!pf) return res.fail("Profession could not be created");
@@ -29,8 +41,12 @@ const getSingleProfession = asyncWrapper(async (req, res) => {
     where: { id },
     include: [
       { model: Skill, as: "skills", foreignKey: "profession_id" },
-      { model: ExperienceType, as: "experienceTypes", foreignKey: "profession_id" },
-    ]
+      {
+        model: ExperienceType,
+        as: "experienceTypes",
+        foreignKey: "profession_id",
+      },
+    ],
   });
   if (!prof) res.fail("Profession data not found");
   res.success(prof);
