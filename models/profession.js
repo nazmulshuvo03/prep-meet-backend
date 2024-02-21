@@ -8,7 +8,10 @@ const Profession = sequelize.define("profession", {
     primaryKey: true,
     allowNull: false,
   },
-  name: DataTypes.STRING,
+  name: {
+    type: DataTypes.STRING,
+    allowNull: false,
+  }
 });
 
 module.exports = {

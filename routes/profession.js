@@ -11,10 +11,12 @@ const router = Router();
 
 router
   .route("/")
-  .get(getSingleProfession)
+  .get(getAllProfessions)
   .post(createProfession)
   .put(updateProfession)
+router
+  .route("/:id")
+  .get(getSingleProfession)
   .delete(deleteProfession);
-router.route("/all").get(getAllProfessions);
 
 module.exports = router;

@@ -1,33 +1,40 @@
+const { BAD_REQUEST } = require("../constants/errorCodes");
 const asyncWrapper = require("../middlewares/async");
 const { Profession } = require("../models/profession");
+const { Skill } = require("../models/skill");
 
-const getAllProfessions = asyncWrapper(async (req, res) => {
+const getAllProfessions = asyncWrapper(async (_req, res) => {
   const pfList = await Profession.findAll();
   res.success(pfList);
 });
 
 const createProfession = asyncWrapper(async (req, res) => {
   const { name } = req.body;
+  if (!name) return res.fail("Profession name is not provided", BAD_REQUEST);
   const model = { name };
   const pf = await Profession.create(model);
+  if (!pf) return res.fail("Profession could not be created");
   res.success(pf);
 });
 
 const getSingleProfession = asyncWrapper(async (req, res) => {
-  const { id } = req.body;
+  const { id } = req.params;
+  if (!id) return res.fail("ID is not provided", BAD_REQUEST);
   const prof = await Profession.findOne({
     where: { id },
+    include: [
+      { model: Skill, as: "skills", foreignKey: "profession_id" },
+    ]
   });
-
   if (!prof) res.fail("Profession data not found");
   res.success(prof);
 });
 
 const updateProfession = asyncWrapper(async (req, res) => {
   const { id, ...updatedFields } = req.body;
-
+  if (!id) return res.fail("ID is not provided", BAD_REQUEST);
   if (Object.keys(updatedFields).length === 0)
-    res.fail("No fields provided for update");
+    return res.fail("No fields provided for update");
 
   const item = await Profession.findByPk(id);
   if (!item) res.fail("Profession data not found");
@@ -40,7 +47,7 @@ const updateProfession = asyncWrapper(async (req, res) => {
 
 const deleteProfession = asyncWrapper(async (req, res) => {
   await Profession.destroy({
-    where: { id: req.body.id },
+    where: { id: req.params.id },
   });
   res.success("Profession Deleted");
 });
