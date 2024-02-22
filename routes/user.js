@@ -8,7 +8,11 @@ const {
   getAllUserData,
 } = require("../controllers/user");
 
+const workExperienceRoutes = require("./workExperience");
+
 const router = Router();
+
+router.use("/workExperience", workExperienceRoutes);
 
 router
   .route("/:userId")

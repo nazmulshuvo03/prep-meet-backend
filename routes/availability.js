@@ -9,11 +9,11 @@ const {
 
 const router = Router();
 
-router.route("/").post(createAvailabilityData);
-router.route("/:userId").get(getUserAvailability);
 router
   .route("/all")
   .get(getAllAvailabilityData)
   .delete(deleteAllAvailabilityData);
+router.route("/:userId").get(getUserAvailability);
+router.route("/").post(createAvailabilityData);
 
 module.exports = router;
