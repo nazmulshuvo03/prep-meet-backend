@@ -10,11 +10,13 @@ const {
 
 const workExperienceRoutes = require("./workExperience");
 const education = require("./education");
+const companiesOfInterest = require("./companiesOfInterest");
 
 const router = Router();
 
 router.use("/workExperience", workExperienceRoutes);
 router.use("/education", education);
+router.use("/companiesOfInterest", companiesOfInterest);
 
 router
   .route("/:userId")

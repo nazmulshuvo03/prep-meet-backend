@@ -7,6 +7,7 @@ const { Profession } = require("../models/profession");
 const { User, Profile } = require("../models/user");
 const { WorkExperience } = require("../models/workExperience");
 const { Education } = require("../models/education");
+const { CompaniesOfInterest } = require("../models/companiesOfInterest");
 
 const _getUserProfile = async (userId) => {
   return Profile.findByPk(userId);
@@ -85,6 +86,7 @@ const getSingleUserProfile = asyncWrapper(async (req, res) => {
       // Availability,
       WorkExperience,
       Education,
+      CompaniesOfInterest,
       // { model: Meeting, as: "initiatedMeetings", foreignKey: "initiator" },
       // { model: Meeting, as: "acceptedMeetings", foreignKey: "acceptor" },
     ],
