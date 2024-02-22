@@ -7,7 +7,7 @@ const getAllWorkExp = asyncWrapper(async (req, res) => {
   res.success(list);
 });
 
-const createWokrExp = asyncWrapper(async (req, res) => {
+const createWorkExp = asyncWrapper(async (req, res) => {
   // {user_id, profession_id, skills, company_name, start_date, end_data }
   const dataModel = req.body;
   const created = await WorkExperience.create(dataModel);
@@ -36,7 +36,7 @@ const updateWorkExp = asyncWrapper(async (req, res) => {
 
 module.exports = {
   getAllWorkExp,
-  createWokrExp,
+  createWorkExp,
   getSingleWorkExp,
   updateWorkExp,
 };

@@ -6,6 +6,7 @@ const { Meeting } = require("../models/meeting");
 const { Profession } = require("../models/profession");
 const { User, Profile } = require("../models/user");
 const { WorkExperience } = require("../models/workExperience");
+const { Education } = require("../models/education");
 
 const _getUserProfile = async (userId) => {
   return Profile.findByPk(userId);
@@ -83,8 +84,9 @@ const getSingleUserProfile = asyncWrapper(async (req, res) => {
       Profession,
       // Availability,
       WorkExperience,
-      { model: Meeting, as: "initiatedMeetings", foreignKey: "initiator" },
-      { model: Meeting, as: "acceptedMeetings", foreignKey: "acceptor" },
+      Education,
+      // { model: Meeting, as: "initiatedMeetings", foreignKey: "initiator" },
+      // { model: Meeting, as: "acceptedMeetings", foreignKey: "acceptor" },
     ],
   });
   if (!user) res.fail("User data not found", NOT_FOUND);
