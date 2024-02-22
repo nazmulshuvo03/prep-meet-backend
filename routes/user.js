@@ -9,14 +9,16 @@ const {
 } = require("../controllers/user");
 
 const workExperienceRoutes = require("./workExperience");
-const education = require("./education");
-const companiesOfInterest = require("./companiesOfInterest");
+const educationRoutes = require("./education");
+const companiesOfInterestRoutes = require("./companiesOfInterest");
+const interviewExperienceRoutes = require("./interviewExperience");
 
 const router = Router();
 
 router.use("/workExperience", workExperienceRoutes);
-router.use("/education", education);
-router.use("/companiesOfInterest", companiesOfInterest);
+router.use("/education", educationRoutes);
+router.use("/companiesOfInterest", companiesOfInterestRoutes);
+router.use("/interviewExperience", interviewExperienceRoutes);
 
 router
   .route("/:userId")
