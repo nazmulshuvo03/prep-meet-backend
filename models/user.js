@@ -30,6 +30,7 @@ const Profile = sequelize.define("profile", {
     type: DataTypes.STRING,
     allowNull: false,
   },
+  userName: DataTypes.STRING,
   firstName: DataTypes.STRING,
   lastName: DataTypes.STRING,
   gender: DataTypes.STRING,
@@ -38,19 +39,15 @@ const Profile = sequelize.define("profile", {
     defaultValue:
       "https://cdn1.iconfinder.com/data/icons/mix-color-3/502/Untitled-7-1024.png",
   },
+  linkedInProfile: DataTypes.STRING,
   profileHeadline: DataTypes.TEXT,
   country: DataTypes.STRING,
   language: DataTypes.STRING,
   timeZone: DataTypes.STRING,
-  fieldOfStudy: DataTypes.STRING,
-  degree: DataTypes.STRING,
-  university: DataTypes.STRING,
-  professionId: {
-    type: DataTypes.UUID,
-  },
-  currentCompany: DataTypes.STRING,
-  yearsOfExperience: DataTypes.INTEGER,
-  fieldOfInterest: DataTypes.STRING,
+  targetProfession: { type: DataTypes.UUID },
+  focusAreas: { type: DataTypes.ARRAY(DataTypes.UUID), defaultValue: [] },
+  rolesOfInterest: { type: DataTypes.ARRAY(DataTypes.UUID), defaultValue: [] },
+  stageOfInterviewPrep: DataTypes.UUID,
 });
 
 Profile.belongsTo(User, { foreignKey: "id", onDelete: "CASCADE" });
