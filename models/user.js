@@ -46,6 +46,10 @@ const Profile = sequelize.define("profile", {
   timeZone: DataTypes.STRING,
   targetProfessionId: { type: DataTypes.UUID },
   focusAreas: { type: DataTypes.ARRAY(DataTypes.UUID), defaultValue: [] },
+  typesOfExperience: {
+    type: DataTypes.ARRAY(DataTypes.UUID),
+    defaultValue: [],
+  },
   rolesOfInterest: { type: DataTypes.ARRAY(DataTypes.UUID), defaultValue: [] },
   stageOfInterviewPrep: DataTypes.UUID,
 });
