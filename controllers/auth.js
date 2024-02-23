@@ -56,7 +56,7 @@ const signupUser = asyncWrapper(async (req, res) => {
     firstName,
     lastName,
   });
-  _handleLoginResponse(req, res, updatedProfile);
+  if (updatedProfile) _handleLoginResponse(req, res, updatedProfile);
 });
 
 const loginUser = asyncWrapper(async (req, res) => {

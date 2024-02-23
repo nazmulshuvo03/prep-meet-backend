@@ -20,13 +20,13 @@ router.use("/education", educationRoutes);
 router.use("/companiesOfInterest", companiesOfInterestRoutes);
 router.use("/interviewExperience", interviewExperienceRoutes);
 
+router.route("/all/:userId?").get(getAllUserProfiles);
+router.route("/users").get(getAllUserData);
+router.route("/all").delete(deleteAllUser);
 router
   .route("/:userId")
   .get(getSingleUserProfile)
   .put(updateUserProfile)
   .delete(deleteUser);
-router.route("/all/:userId?").get(getAllUserProfiles);
-router.route("/all").delete(deleteAllUser);
-router.route("/users").get(getAllUserData);
 
 module.exports = router;

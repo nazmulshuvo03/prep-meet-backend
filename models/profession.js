@@ -11,7 +11,7 @@ const Profession = sequelize.define("profession", {
   name: {
     type: DataTypes.STRING,
     allowNull: false,
-  }
+  },
 });
 
 module.exports = {

@@ -2,7 +2,7 @@ const { Op } = require("sequelize");
 const { BAD_REQUEST, NOT_FOUND } = require("../constants/errorCodes");
 const asyncWrapper = require("../middlewares/async");
 // const { Availability } = require("../models/availability");
-const { Meeting } = require("../models/meeting");
+// const { Meeting } = require("../models/meeting");
 const { Profession } = require("../models/profession");
 const { User, Profile } = require("../models/user");
 const { WorkExperience } = require("../models/workExperience");
@@ -24,7 +24,7 @@ const createUser = asyncWrapper(async (req, res) => {
     ...req.body,
   };
   const pf = await User.create(model);
-  if (!pf) res.fail("User data not created");
+  if (!pf) return res.fail("User data not created");
 
   res.success(pf);
 });
@@ -79,12 +79,15 @@ const getAllUserProfiles = asyncWrapper(async (req, res) => {
 
 const getSingleUserProfile = asyncWrapper(async (req, res) => {
   const { userId } = req.params;
-  if (!userId) res.fail("Invalid user ID", BAD_REQUEST);
+  if (!userId) return res.fail("Invalid user ID", BAD_REQUEST);
   const user = await Profile.findOne({
     where: { id: userId },
     include: [
-      Profession,
-      // Availability,
+      {
+        model: Profession,
+        as: "targetProfession",
+        foreignKey: "targetProfessionId",
+      },
       WorkExperience,
       Education,
       CompaniesOfInterest,
@@ -93,34 +96,33 @@ const getSingleUserProfile = asyncWrapper(async (req, res) => {
       // { model: Meeting, as: "acceptedMeetings", foreignKey: "acceptor" },
     ],
   });
-  if (!user) res.fail("User data not found", NOT_FOUND);
-
-  return res.success(user);
+  if (!user) return res.fail("User data not found", NOT_FOUND);
+  res.success(user);
 });
 
 const _updateUserProfile = async (res, userId, updatedFields) => {
   if (Object.keys(updatedFields).length === 0)
-    res.fail("No fields provided for update", BAD_REQUEST);
+    return res.fail("No fields provided for update", BAD_REQUEST);
 
   const user = await Profile.findByPk(userId);
-  if (!user) res.fail("User data not found", NOT_FOUND);
+  if (!user) return res.fail("User data not found", NOT_FOUND);
 
   const updatedUser = await user.update(updatedFields);
-  if (!updatedUser) res.fail("User data update failed");
+  if (!updatedUser) return res.fail("User data update failed");
 
   return updatedUser;
 };
 
 const updateUserProfile = asyncWrapper(async (req, res) => {
   const { userId } = req.params;
-  if (!userId) res.fail("Invalid user ID", BAD_REQUEST);
+  if (!userId) return res.fail("Invalid user ID", BAD_REQUEST);
   const updatedUser = await _updateUserProfile(res, userId, req.body);
-  res.success(updatedUser);
+  if (updatedUser) res.success(updatedUser);
 });
 
 const deleteUser = asyncWrapper(async (req, res) => {
   const { userId } = req.params;
-  if (!userId) res.fail("Invalid user ID", BAD_REQUEST);
+  if (!userId) return res.fail("Invalid user ID", BAD_REQUEST);
   await User.destroy({
     where: { id: userId },
   });

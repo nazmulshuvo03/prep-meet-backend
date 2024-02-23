@@ -44,7 +44,7 @@ const Profile = sequelize.define("profile", {
   country: DataTypes.STRING,
   language: DataTypes.STRING,
   timeZone: DataTypes.STRING,
-  targetProfession: { type: DataTypes.UUID },
+  targetProfessionId: { type: DataTypes.UUID },
   focusAreas: { type: DataTypes.ARRAY(DataTypes.UUID), defaultValue: [] },
   rolesOfInterest: { type: DataTypes.ARRAY(DataTypes.UUID), defaultValue: [] },
   stageOfInterviewPrep: DataTypes.UUID,
@@ -53,12 +53,13 @@ const Profile = sequelize.define("profile", {
 Profile.belongsTo(User, { foreignKey: "id", onDelete: "CASCADE" });
 User.hasOne(Profile, { foreignKey: "id", onDelete: "CASCADE" });
 
-Profile.belongsTo(Profession, {
-  foreignKey: "professionId",
-  onDelete: "SET NULL",
+Profession.hasMany(Profile, {
+  foreignKey: "targetProfessionId",
+  onDelete: "CASCADE",
 });
-Profession.hasOne(Profile, {
-  foreignKey: "professionId",
+Profile.belongsTo(Profession, {
+  foreignKey: "targetProfessionId",
+  as: "targetProfession",
   onDelete: "SET NULL",
 });
 
