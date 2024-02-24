@@ -33,9 +33,16 @@ const updateEducation = asyncWrapper(async (req, res) => {
   res.success(updated);
 });
 
+const deleteEducation = asyncWrapper(async (req, res) => {
+  const { id } = req.params;
+  await Education.destroy({ where: { id } });
+  res.success("Deleted");
+});
+
 module.exports = {
   getAllEducation,
   createEducation,
   getSingleEducation,
   updateEducation,
+  deleteEducation,
 };
