@@ -5,6 +5,7 @@ const professionRoutes = require("./profession");
 const skillRoutes = require("./skill");
 const availabilityRoutes = require("./availability");
 const meetingRoutes = require("./meeting");
+const staticRoutes = require("./static");
 const fileRoutes = require("./file");
 // const { requireAuth } = require("../middlewares/auth");
 
@@ -25,5 +26,6 @@ router.use("/profession", professionRoutes);
 router.use("/skill", skillRoutes);
 router.use("/availability", availabilityRoutes);
 router.use("/meeting", meetingRoutes);
+router.use("/static", staticRoutes);
 
 module.exports = router;
