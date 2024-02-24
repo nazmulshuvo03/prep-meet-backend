@@ -50,8 +50,8 @@ const Profile = sequelize.define("profile", {
     type: DataTypes.ARRAY(DataTypes.UUID),
     defaultValue: [],
   },
-  rolesOfInterest: { type: DataTypes.ARRAY(DataTypes.UUID), defaultValue: [] },
-  stageOfInterviewPrep: DataTypes.UUID,
+  experienceLevel: DataTypes.INTEGER,
+  preparationStage: DataTypes.INTEGER,
 });
 
 Profile.belongsTo(User, { foreignKey: "id", onDelete: "CASCADE" });
