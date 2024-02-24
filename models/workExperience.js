@@ -25,6 +25,9 @@ const WorkExperience = sequelize.define("workExperience", {
     type: DataTypes.STRING,
     allowNull: false,
   },
+  country: {
+    type: DataTypes.STRING,
+  },
   start_date: {
     type: DataTypes.DATE,
   },

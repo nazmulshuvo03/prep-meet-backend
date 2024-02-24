@@ -34,9 +34,16 @@ const updateWorkExp = asyncWrapper(async (req, res) => {
   res.success(updated);
 });
 
+const deleteWorkExp = asyncWrapper(async (req, res) => {
+  const { id } = req.params;
+  await WorkExperience.destroy({ where: { id } });
+  res.success("Deleted");
+});
+
 module.exports = {
   getAllWorkExp,
   createWorkExp,
   getSingleWorkExp,
   updateWorkExp,
+  deleteWorkExp,
 };
