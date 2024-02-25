@@ -7,7 +7,7 @@ const { Profession } = require("../models/profession");
 const { User, Profile } = require("../models/user");
 const { WorkExperience } = require("../models/workExperience");
 const { Education } = require("../models/education");
-const { CompaniesOfInterest } = require("../models/companiesOfInterest");
+// const { CompaniesOfInterest } = require("../models/companiesOfInterest");
 const { InterviewExperience } = require("../models/interviewExperience");
 
 const _getUserProfile = async (userId) => {
@@ -90,7 +90,7 @@ const getSingleUserProfile = asyncWrapper(async (req, res) => {
       },
       WorkExperience,
       Education,
-      CompaniesOfInterest,
+      // CompaniesOfInterest,
       InterviewExperience,
       // { model: Meeting, as: "initiatedMeetings", foreignKey: "initiator" },
       // { model: Meeting, as: "acceptedMeetings", foreignKey: "acceptor" },

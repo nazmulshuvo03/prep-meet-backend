@@ -43,7 +43,6 @@ const Profile = sequelize.define("profile", {
   profileHeadline: DataTypes.TEXT,
   country: DataTypes.STRING,
   language: DataTypes.STRING,
-  timeZone: DataTypes.STRING,
   targetProfessionId: { type: DataTypes.UUID },
   focusAreas: { type: DataTypes.ARRAY(DataTypes.UUID), defaultValue: [] },
   typesOfExperience: {
@@ -52,6 +51,7 @@ const Profile = sequelize.define("profile", {
   },
   experienceLevel: DataTypes.INTEGER,
   preparationStage: DataTypes.INTEGER,
+  companiesOfInterest: DataTypes.ARRAY(DataTypes.INTEGER),
 });
 
 Profile.belongsTo(User, { foreignKey: "id", onDelete: "CASCADE" });

@@ -21,17 +21,17 @@ const CompaniesOfInterest = sequelize.define("companiesOfInterest", {
   company_symbol: DataTypes.STRING,
 });
 
-CompaniesOfInterest.belongsTo(Profile, {
-  foreignKey: "user_id",
-  targetKey: "id",
-  onDelete: "SET NULL",
-});
+// CompaniesOfInterest.belongsTo(Profile, {
+//   foreignKey: "user_id",
+//   targetKey: "id",
+//   onDelete: "SET NULL",
+// });
 
-Profile.hasMany(CompaniesOfInterest, {
-  foreignKey: "user_id",
-  sourceKey: "id",
-  onDelete: "CASCADE",
-});
+// Profile.hasMany(CompaniesOfInterest, {
+//   foreignKey: "user_id",
+//   sourceKey: "id",
+//   onDelete: "CASCADE",
+// });
 
 module.exports = {
   CompaniesOfInterest,
