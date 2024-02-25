@@ -101,6 +101,7 @@ const getSingleUserProfile = asyncWrapper(async (req, res) => {
 });
 
 const _updateUserProfile = async (res, userId, updatedFields) => {
+  console.log("@@@@@@@@@", updatedFields);
   if (Object.keys(updatedFields).length === 0)
     return res.fail("No fields provided for update", BAD_REQUEST);
 
