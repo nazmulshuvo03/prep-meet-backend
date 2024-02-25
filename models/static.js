@@ -9,10 +9,7 @@ const ExperienceLevel = sequelize.define(
       primaryKey: true,
       autoIncrement: true,
     },
-    levelName: {
-      type: DataTypes.STRING,
-      allowNull: false,
-    },
+    name: DataTypes.STRING,
   },
   { timestamps: false }
 );
@@ -25,10 +22,7 @@ const PreparationStage = sequelize.define(
       primaryKey: true,
       autoIncrement: true,
     },
-    stageName: {
-      type: DataTypes.STRING,
-      allowNull: false,
-    },
+    name: DataTypes.STRING,
   },
   { timestamps: false }
 );
