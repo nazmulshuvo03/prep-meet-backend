@@ -13,7 +13,7 @@ const WorkExperience = sequelize.define("workExperience", {
     type: DataTypes.UUID,
     allowNull: false,
   },
-  profession_id: {
+  professionId: {
     type: DataTypes.UUID,
     allowNull: false,
   },
@@ -21,17 +21,17 @@ const WorkExperience = sequelize.define("workExperience", {
     type: DataTypes.ARRAY(DataTypes.UUID),
     defaultValue: [],
   },
-  company_name: {
-    type: DataTypes.STRING,
+  companyId: {
+    type: DataTypes.INTEGER,
     allowNull: false,
   },
   country: {
     type: DataTypes.STRING,
   },
-  start_date: {
+  startDate: {
     type: DataTypes.DATE,
   },
-  end_date: {
+  endDate: {
     type: DataTypes.DATE,
   },
 });

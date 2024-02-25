@@ -8,7 +8,6 @@ const getAllWorkExp = asyncWrapper(async (req, res) => {
 });
 
 const createWorkExp = asyncWrapper(async (req, res) => {
-  // {user_id, profession_id, skills, company_name, start_date, end_data }
   const dataModel = req.body;
   const created = await WorkExperience.create(dataModel);
   if (!created) return res.fail("Work experience could not be added");
