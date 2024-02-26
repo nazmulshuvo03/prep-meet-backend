@@ -20,8 +20,18 @@ const getAllCompanies = asyncWrapper(async (req, res) => {
   res.success(data);
 });
 
+const createCompany = asyncWrapper(async (req, res) => {
+  const model = {
+    name: req.body.name,
+    country: req.body.country,
+  };
+  const created = await Companies.create(model);
+  res.success(created);
+});
+
 module.exports = {
   getAllExperienceLevels,
   getAllPreparationStages,
   getAllCompanies,
+  createCompany,
 };

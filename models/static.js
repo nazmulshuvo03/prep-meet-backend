@@ -26,13 +26,7 @@ const PreparationStage = sequelize.define(
   },
   { timestamps: false }
 );
-/**
- * symbol VARCHAR(255),
-    name VARCHAR(255),
-    country VARCHAR(255),
-    sector VARCHAR(255),
-    industry VARCHAR(255)
- */
+
 const Companies = sequelize.define(
   "companies",
   {
