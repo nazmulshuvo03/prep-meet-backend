@@ -13,7 +13,7 @@ const InterviewExperience = sequelize.define("interviewExperience", {
     type: DataTypes.UUID,
     allowNull: false,
   },
-  company_id: DataTypes.INTEGER,
+  companyId: DataTypes.INTEGER,
   role: {
     type: DataTypes.UUID,
     allowNull: false,

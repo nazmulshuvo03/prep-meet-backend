@@ -33,9 +33,16 @@ const updateInterviewExperience = asyncWrapper(async (req, res) => {
   res.success(updated);
 });
 
+const deleteInterviewExp = asyncWrapper(async (req, res) => {
+  const { id } = req.params;
+  await InterviewExperience.destroy({ where: { id } });
+  res.success("Deleted");
+});
+
 module.exports = {
   getAllInterviewExperience,
   createInterviewExperience,
   getSingleInterviewExperience,
   updateInterviewExperience,
+  deleteInterviewExp,
 };

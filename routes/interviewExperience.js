@@ -4,6 +4,7 @@ const {
   createInterviewExperience,
   getSingleInterviewExperience,
   updateInterviewExperience,
+  deleteInterviewExp,
 } = require("../controllers/interviewExperience");
 
 const router = Router();
@@ -11,7 +12,8 @@ const router = Router();
 router
   .route("/:id")
   .get(getSingleInterviewExperience)
-  .put(updateInterviewExperience);
+  .put(updateInterviewExperience)
+  .delete(deleteInterviewExp);
 router
   .route("/")
   .get(getAllInterviewExperience)
