@@ -64,6 +64,11 @@ const updateWorkExp = asyncWrapper(async (req, res) => {
   const found = await WorkExperience.findByPk(id);
   if (!found) res.fail("Data not found", NOT_FOUND);
 
+  if (updatedData.endDate && !found.endDate) {
+    // this means user left existing current company
+    updatedData.currentCompany = false;
+  }
+
   const updated = await found.update(updatedData);
   res.success(updated);
 });
