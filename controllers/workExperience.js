@@ -9,14 +9,42 @@ const _getWorxExperiencesOfProfession = async (profession_id) => {
   return data;
 };
 
+const _getUserCurrentCompany = async (userId) => {
+  const data = await WorkExperience.findOne({
+    where: { user_id: userId, currentCompany: true },
+  });
+  return data;
+};
+
 const getAllWorkExp = asyncWrapper(async (req, res) => {
   const list = await WorkExperience.findAll();
   res.success(list);
 });
 
 const createWorkExp = asyncWrapper(async (req, res) => {
-  const dataModel = req.body;
-  const created = await WorkExperience.create(dataModel);
+  const model = {
+    user_id: req.body.user_id,
+    professionId: req.body.professionId,
+    skills: req.body.skills,
+    companyId: req.body.companyId,
+    country: req.body.country,
+    startDate: req.body.startDate,
+    endDate: req.body.endDate,
+  };
+  if (!model.professionId)
+    return res.fail("Job Title is not provided", BAD_REQUEST);
+  if (!model.companyId)
+    return res.fail("Company name is not provided", BAD_REQUEST);
+  if (!model.startDate) return res.fail("Start date is not provided");
+
+  if (!model.endDate) {
+    const existingCurrentCompany = await _getUserCurrentCompany(model.user_id);
+    if (existingCurrentCompany)
+      return res.fail("You already have a current company");
+    model.currentCompany = true;
+  }
+
+  const created = await WorkExperience.create(model);
   if (!created) return res.fail("Work experience could not be added");
   res.success(created);
 });
@@ -48,6 +76,7 @@ const deleteWorkExp = asyncWrapper(async (req, res) => {
 
 module.exports = {
   _getWorxExperiencesOfProfession,
+  _getUserCurrentCompany,
   getAllWorkExp,
   createWorkExp,
   getSingleWorkExp,

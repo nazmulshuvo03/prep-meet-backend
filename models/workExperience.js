@@ -33,7 +33,9 @@ const WorkExperience = sequelize.define("workExperience", {
   },
   endDate: {
     type: DataTypes.DATE,
+    allowNull: true,
   },
+  currentCompany: DataTypes.BOOLEAN,
 });
 
 WorkExperience.belongsTo(Profile, {
