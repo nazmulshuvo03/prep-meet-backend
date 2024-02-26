@@ -2,6 +2,13 @@ const { BAD_REQUEST, NOT_FOUND } = require("../constants/errorCodes");
 const asyncWrapper = require("../middlewares/async");
 const { WorkExperience } = require("../models/workExperience");
 
+const _getWorxExperiencesOfProfession = async (profession_id) => {
+  const data = await WorkExperience.findAll({
+    where: { professionId: profession_id },
+  });
+  return data;
+};
+
 const getAllWorkExp = asyncWrapper(async (req, res) => {
   const list = await WorkExperience.findAll();
   res.success(list);
@@ -40,6 +47,7 @@ const deleteWorkExp = asyncWrapper(async (req, res) => {
 });
 
 module.exports = {
+  _getWorxExperiencesOfProfession,
   getAllWorkExp,
   createWorkExp,
   getSingleWorkExp,

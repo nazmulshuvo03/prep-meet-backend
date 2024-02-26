@@ -3,6 +3,11 @@ const { BAD_REQUEST } = require("../constants/errorCodes");
 const asyncWrapper = require("../middlewares/async");
 const { Profession } = require("../models/profession");
 const { Skill, ExperienceType } = require("../models/skill");
+const {
+  _getSkillsOfProfession,
+  _getExperienceTypesOfProfession,
+} = require("./skill");
+const { _getWorxExperiencesOfProfession } = require("./workExperience");
 
 const getAllProfessions = asyncWrapper(async (_req, res) => {
   const pfList = await Profession.findAll({
@@ -68,8 +73,18 @@ const updateProfession = asyncWrapper(async (req, res) => {
 });
 
 const deleteProfession = asyncWrapper(async (req, res) => {
+  const profId = req.params.id;
+  const connectedSkills = await _getSkillsOfProfession(profId);
+  if (connectedSkills && connectedSkills.length)
+    return res.fail("You have Skills connected to this profession");
+  const connectedExpTypes = await _getExperienceTypesOfProfession(profId);
+  if (connectedExpTypes && connectedExpTypes.length)
+    return res.fail("You have Experience Types connected to this profession");
+  const connectedWorkExp = await _getWorxExperiencesOfProfession(profId);
+  if (connectedWorkExp && connectedWorkExp.length)
+    return res.fail("You have Work experiences connected to this profession");
   await Profession.destroy({
-    where: { id: req.params.id },
+    where: { id: profId },
   });
   res.success("Profession Deleted");
 });
