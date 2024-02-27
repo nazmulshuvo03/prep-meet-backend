@@ -11,10 +11,11 @@ const sequelize = new Sequelize(
     createdAt: "createdAt",
     updatedAt: "updatedAt",
     models: [__dirname + "/models/*.js"],
-    // logging: (msg) => {
-    //   // console.log(sequelize.config);
-    //   console.log("Message: ", msg);
-    // },
+    logging: (msg) => {
+      // console.log(sequelize.config);
+      // console.log("Message: ", msg);
+      return false;
+    },
   }
 );
 

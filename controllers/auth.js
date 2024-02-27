@@ -38,7 +38,6 @@ const _handleLoginResponse = (req, res, profile) => {
 };
 
 const signupUser = asyncWrapper(async (req, res) => {
-  console.log("header: ", req.headers["content-type"]);
   const { email, password, firstName, lastName } = req.body;
   const exists = await User.findOne({ where: { email } });
   if (exists) {
