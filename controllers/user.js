@@ -1,4 +1,3 @@
-const { Op } = require("sequelize");
 const { BAD_REQUEST, NOT_FOUND } = require("../constants/errorCodes");
 const asyncWrapper = require("../middlewares/async");
 // const { Availability } = require("../models/availability");
@@ -9,6 +8,7 @@ const { WorkExperience } = require("../models/workExperience");
 const { Education } = require("../models/education");
 // const { CompaniesOfInterest } = require("../models/companiesOfInterest");
 const { InterviewExperience } = require("../models/interviewExperience");
+const { profileQueryOptions } = require("../helpers/queries/profile");
 
 const _getUserProfile = async (userId) => {
   return Profile.findByPk(userId);
@@ -32,47 +32,8 @@ const createUser = asyncWrapper(async (req, res) => {
 const getAllUserProfiles = asyncWrapper(async (req, res) => {
   const { userId } = req.params;
   const queryParameters = req.query;
-  const queryOptions = {
-    where: userId // user should not get profile in dashbaord
-      ? {
-          id: {
-            [Op.ne]: userId,
-          },
-        }
-      : {},
-  };
-  if (Object.keys(queryParameters).length) {
-    Object.keys(queryParameters).forEach((param) => {
-      const value = queryParameters[param];
-
-      // Check if the value is a number
-      if (!isNaN(value)) {
-        // If it's a number, check if it's prefixed with "_lt" or "_gt" or "_lte" or "_gte"
-        if (param.endsWith("_lt")) {
-          queryOptions.where[param.slice(0, -3)] = {
-            [Op.lt]: value,
-          };
-        } else if (param.endsWith("_gt")) {
-          queryOptions.where[param.slice(0, -3)] = {
-            [Op.gt]: value,
-          };
-        } else if (param.endsWith("_lte")) {
-          queryOptions.where[param.slice(0, -4)] = {
-            [Op.lte]: value,
-          };
-        } else if (param.endsWith("_gte")) {
-          queryOptions.where[param.slice(0, -4)] = {
-            [Op.gte]: value,
-          };
-        } else {
-          queryOptions.where[param] = value;
-        }
-      } else {
-        // If it's not a number, use equality
-        queryOptions.where[param] = value;
-      }
-    });
-  }
+  const userProfile = await Profile.findByPk(userId);
+  const queryOptions = profileQueryOptions(queryParameters, userProfile);
   const userList = await Profile.findAll(queryOptions);
   res.success(userList);
 });
