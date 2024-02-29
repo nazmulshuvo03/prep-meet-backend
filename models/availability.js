@@ -11,6 +11,7 @@ const Availability = sequelize.define("availability", {
   },
   dayHour: { type: DataTypes.BIGINT, allowNull: false },
   dayHourUTC: { type: DataTypes.DATE },
+  userId: { type: DataTypes.UUID, allowNull: false },
   state: {
     type: DataTypes.ENUM("OPEN", "BOOKED", "COMPLETED"),
     defaultValue: "OPEN",
@@ -22,10 +23,10 @@ Availability.belongsTo(Profile, {
   targetKey: "id",
   onDelete: "SET NULL",
 });
-// Profile.hasMany(Availability, {
-//   foreignKey: "userId",
-//   onDelete: "CASCADE",
-// });
+Profile.hasMany(Availability, {
+  foreignKey: "userId",
+  onDelete: "CASCADE",
+});
 
 module.exports = {
   Availability,

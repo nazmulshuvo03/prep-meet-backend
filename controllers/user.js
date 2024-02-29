@@ -1,6 +1,6 @@
 const { BAD_REQUEST, NOT_FOUND } = require("../constants/errorCodes");
 const asyncWrapper = require("../middlewares/async");
-// const { Availability } = require("../models/availability");
+const { Availability } = require("../models/availability");
 // const { Meeting } = require("../models/meeting");
 const { Profession } = require("../models/profession");
 const { User, Profile } = require("../models/user");
@@ -34,7 +34,19 @@ const getAllUserProfiles = asyncWrapper(async (req, res) => {
   const queryParameters = req.query;
   const userProfile = await Profile.findByPk(userId);
   const queryOptions = profileQueryOptions(queryParameters, userProfile);
-  const userList = await Profile.findAll(queryOptions);
+  const userList = await Profile.findAll({
+    ...queryOptions,
+    include: [
+      {
+        model: Profession,
+        as: "targetProfession",
+        foreignKey: "targetProfessionId",
+      },
+      Availability,
+      WorkExperience,
+      InterviewExperience,
+    ],
+  });
   res.success(userList);
 });
 

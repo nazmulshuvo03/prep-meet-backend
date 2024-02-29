@@ -11,6 +11,7 @@ const profileQueryOptions = (queryParameters, userProfile) => {
           // targetProfessionId, // Activate this to get users only with same target profession
         }
       : {},
+    order: [["availabilities", "dayHour", "ASC"]],
   };
   if (Object.keys(queryParameters).length) {
     Object.keys(queryParameters).forEach((param) => {
