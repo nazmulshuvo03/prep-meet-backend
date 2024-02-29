@@ -1,14 +1,13 @@
+const { Op } = require("sequelize");
 const { BAD_REQUEST, NOT_FOUND } = require("../constants/errorCodes");
 const asyncWrapper = require("../middlewares/async");
 const { Availability } = require("../models/availability");
-// const { Meeting } = require("../models/meeting");
 const { Profession } = require("../models/profession");
 const { User, Profile } = require("../models/user");
 const { WorkExperience } = require("../models/workExperience");
 const { Education } = require("../models/education");
 const { InterviewExperience } = require("../models/interviewExperience");
 const { profileQueryOptions } = require("../helpers/queries/profile");
-const { Companies, ExperienceLevel } = require("../models/static");
 
 const _getUserProfile = async (userId) => {
   return Profile.findByPk(userId);
@@ -34,9 +33,22 @@ const getAllUserProfiles = asyncWrapper(async (req, res) => {
   const queryParameters = req.query;
   const userProfile = await Profile.findByPk(userId);
   const queryOptions = profileQueryOptions(queryParameters, userProfile);
+  const today = new Date();
+  const todayMidnight = today.setHours(0, 0, 0, 0);
   const userList = await Profile.findAll({
     ...queryOptions,
-    include: [Availability, WorkExperience],
+    include: [
+      {
+        model: Availability,
+        where: {
+          dayHour: {
+            [Op.gte]: todayMidnight,
+          },
+        },
+        order: [["availabilities", "dayHour", "ASC"]],
+      },
+      WorkExperience,
+    ],
   });
   res.success(userList);
 });

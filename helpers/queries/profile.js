@@ -1,7 +1,11 @@
 const { Op } = require("sequelize");
+const sequelize = require("../../db");
 
 const profileQueryOptions = (queryParameters, userProfile) => {
   const { id, targetProfessionId } = userProfile;
+  const today = new Date();
+  const todayMidnight = today.setHours(0, 0, 0, 0);
+
   const queryOptions = {
     where: id // user should not get profile in dashbaord
       ? {
@@ -11,7 +15,15 @@ const profileQueryOptions = (queryParameters, userProfile) => {
           // targetProfessionId, // Activate this to get users only with same target profession
         }
       : {},
-    order: [["availabilities", "dayHour", "ASC"]],
+    order: [
+      [
+        sequelize.literal(
+          `CASE WHEN "availabilities"."dayHour" > '${todayMidnight}' THEN 1 ELSE 2 END`
+        ),
+        "ASC",
+      ],
+      ["availabilities", "dayHour", "ASC"],
+    ],
   };
   if (Object.keys(queryParameters).length) {
     Object.keys(queryParameters).forEach((param) => {
