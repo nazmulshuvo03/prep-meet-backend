@@ -6,9 +6,9 @@ const { Profession } = require("../models/profession");
 const { User, Profile } = require("../models/user");
 const { WorkExperience } = require("../models/workExperience");
 const { Education } = require("../models/education");
-// const { CompaniesOfInterest } = require("../models/companiesOfInterest");
 const { InterviewExperience } = require("../models/interviewExperience");
 const { profileQueryOptions } = require("../helpers/queries/profile");
+const { Companies, ExperienceLevel } = require("../models/static");
 
 const _getUserProfile = async (userId) => {
   return Profile.findByPk(userId);
@@ -36,16 +36,7 @@ const getAllUserProfiles = asyncWrapper(async (req, res) => {
   const queryOptions = profileQueryOptions(queryParameters, userProfile);
   const userList = await Profile.findAll({
     ...queryOptions,
-    include: [
-      {
-        model: Profession,
-        as: "targetProfession",
-        foreignKey: "targetProfessionId",
-      },
-      Availability,
-      WorkExperience,
-      InterviewExperience,
-    ],
+    include: [Availability, WorkExperience],
   });
   res.success(userList);
 });
@@ -63,7 +54,6 @@ const getSingleUserProfile = asyncWrapper(async (req, res) => {
       },
       WorkExperience,
       Education,
-      // CompaniesOfInterest,
       InterviewExperience,
       // { model: Meeting, as: "initiatedMeetings", foreignKey: "initiator" },
       // { model: Meeting, as: "acceptedMeetings", foreignKey: "acceptor" },
