@@ -27,9 +27,9 @@ const _createToken = (data) => {
 const _handleLoginResponse = (req, res, profile) => {
   const contentType = req.headers["content-type"];
   if (contentType.startsWith("application/json")) {
-    res.success({ ...profile.dataValues });
+    return res.success({ ...profile.dataValues });
   } else if (contentType.startsWith("application/x-www-form-urlencoded")) {
-    res.redirect(
+    return res.redirect(
       `${process.env.DASHBOARD_URL}/dashboard/${profile.dataValues.id}`
     );
   } else {
@@ -41,7 +41,7 @@ const signupUser = asyncWrapper(async (req, res) => {
   const { email, password, firstName, lastName } = req.body;
   const exists = await User.findOne({ where: { email } });
   if (exists) {
-    res.fail("Email already exists");
+    return res.fail("Email already exists");
   }
   const hashedPassword = await bcrypt.hash(password, 10);
   const model = {
@@ -69,10 +69,10 @@ const loginUser = asyncWrapper(async (req, res) => {
       const profile = await Profile.findByPk(user.id);
       _handleLoginResponse(req, res, profile);
     } else {
-      res.fail("Incorrect password", 422);
+      return res.fail("Incorrect password", 422);
     }
   } else {
-    res.fail("Email does not exist", 422);
+    return res.fail("Email does not exist", 422);
   }
 });
 
@@ -85,9 +85,9 @@ const logoutUser = asyncWrapper(async (req, res) => {
 const verifyEmail = asyncWrapper(async (req, res) => {
   try {
     const data = await sendVerificationEmail();
-    res.success(data);
+    return res.success(data);
   } catch (err) {
-    res.fail(err.message);
+    return res.fail(err.message);
   }
 });
 
