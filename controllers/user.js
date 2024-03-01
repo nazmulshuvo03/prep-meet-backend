@@ -48,6 +48,7 @@ const getAllUserProfiles = asyncWrapper(async (req, res) => {
         order: [["availabilities", "dayHour", "ASC"]],
       },
       WorkExperience,
+      InterviewExperience,
     ],
   });
   res.success(userList);
@@ -55,6 +56,8 @@ const getAllUserProfiles = asyncWrapper(async (req, res) => {
 
 const getSingleUserProfile = asyncWrapper(async (req, res) => {
   const { userId } = req.params;
+  const today = new Date();
+  const todayMidnight = today.setHours(0, 0, 0, 0);
   if (!userId) return res.fail("Invalid user ID", BAD_REQUEST);
   const user = await Profile.findOne({
     where: { id: userId },
@@ -67,6 +70,15 @@ const getSingleUserProfile = asyncWrapper(async (req, res) => {
       WorkExperience,
       Education,
       InterviewExperience,
+      {
+        model: Availability,
+        where: {
+          dayHour: {
+            [Op.gte]: todayMidnight,
+          },
+        },
+        order: [["availabilities", "dayHour", "ASC"]],
+      },
       // { model: Meeting, as: "initiatedMeetings", foreignKey: "initiator" },
       // { model: Meeting, as: "acceptedMeetings", foreignKey: "acceptor" },
     ],
