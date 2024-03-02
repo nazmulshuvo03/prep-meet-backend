@@ -40,6 +40,7 @@ const getAllUserProfiles = asyncWrapper(async (req, res) => {
     include: [
       {
         model: Availability,
+        required: false,
         where: {
           dayHour: {
             [Op.gte]: todayMidnight,
@@ -67,11 +68,15 @@ const getSingleUserProfile = asyncWrapper(async (req, res) => {
         as: "targetProfession",
         foreignKey: "targetProfessionId",
       },
-      WorkExperience,
+      {
+        model: WorkExperience,
+        order: [["startDate", "DESC"]],
+      },
       Education,
       InterviewExperience,
       {
         model: Availability,
+        required: false,
         where: {
           dayHour: {
             [Op.gte]: todayMidnight,
@@ -79,8 +84,6 @@ const getSingleUserProfile = asyncWrapper(async (req, res) => {
         },
         order: [["availabilities", "dayHour", "ASC"]],
       },
-      // { model: Meeting, as: "initiatedMeetings", foreignKey: "initiator" },
-      // { model: Meeting, as: "acceptedMeetings", foreignKey: "acceptor" },
     ],
   });
   if (!user) return res.fail("User data not found", NOT_FOUND);
