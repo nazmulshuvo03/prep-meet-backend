@@ -14,6 +14,7 @@ router
   .get(getAllAvailabilityData)
   .delete(deleteAllAvailabilityData);
 router.route("/:userId").get(getUserAvailability);
+router.route("/:avaiabilityId").delete(deleteAvailabilityData);
 router.route("/").post(createAvailabilityData);
 
 module.exports = router;
