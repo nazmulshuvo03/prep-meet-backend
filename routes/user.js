@@ -6,6 +6,7 @@ const {
   getAllUserProfiles,
   deleteAllUser,
   getAllUserData,
+  checkProperty,
 } = require("../controllers/user");
 
 const workExperienceRoutes = require("./workExperience");
@@ -28,5 +29,6 @@ router
   .get(getSingleUserProfile)
   .put(updateUserProfile)
   .delete(deleteUser);
+router.route("/check").post(checkProperty);
 
 module.exports = router;

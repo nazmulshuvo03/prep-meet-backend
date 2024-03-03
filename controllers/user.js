@@ -124,6 +124,15 @@ const deleteAllUser = asyncWrapper(async (req, res) => {
   res.success("User table cleared");
 });
 
+const checkProperty = asyncWrapper(async (req, res) => {
+  const obj = req.body;
+  const found = await Profile.findOne({ where: obj });
+  if (found) {
+    return res.success({ exists: true });
+  }
+  res.success({ exists: false });
+});
+
 module.exports = {
   _getUserProfile,
   _updateUserProfile,
@@ -134,4 +143,5 @@ module.exports = {
   updateUserProfile,
   deleteUser,
   deleteAllUser,
+  checkProperty,
 };
