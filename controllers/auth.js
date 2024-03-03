@@ -30,7 +30,7 @@ const _handleLoginResponse = (req, res, profile) => {
     return res.success({ ...profile.dataValues });
   } else if (contentType.startsWith("application/x-www-form-urlencoded")) {
     return res.redirect(
-      `${process.env.DASHBOARD_URL}/dashboard/${profile.dataValues.id}`
+      `${process.env.DASHBOARD_URL}/profile/${profile.dataValues.id}`
     );
   } else {
     res.success({ ...profile.dataValues });
