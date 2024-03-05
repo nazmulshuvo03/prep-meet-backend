@@ -45,11 +45,9 @@ const Companies = sequelize.define(
   { timestamps: false }
 );
 
-ExperienceLevel.belongsTo(Profile);
 Profile.hasOne(ExperienceLevel, {
   as: "targetRole",
-  foreignKey: "id",
-  sourceKey: "experienceLevel",
+  foreignKey: "experienceLevel",
 });
 
 module.exports = {
