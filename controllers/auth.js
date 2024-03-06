@@ -1,6 +1,6 @@
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
-
+const { Op } = require("sequelize");
 const asyncWrapper = require("../middlewares/async");
 const { User, Profile } = require("../models/user");
 const { sendVerificationEmail } = require("../helpers/emailVerification");
@@ -10,6 +10,12 @@ const {
   getAccessTokenFromRefreshToken,
   redirectToOAuthURL,
 } = require("../helpers/oAuth");
+const { Profession } = require("../models/profession");
+const { WorkExperience } = require("../models/workExperience");
+const { Education } = require("../models/education");
+const { InterviewExperience } = require("../models/interviewExperience");
+const { Availability } = require("../models/availability");
+const { generateUsername } = require("../helpers/string");
 
 const TOKEN_COOKIE_NAME = "prepMeetToken";
 const MAX_AGE = 30 * 24 * 60 * 60;
@@ -24,7 +30,35 @@ const _createToken = (data) => {
   });
 };
 
-const _handleLoginResponse = (req, res, profile) => {
+const _handleLoginResponse = async (req, res, userId) => {
+  const today = new Date();
+  const todayMidnight = today.setHours(0, 0, 0, 0);
+  const profile = await Profile.findOne({
+    where: { id: userId },
+    include: [
+      {
+        model: Profession,
+        as: "targetProfession",
+        foreignKey: "targetProfessionId",
+      },
+      {
+        model: WorkExperience,
+        order: [["startDate", "DESC"]],
+      },
+      Education,
+      InterviewExperience,
+      {
+        model: Availability,
+        required: false,
+        where: {
+          dayHour: {
+            [Op.gte]: todayMidnight,
+          },
+        },
+        order: [["availabilities", "dayHour", "ASC"]],
+      },
+    ],
+  });
   const contentType = req.headers["content-type"];
   if (contentType.startsWith("application/json")) {
     return res.success({ ...profile.dataValues });
@@ -54,8 +88,9 @@ const signupUser = asyncWrapper(async (req, res) => {
   const updatedProfile = await _updateUserProfile(res, user.id, {
     firstName,
     lastName,
+    userName: generateUsername(),
   });
-  if (updatedProfile) _handleLoginResponse(req, res, updatedProfile);
+  if (updatedProfile) _handleLoginResponse(req, res, user.id);
 });
 
 const loginUser = asyncWrapper(async (req, res) => {
@@ -66,8 +101,7 @@ const loginUser = asyncWrapper(async (req, res) => {
     if (auth) {
       const token = _createToken({ id: user.id });
       res.cookie(TOKEN_COOKIE_NAME, token, COOKIE_OPTIONS);
-      const profile = await Profile.findByPk(user.id);
-      _handleLoginResponse(req, res, profile);
+      _handleLoginResponse(req, res, user.id);
     } else {
       return res.fail("Incorrect password", 422);
     }

@@ -37,7 +37,7 @@ const Profile = sequelize.define("profile", {
   photoURL: {
     type: DataTypes.STRING,
     defaultValue:
-      "https://cdn1.iconfinder.com/data/icons/mix-color-3/502/Untitled-7-1024.png",
+      "https://candidace-public-storage.s3.ap-south-1.amazonaws.com/default.png",
   },
   linkedInProfile: DataTypes.STRING,
   profileHeadline: DataTypes.TEXT,
