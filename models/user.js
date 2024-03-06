@@ -12,7 +12,10 @@ const User = sequelize.define("user", {
   email: { type: DataTypes.STRING, allowNull: false, unique: true },
   password: DataTypes.STRING,
   email_varified: { type: DataTypes.BOOLEAN, defaultValue: false },
-  role: { type: DataTypes.ENUM("USER", "ADMIN"), defaultValue: "USER" },
+  type: {
+    type: DataTypes.ENUM("BASIC", "PREMIUM", "ADMIN"),
+    defaultValue: "BASIC",
+  },
 });
 
 const Profile = sequelize.define("profile", {
