@@ -20,9 +20,9 @@ router.route("/").get((_req, res) => {
 
 router.use("/auth", authRoutes);
 router.use("/file", fileRoutes);
+router.use("/profession", professionRoutes);
 router.use(requireAuth);
 router.use("/user", userRoutes);
-router.use("/profession", professionRoutes);
 router.use("/skill", skillRoutes);
 router.use("/availability", availabilityRoutes);
 router.use("/meeting", meetingRoutes);

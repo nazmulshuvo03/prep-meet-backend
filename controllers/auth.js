@@ -72,7 +72,7 @@ const _handleLoginResponse = async (req, res, userId) => {
 };
 
 const signupUser = asyncWrapper(async (req, res) => {
-  const { email, password, firstName, lastName } = req.body;
+  const { email, password, firstName, lastName, targetProfessionId } = req.body;
   const exists = await User.findOne({ where: { email } });
   if (exists) {
     return res.fail("Email already exists");
@@ -89,6 +89,7 @@ const signupUser = asyncWrapper(async (req, res) => {
     firstName,
     lastName,
     userName: generateUsername(),
+    targetProfessionId,
   });
   if (updatedProfile) _handleLoginResponse(req, res, user.id);
 });
