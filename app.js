@@ -37,7 +37,7 @@ app.use(requestLogger);
 app.use(responseMiddleware);
 // app.use(connectLiveReload());
 
-app.use("/", viewRoutes);
+// app.use("/", viewRoutes);
 app.use("/api/v1", Routes);
 
 sequelize

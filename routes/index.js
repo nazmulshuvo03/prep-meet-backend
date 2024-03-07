@@ -14,7 +14,7 @@ const router = Router();
 router.route("/").get((_req, res) => {
   res.json({
     message:
-      "Hello from the Prep Meet backend. Last updated 01/03/2024 02:56 AM",
+      "Hello from the Prep Meet backend. Last updated 08/03/2024 01:40 AM",
   });
 });
 
