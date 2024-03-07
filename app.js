@@ -41,7 +41,7 @@ app.use(responseMiddleware);
 app.use("/api/v1", Routes);
 
 sequelize
-  .sync({ alter: true })
+  .sync({ force: true })
   .then(() => {
     try {
       console.log("Database connected!!");
