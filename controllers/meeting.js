@@ -10,6 +10,7 @@ const {
 const { NOT_FOUND, UNPROCESSABLE_DATA } = require("../constants/errorCodes");
 const { _getUserProfile } = require("./user");
 const { createEvent, createMeeting } = require("../helpers/meeting");
+const { WorkExperience } = require("../models/workExperience");
 
 const getAllMeetingData = asyncWrapper(async (req, res) => {
   const data = await Meeting.findAll();
@@ -24,16 +25,33 @@ const getUsersMeetingData = asyncWrapper(async (req, res) => {
         {
           [Op.or]: [{ initiator: userId }, { acceptor: userId }],
         },
-        {
-          dayHour: {
-            [Op.gte]: new Date().getTime(),
-          },
-        },
       ],
     },
     include: [
-      { model: Profile, as: "initiatorProfile", foreignKey: "initiator" },
-      { model: Profile, as: "acceptorProfile", foreignKey: "acceptor" },
+      {
+        model: Profile,
+        as: "initiatorProfile",
+        foreignKey: "initiator",
+        include: [
+          {
+            model: WorkExperience,
+            required: false,
+            where: { currentCompany: true },
+          },
+        ],
+      },
+      {
+        model: Profile,
+        as: "acceptorProfile",
+        foreignKey: "acceptor",
+        include: [
+          {
+            model: WorkExperience,
+            required: false,
+            where: { currentCompany: true },
+          },
+        ],
+      },
     ],
     order: [["dayHour", "ASC"]],
   });
