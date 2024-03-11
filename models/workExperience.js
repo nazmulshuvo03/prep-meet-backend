@@ -13,9 +13,11 @@ const WorkExperience = sequelize.define("workExperience", {
     type: DataTypes.UUID,
     allowNull: false,
   },
-  professionId: {
-    type: DataTypes.UUID,
-    allowNull: false,
+  jobTitle: {
+    type: DataTypes.STRING,
+  },
+  experienceId: {
+    type: DataTypes.INTEGER,
   },
   skills: {
     type: DataTypes.ARRAY(DataTypes.UUID),

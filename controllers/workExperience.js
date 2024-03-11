@@ -24,15 +24,17 @@ const getAllWorkExp = asyncWrapper(async (req, res) => {
 const createWorkExp = asyncWrapper(async (req, res) => {
   const model = {
     user_id: req.body.user_id,
-    professionId: req.body.professionId,
+    jobTitle: req.body.jobTitle,
+    experienceId: req.body.experienceId,
     skills: req.body.skills,
     companyId: req.body.companyId,
     country: req.body.country,
     startDate: req.body.startDate,
     endDate: req.body.endDate,
   };
-  if (!model.professionId)
-    return res.fail("Job Title is not provided", BAD_REQUEST);
+  if (!model.jobTitle) return res.fail("Job Role is not provided", BAD_REQUEST);
+  if (!model.experienceId)
+    return res.fail("Experience Level is not provided", BAD_REQUEST);
   if (!model.companyId)
     return res.fail("Company name is not provided", BAD_REQUEST);
   if (!model.startDate) return res.fail("Start date is not provided");
