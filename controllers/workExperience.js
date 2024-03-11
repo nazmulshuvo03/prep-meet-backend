@@ -71,6 +71,16 @@ const updateWorkExp = asyncWrapper(async (req, res) => {
     updatedData.currentCompany = false;
   }
 
+  if (!updatedData.endDate && found.endDate) {
+    // if someone wants to remove end date and make that one current company
+    const existingCurrentCompany = await _getUserCurrentCompany(
+      updatedData.user_id
+    );
+    if (existingCurrentCompany)
+      return res.fail("You already have a current company");
+    updatedData.currentCompany = true;
+  }
+
   const updated = await found.update(updatedData);
   res.success(updated);
 });
