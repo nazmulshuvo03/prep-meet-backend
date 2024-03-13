@@ -12,6 +12,20 @@ const { _getUserProfile } = require("./user");
 const { createEvent, createMeeting } = require("../helpers/meeting");
 const { WorkExperience } = require("../models/workExperience");
 
+const _getUsersLastMeeting = async (userId) => {
+  const data = await Meeting.findOne({
+    where: {
+      [Op.and]: [
+        {
+          [Op.or]: [{ initiator: userId }, { acceptor: userId }],
+        },
+      ],
+    },
+    order: [["dayHour", "DESC"]],
+  });
+  return data;
+};
+
 const getAllMeetingData = asyncWrapper(async (req, res) => {
   const data = await Meeting.findAll();
   res.success(data);
@@ -166,6 +180,7 @@ const deleteAllMeetingData = asyncWrapper(async (req, res) => {
 });
 
 module.exports = {
+  _getUsersLastMeeting,
   getAllMeetingData,
   getUsersMeetingData,
   createMeetingData,

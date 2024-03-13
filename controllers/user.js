@@ -8,6 +8,8 @@ const { WorkExperience } = require("../models/workExperience");
 const { Education } = require("../models/education");
 const { InterviewExperience } = require("../models/interviewExperience");
 const { profileQueryOptions } = require("../helpers/queries/profile");
+const { Meeting } = require("../models/meeting");
+const { _getUsersLastMeeting } = require("./meeting");
 
 const _getUserProfile = async (userId) => {
   return Profile.findByPk(userId);
@@ -52,6 +54,10 @@ const getAllUserProfiles = asyncWrapper(async (req, res) => {
       InterviewExperience,
     ],
   });
+  for (let user of userList) {
+    const lastMeeting = await _getUsersLastMeeting(user.id);
+    user.dataValues.lastMeeting = lastMeeting;
+  }
   res.success(userList);
 });
 
