@@ -31,8 +31,7 @@ const _createToken = (data) => {
 };
 
 const _handleLoginResponse = async (req, res, userId) => {
-  const today = new Date();
-  const todayMidnight = today.setHours(0, 0, 0, 0);
+  const today = new Date().getTime();
   const profile = await Profile.findOne({
     where: { id: userId },
     include: [
@@ -43,7 +42,6 @@ const _handleLoginResponse = async (req, res, userId) => {
       },
       {
         model: WorkExperience,
-        order: [["startDate", "DESC"]],
       },
       Education,
       InterviewExperience,
@@ -52,11 +50,15 @@ const _handleLoginResponse = async (req, res, userId) => {
         required: false,
         where: {
           dayHour: {
-            [Op.gte]: todayMidnight,
+            [Op.gte]: today,
           },
         },
-        order: [["availabilities", "dayHour", "ASC"]],
       },
+    ],
+    order: [
+      ["availabilities", "dayHourUTC", "ASC"],
+      ["workExperiences", "startDate", "DESC"],
+      ["education", "year_of_graduation", "DESC"],
     ],
   });
   const contentType = req.headers["content-type"];

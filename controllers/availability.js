@@ -29,15 +29,15 @@ const getAllAvailabilityData = asyncWrapper(async (req, res) => {
 const getUserAvailability = asyncWrapper(async (req, res) => {
   const { userId } = req.params;
   if (!userId) res.fail("Invalid user ID", BAD_REQUEST);
-  const today = new Date();
-  const todayMidnight = today.setHours(0, 0, 0, 0);
+  const today = new Date().getTime();
   const data = await Availability.findAll({
     where: {
       userId,
       dayHour: {
-        [Op.gte]: todayMidnight,
+        [Op.gte]: today,
       },
     },
+    order: [["dayHour", "ASC"]],
   });
   // if (!data) res.fail("User availability data not found", NOT_FOUND);
   res.success(data);

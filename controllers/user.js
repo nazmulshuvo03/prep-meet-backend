@@ -30,8 +30,7 @@ const getAllUserProfiles = asyncWrapper(async (req, res) => {
   const queryParameters = req.query;
   const userProfile = await Profile.findByPk(userId);
   const queryOptions = profileQueryOptions(queryParameters, userProfile);
-  const today = new Date();
-  const todayMidnight = today.setHours(0, 0, 0, 0);
+  const today = new Date().getTime();
   const userList = await Profile.findAll({
     ...queryOptions,
     include: [
@@ -40,7 +39,7 @@ const getAllUserProfiles = asyncWrapper(async (req, res) => {
         required: false,
         where: {
           dayHour: {
-            [Op.gte]: todayMidnight,
+            [Op.gte]: today,
           },
         },
         order: [["availabilities", "dayHour", "ASC"]],
@@ -58,9 +57,9 @@ const getAllUserProfiles = asyncWrapper(async (req, res) => {
 
 const getSingleUserProfile = asyncWrapper(async (req, res) => {
   const { userId } = req.params;
-  const today = new Date();
-  const todayMidnight = today.setHours(0, 0, 0, 0);
+  const today = new Date().getTime();
   if (!userId) return res.fail("Invalid user ID", BAD_REQUEST);
+
   const user = await Profile.findOne({
     where: { id: userId },
     include: [
@@ -71,7 +70,6 @@ const getSingleUserProfile = asyncWrapper(async (req, res) => {
       },
       {
         model: WorkExperience,
-        order: [["startDate", "DESC"]],
       },
       Education,
       InterviewExperience,
@@ -80,13 +78,18 @@ const getSingleUserProfile = asyncWrapper(async (req, res) => {
         required: false,
         where: {
           dayHour: {
-            [Op.gte]: todayMidnight,
+            [Op.gte]: today,
           },
         },
-        order: [["availabilities", "dayHour", "ASC"]],
       },
     ],
+    order: [
+      ["availabilities", "dayHourUTC", "ASC"],
+      ["workExperiences", "startDate", "DESC"],
+      ["education", "year_of_graduation", "DESC"],
+    ],
   });
+
   if (!user) return res.fail("User data not found", NOT_FOUND);
   res.success(user);
 });
