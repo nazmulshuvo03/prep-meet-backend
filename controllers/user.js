@@ -8,12 +8,7 @@ const { WorkExperience } = require("../models/workExperience");
 const { Education } = require("../models/education");
 const { InterviewExperience } = require("../models/interviewExperience");
 const { profileQueryOptions } = require("../helpers/queries/profile");
-const { Meeting } = require("../models/meeting");
 const { _getUsersLastMeeting } = require("./meeting");
-
-const _getUserProfile = async (userId) => {
-  return Profile.findByPk(userId);
-};
 
 const getAllUserData = asyncWrapper(async (req, res) => {
   const userList = await User.findAll();
@@ -140,7 +135,6 @@ const checkProperty = asyncWrapper(async (req, res) => {
 });
 
 module.exports = {
-  _getUserProfile,
   _updateUserProfile,
   getAllUserData,
   getAllUserProfiles,

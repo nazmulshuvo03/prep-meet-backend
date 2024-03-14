@@ -8,9 +8,14 @@ const {
   _getAvailabilityByBody,
 } = require("./availability");
 const { NOT_FOUND, UNPROCESSABLE_DATA } = require("../constants/errorCodes");
-const { _getUserProfile } = require("./user");
 const { createEvent, createMeeting } = require("../helpers/meeting");
 const { WorkExperience } = require("../models/workExperience");
+
+const _getUserProfile = async (userId) => {
+  const found = await Profile.findByPk(userId);
+  console.log("!!!!!!!!!!!!!!!!!!!!!!!!!!!!", found);
+  return found;
+};
 
 const _getUsersLastMeeting = async (userId) => {
   const data = await Meeting.findOne({
@@ -78,8 +83,9 @@ const createMeetingData = asyncWrapper(async (req, res) => {
   if (!availabilityData)
     return res.fail("Availability data not found with this ID", NOT_FOUND);
 
-  const initiatorProfile = await _getUserProfile(availabilityData.userId);
+  console.log("#########", availabilityId, availabilityData);
   const acceptorProfile = await _getUserProfile(acceptorId);
+  const initiatorProfile = await _getUserProfile(availabilityData.userId);
 
   const meetingData = await createMeeting();
   if (meetingData.error)
