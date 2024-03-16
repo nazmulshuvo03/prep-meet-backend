@@ -16,6 +16,7 @@ const { Education } = require("../models/education");
 const { InterviewExperience } = require("../models/interviewExperience");
 const { Availability } = require("../models/availability");
 const { generateUsername } = require("../helpers/string");
+const { profileCompletionStatus } = require("../helpers/user");
 
 const TOKEN_COOKIE_NAME = "prepMeetToken";
 const MAX_AGE = 30 * 24 * 60 * 60;
@@ -61,15 +62,17 @@ const _handleLoginResponse = async (req, res, userId) => {
       ["education", "year_of_graduation", "DESC"],
     ],
   });
+  const completionStatus = await profileCompletionStatus(profile.dataValues.id);
   const contentType = req.headers["content-type"];
-  if (contentType.startsWith("application/json")) {
-    return res.success({ ...profile.dataValues });
-  } else if (contentType.startsWith("application/x-www-form-urlencoded")) {
+  if (contentType.startsWith("application/x-www-form-urlencoded")) {
     return res.redirect(
       `${process.env.DASHBOARD_URL}/profile/${profile.dataValues.id}`
     );
   } else {
-    res.success({ ...profile.dataValues });
+    res.success({
+      ...profile.dataValues,
+      completionStatus,
+    });
   }
 };
 

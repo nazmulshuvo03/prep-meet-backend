@@ -9,6 +9,7 @@ const { Education } = require("../models/education");
 const { InterviewExperience } = require("../models/interviewExperience");
 const { profileQueryOptions } = require("../helpers/queries/profile");
 const { _getUsersLastMeeting } = require("./meeting");
+const { profileCompletionStatus } = require("../helpers/user");
 
 const getAllUserData = asyncWrapper(async (req, res) => {
   const userList = await User.findAll();
@@ -110,8 +111,13 @@ const _updateUserProfile = async (res, userId, updatedFields) => {
 const updateUserProfile = asyncWrapper(async (req, res) => {
   const { userId } = req.params;
   if (!userId) return res.fail("Invalid user ID", BAD_REQUEST);
-  const updatedUser = await _updateUserProfile(res, userId, req.body);
-  if (updatedUser) res.success(updatedUser);
+  let updatedUser = await _updateUserProfile(res, userId, req.body);
+  if (updatedUser) {
+    updatedUser.dataValues.completionStatus = await profileCompletionStatus(
+      updatedUser.id
+    );
+    res.success(updatedUser);
+  }
 });
 
 const deleteUser = asyncWrapper(async (req, res) => {
