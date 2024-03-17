@@ -25,17 +25,21 @@ const profileCompletionStatus = async (profileId) => {
       ],
     });
     return {
-      companiesOfInterest:
-        profile.companiesOfInterest && profile.companiesOfInterest.length > 0,
-      focusAreas: profile.focusAreas && profile.focusAreas.length > 0,
-      typesOfExperience:
-        profile.typesOfExperience && profile.typesOfExperience.length > 0,
+      companiesOfInterest: !!(
+        profile.companiesOfInterest && profile.companiesOfInterest.length
+      ),
+      focusAreas: !!(profile.focusAreas && profile.focusAreas.length),
+      typesOfExperience: !!(
+        profile.typesOfExperience && profile.typesOfExperience.length
+      ),
       experienceLevel: !!profile.experienceLevel,
       preparationStage: !!profile.preparationStage,
-      workExperiences:
-        profile.workExperiences && profile.workExperiences.length > 0,
-      availabilities:
-        profile.availabilities && profile.availabilities.length > 0,
+      workExperiences: !!(
+        profile.workExperiences && profile.workExperiences.length
+      ),
+      availabilities: !!(
+        profile.availabilities && profile.availabilities.length
+      ),
     };
   } catch (err) {
     console.log(

@@ -1,6 +1,7 @@
 const { Op } = require("sequelize");
 const asyncWrapper = require("../middlewares/async");
 const { Availability } = require("../models/availability");
+const { profileCompletionStatus } = require("../helpers/user");
 
 const _getAvailabilityById = async (id) => {
   const found = await Availability.findByPk(id);
@@ -53,8 +54,7 @@ const createAvailabilityData = asyncWrapper(async (req, res) => {
     },
   });
   if (found) {
-    found.destroy();
-    res.success("Deleted");
+    res.fail("Already added");
   } else {
     const model = {
       userId,
@@ -64,6 +64,7 @@ const createAvailabilityData = asyncWrapper(async (req, res) => {
     const created = await Availability.create(model);
     if (!created)
       res.fail("Availability data could not be created for this user");
+    created.dataValues.completionStatus = await profileCompletionStatus(userId);
     res.success(created);
   }
 });
@@ -71,8 +72,10 @@ const createAvailabilityData = asyncWrapper(async (req, res) => {
 const deleteAvailabilityData = asyncWrapper(async (req, res) => {
   const { avaiabilityId } = req.params;
   if (!avaiabilityId) res.fail("Invalid availability ID", BAD_REQUEST);
-  await Availability.destroy({ where: { id: avaiabilityId } });
-  res.success("Availability data deleted");
+  const found = await Availability.findOne({ where: { id: avaiabilityId } });
+  found.destroy();
+  const completionStatus = await profileCompletionStatus(found.userId);
+  res.success(completionStatus);
 });
 
 const deleteAllAvailabilityData = asyncWrapper(async (req, res) => {

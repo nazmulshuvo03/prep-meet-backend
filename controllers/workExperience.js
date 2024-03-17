@@ -1,4 +1,5 @@
 const { BAD_REQUEST, NOT_FOUND } = require("../constants/errorCodes");
+const { profileCompletionStatus } = require("../helpers/user");
 const asyncWrapper = require("../middlewares/async");
 const { WorkExperience } = require("../models/workExperience");
 
@@ -48,6 +49,9 @@ const createWorkExp = asyncWrapper(async (req, res) => {
 
   const created = await WorkExperience.create(model);
   if (!created) return res.fail("Work experience could not be added");
+  created.dataValues.completionStatus = await profileCompletionStatus(
+    created.user_id
+  );
   res.success(created);
 });
 
@@ -87,8 +91,10 @@ const updateWorkExp = asyncWrapper(async (req, res) => {
 
 const deleteWorkExp = asyncWrapper(async (req, res) => {
   const { id } = req.params;
-  await WorkExperience.destroy({ where: { id } });
-  res.success("Deleted");
+  const found = await WorkExperience.findOne({ where: { id } });
+  found.destroy();
+  const completionStatus = await profileCompletionStatus(found.user_id);
+  res.success(completionStatus);
 });
 
 module.exports = {
