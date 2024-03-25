@@ -6,7 +6,7 @@ const {
   createOAuthClient,
   getAccessTokenFromRefreshToken,
 } = require("./oAuth");
-const { meetingEmail } = require("../constants/emails");
+const { sendMeetingEmail } = require("./emailMeeting");
 
 const TOKEN_PATH = "./token.json";
 
@@ -59,7 +59,7 @@ const createEvent = async (
   initiator,
   acceptor,
   availabilityData,
-  meetingLink
+  meetingProps
 ) => {
   const dayHour = parseInt(availabilityData.dayHour);
   const startTimeUnix = new Date(dayHour);
@@ -70,7 +70,7 @@ const createEvent = async (
   const event = {
     summary: "Meet Prep Meeting",
     location: "Google Meet",
-    description: meetingEmail(meetingLink),
+    description: await sendMeetingEmail(meetingProps),
     start: {
       dateTime: startTime,
     },
@@ -78,11 +78,6 @@ const createEvent = async (
       dateTime: endTime,
     },
     attendees: [{ email: initiator }, { email: acceptor }],
-    // conferenceData: {
-    //   createRequest: {
-    //     requestId: availabilityData.id,
-    //   },
-    // },
   };
   const insertResponse = await performMeetingInsert(event);
   if (insertResponse.message === "Invalid Credentials") {

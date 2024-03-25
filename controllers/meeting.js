@@ -13,7 +13,6 @@ const { WorkExperience } = require("../models/workExperience");
 
 const _getUserProfile = async (userId) => {
   const found = await Profile.findByPk(userId);
-  console.log("!!!!!!!!!!!!!!!!!!!!!!!!!!!!", found);
   return found;
 };
 
@@ -83,7 +82,6 @@ const createMeetingData = asyncWrapper(async (req, res) => {
   if (!availabilityData)
     return res.fail("Availability data not found with this ID", NOT_FOUND);
 
-  console.log("#########", availabilityId, availabilityData);
   const acceptorProfile = await _getUserProfile(acceptorId);
   const initiatorProfile = await _getUserProfile(availabilityData.userId);
 
@@ -91,12 +89,17 @@ const createMeetingData = asyncWrapper(async (req, res) => {
   if (meetingData.error)
     return res.fail(`Meeting creation error: ${meetingData.error}`);
 
+  const meetingProps = {
+    meetingLink: meetingData.meeting,
+  };
+
   const createdEvent = await createEvent(
     initiatorProfile.dataValues.email,
     acceptorProfile.dataValues.email,
     availabilityData.dataValues,
-    meetingData.meeting
+    meetingProps
   );
+
   if (!createdEvent.created) {
     if (createdEvent.redirect) {
       return res.fail(createdEvent.redirectUrl);
@@ -104,6 +107,7 @@ const createMeetingData = asyncWrapper(async (req, res) => {
       return res.fail(createdEvent.message);
     }
   }
+
   const model = {
     initiator: availabilityData.userId,
     acceptor: acceptorId,
