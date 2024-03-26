@@ -17,6 +17,7 @@ const { InterviewExperience } = require("../models/interviewExperience");
 const { Availability } = require("../models/availability");
 const { generateUsername } = require("../helpers/string");
 const { profileCompletionStatus } = require("../helpers/user");
+const { sendWelcomeEmail } = require("../helpers/emailWelcome");
 
 const TOKEN_COOKIE_NAME = "prepMeetToken";
 const MAX_AGE = 30 * 24 * 60 * 60;
@@ -98,6 +99,20 @@ const signupUser = asyncWrapper(async (req, res) => {
     targetProfessionId,
   });
   if (updatedProfile) _handleLoginResponse(req, res, user.id);
+
+  // let secondsPassed = 0;
+  // let interval = setInterval(() => {
+  //   secondsPassed++;
+  //   console.log(`Seconds passed for: ${email}: ${secondsPassed}`);
+  // }, 1 * 1000);
+
+  setTimeout(() => {
+    // clearInterval(interval);
+    sendWelcomeEmail({
+      name: "New User",
+      receiver: email,
+    });
+  }, 1 * 60 * 1000); // 1 minute
 });
 
 const loginUser = asyncWrapper(async (req, res) => {
