@@ -38,7 +38,7 @@ app.use(responseMiddleware);
 // app.use(connectLiveReload());
 
 // app.use("/", viewRoutes);
-app.use("/api/v1", Routes);
+app.use("/v1", Routes);
 
 sequelize
   .sync({ alter: true })
