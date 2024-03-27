@@ -1,4 +1,4 @@
-name: Meet Prep Backend deployment
+name: Candidace Backend deployment
 
 on:
   push:
@@ -19,7 +19,7 @@ jobs:
           node-version: "20"
 
       - name: Install dependencies
-        run: npm install
+        run: npm ci
 
       - name: Set up SSH
         run: |
@@ -29,4 +29,4 @@ jobs:
 
       - name: Deploy to Server
         run: |
-          ssh -o StrictHostKeyChecking=no -i $HOME/.ssh/private-key.pem ${{ secrets.USER }}@${{ secrets.SERVER_IP }} "cd ${{ secrets.APP_PATH }} && git pull origin master && npm install && cd .. && pm2 restart  ecosystem.config.js"
+          ssh -o StrictHostKeyChecking=no -i $HOME/.ssh/private-key.pem ${{ secrets.USER }}@${{ secrets.SERVER_IP }} "cd ${{ secrets.APP_PATH }} && git pull origin master && npm ci && cd .. && pm2 restart  ecosystem.config.js"
