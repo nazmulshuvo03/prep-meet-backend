@@ -16,6 +16,8 @@ const Availability = sequelize.define("availability", {
     type: DataTypes.ENUM("OPEN", "BOOKED", "COMPLETED"),
     defaultValue: "OPEN",
   },
+  practiceAreas: { type: DataTypes.ARRAY(DataTypes.UUID), defaultValue: [] },
+  interviewNote: DataTypes.TEXT,
 });
 
 Availability.belongsTo(Profile, {

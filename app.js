@@ -10,7 +10,7 @@ const Routes = require("./routes");
 const sequelize = require("./db");
 const { responseMiddleware } = require("./middlewares/Response");
 const { requestLogger } = require("./middlewares/logger");
-const viewRoutes = require("./routes/view");
+// const viewRoutes = require("./routes/view");
 const configureCors = require("./middlewares/cors");
 
 // const liveReloadServer = livereload.createServer();

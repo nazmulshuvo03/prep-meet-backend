@@ -45,7 +45,7 @@ const getUserAvailability = asyncWrapper(async (req, res) => {
 });
 
 const createAvailabilityData = asyncWrapper(async (req, res) => {
-  const { userId, dayHourUTC } = req.body;
+  const { userId, dayHourUTC, practiceAreas, interviewNote } = req.body;
   const dayHour = new Date(dayHourUTC).getTime();
   const found = await Availability.findOne({
     where: {
@@ -60,6 +60,8 @@ const createAvailabilityData = asyncWrapper(async (req, res) => {
       userId,
       dayHour,
       dayHourUTC,
+      practiceAreas,
+      interviewNote,
     };
     const created = await Availability.create(model);
     if (!created)
