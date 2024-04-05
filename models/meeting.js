@@ -31,6 +31,8 @@ const Meeting = sequelize.define("meeting", {
     type: DataTypes.ENUM("SCHEDULED", "COMPLETED"),
     defaultValue: "SCHEDULED",
   },
+  practiceAreas: { type: DataTypes.ARRAY(DataTypes.UUID), defaultValue: [] },
+  interviewNote: DataTypes.TEXT,
 });
 
 Meeting.belongsTo(Profile, {

@@ -115,6 +115,8 @@ const createMeetingData = asyncWrapper(async (req, res) => {
     dayHourUTC: availabilityData.dayHourUTC,
     event: createdEvent.eventLink,
     meet: meetingData.meeting,
+    practiceAreas: availabilityData.practiceAreas,
+    interviewNote: availabilityData.interviewNote,
   };
   const meetingCreated = await Meeting.create(model);
   if (!meetingCreated)
