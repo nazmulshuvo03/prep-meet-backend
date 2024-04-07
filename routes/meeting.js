@@ -14,11 +14,11 @@ const router = Router();
 
 router
   .route("/")
-  .get(getSingleMeetingData)
   .post(createMeetingData)
   .put(updateMeetingData)
   .delete(deleteSingleMeetingData);
-router.route("/:userId").get(getUsersMeetingData);
+router.route("/user/:userId").get(getUsersMeetingData);
+router.route("/:id").get(getSingleMeetingData);
 router.route("/cancel").post(cancelMeeting);
 router.route("/all").get(getAllMeetingData).delete(deleteAllMeetingData);
 

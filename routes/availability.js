@@ -13,7 +13,7 @@ router
   .route("/all")
   .get(getAllAvailabilityData)
   .delete(deleteAllAvailabilityData);
-router.route("/:userId").get(getUserAvailability);
+router.route("/user/:userId").get(getUserAvailability);
 router.route("/:avaiabilityId").delete(deleteAvailabilityData);
 router.route("/").post(createAvailabilityData);
 

@@ -153,7 +153,7 @@ const cancelMeeting = asyncWrapper(async (req, res) => {
 });
 
 const getSingleMeetingData = asyncWrapper(async (req, res) => {
-  const { id } = req.body;
+  const { id } = req.params;
   const data = await Meeting.findOne({
     where: { id },
     include: [
