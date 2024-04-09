@@ -1,0 +1,102 @@
+{
+  "_id_structure": "1_two_digitFileSerialNumber(04)_questionType(1/2)_twoDigitQuestionSerialNumber(01)",
+  "type1": [
+    {
+      "id": 104101,
+      "text": "Did you ask between 3-5 clarification questions at the start of the interview?"
+    },
+    {
+      "id": 104102,
+      "text": "Did all your clarification questions have a strategic aspect related to assessing severity/scope of the problem?"
+    },
+    {
+      "id": 104103,
+      "text": "Did you explicitly state at least one assumption made during the interview?"
+    },
+    {
+      "id": 104104,
+      "text": "Were you able to list at least 3 user needs/motivations for the product?"
+    },
+    {
+      "id": 104105,
+      "text": "Did you link any user motivation to the company's mission?"
+    },
+    {
+      "id": 104106,
+      "text": "Did you mention at least 3 industry trends?"
+    },
+    {
+      "id": 104107,
+      "text": "Did you identify at least 3 meaningful vectors/considerations for user segmentation?"
+    },
+    {
+      "id": 104108,
+      "text": "Were you able to list at least 3 major pain points/opportunities for each user segment?"
+    },
+    {
+      "id": 104109,
+      "text": "Did you propose a specific methodology/framework to prioritise the identified pain points?"
+    },
+    {
+      "id": 104110,
+      "text": "Did your proposed solution directly address the core prioritised pain point?"
+    }
+  ],
+  "type2": [
+    {
+      "id": 104201,
+      "text": "How well did you identify industry trends and their potential impact?",
+      "options": [
+        "Did not mention any industry trends",
+        "Mentioned 1-2 generic trends not specific to the product space",
+        "Mentioned 3-4 relevant trends but did not discuss their impact",
+        "Discussed 3-4 relevant trends and their high-level impact",
+        "Provided insightful analysis of multiple trends and their nuanced impact on users, business, competition"
+      ]
+    },
+    {
+      "id": 104202,
+      "text": "How effectively did you demonstrate understanding of the competitive landscape?",
+      "options": [
+        "Did not discuss any competitors",
+        "Named 1-2 competitors but did not analyze them",
+        "Analyzed 3-4 competitors at a surface level",
+        "Provided good analysis of 3-4 key competitors and their differentiation",
+        "Provided nuanced analysis of multiple competitors, their strengths/weaknesses, and what it takes to succeed"
+      ]
+    },
+    {
+      "id": 104203,
+      "text": "How well did you empathize with user pain points across different segments?",
+      "options": [
+        "Did not identify any user pain points",
+        "Listed 1-2 generic pain points lacking user perspective",
+        "Listed 3-4 relevant pain points but from a product/business view",
+        "Discussed 3-4 pain points from the user's perspective for each segment",
+        "Demonstrated deep empathy by vividly capturing user frustrations for multiple segments"
+      ]
+    },
+    {
+      "id": 104204,
+      "text": "How reasonable and feasible were the assumptions you stated?",
+      "options": [
+        "Did not explicitly state any assumptions",
+        "Stated some invalid or far-fetched assumptions",
+        "Stated reasonable but very generic assumptions",
+        "Stated specific, realistic assumptions relevant to the product space",
+        "Stated nuanced, insightful assumptions showing deep domain understanding"
+      ]
+    },
+    {
+      "id": 104205,
+      "text": "How well did you tie your solution to the company's mission and principles?",
+      "options": [
+        "Did not mention the company's mission",
+        "Mentioned the mission statement verbatim but did not tie it back",
+        "Made a surface-level connection between the solution and mission",
+        "Linked the solution's impact to the key aspects of the mission",
+        "Proposed a solution firmly grounded in the company's core mission and principles"
+      ]
+    }
+  ]
+}

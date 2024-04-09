@@ -6,6 +6,7 @@ const skillRoutes = require("./skill");
 const availabilityRoutes = require("./availability");
 const meetingRoutes = require("./meeting");
 const staticRoutes = require("./static");
+const reviewRoutes = require("./review");
 const fileRoutes = require("./file");
 const { requireAuth } = require("../middlewares/auth");
 
@@ -27,5 +28,6 @@ router.use("/skill", skillRoutes);
 router.use("/availability", availabilityRoutes);
 router.use("/meeting", meetingRoutes);
 router.use("/static", staticRoutes);
+router.use("/review", reviewRoutes);
 
 module.exports = router;
