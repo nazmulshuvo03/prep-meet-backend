@@ -1,12 +1,12 @@
 const { Router } = require("express");
 const {
   getAllReviewQuestions,
-  createReview,
+  getOrCreateReview,
 } = require("../controllers/review");
 
 const router = Router();
 
 router.route("/questions/:skillId").get(getAllReviewQuestions);
-router.route("/interviewer").post(createReview);
+router.route("/interviewer").post(getOrCreateReview);
 
 module.exports = router;
