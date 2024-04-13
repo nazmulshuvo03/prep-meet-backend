@@ -3,6 +3,12 @@ const asyncWrapper = require("../middlewares/async");
 const { BAD_REQUEST } = require("../constants/errorCodes");
 const { Skill } = require("../models/skill");
 
+const _getSkillNameFromId = async (id) => {
+  const data = await Skill.findByPk(id);
+  if (!data) return "";
+  return data.name;
+};
+
 const _getSkillsOfProfession = async (profession_id) => {
   const data = await Skill.findAll({ where: { profession_id } });
   return data;
@@ -51,6 +57,7 @@ const deleteSkill = asyncWrapper(async (req, res) => {
 });
 
 module.exports = {
+  _getSkillNameFromId,
   _getSkillsOfProfession,
   getAllSkills,
   createSkill,
