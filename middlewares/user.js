@@ -1,5 +1,5 @@
 const jwt = require("jsonwebtoken");
-const { User } = require("../models/user");
+const { User, Profile } = require("../models/user");
 const { TOKEN_COOKIE_NAME } = require("../controllers/auth");
 const { profileCompletionStatus } = require("../helpers/user");
 
@@ -12,9 +12,9 @@ const checkUser = (req, res, next) => {
         res.locals.user = null;
         next();
       } else {
-        console.log("Decoded token: ", decoded);
-        const user = await User.findOne({ where: { id: decoded.id } });
-        console.log("Current user: ", user);
+        // console.log("Decoded token: ", decoded);
+        const user = await Profile.findOne({ where: { id: decoded.id } });
+        // console.log("Current user: ", user);
         res.locals.user = user;
         res.cookie("user", JSON.stringify(user));
         next();

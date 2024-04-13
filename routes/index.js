@@ -9,6 +9,7 @@ const staticRoutes = require("./static");
 const reviewRoutes = require("./review");
 const fileRoutes = require("./file");
 const { requireAuth } = require("../middlewares/auth");
+const { checkUser } = require("../middlewares/user");
 
 const router = Router();
 
@@ -19,6 +20,7 @@ router.route("/").get((_req, res) => {
   });
 });
 
+router.use(checkUser);
 router.use("/auth", authRoutes);
 router.use("/file", fileRoutes);
 router.use("/profession", professionRoutes);
