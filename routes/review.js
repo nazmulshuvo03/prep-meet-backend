@@ -5,6 +5,7 @@ const {
   createReview,
   createSelfAssessmewnt,
   getSelfAssessment,
+  getUserReviews,
 } = require("../controllers/review");
 
 const router = Router();
@@ -18,5 +19,6 @@ router
   .route("/self/:meetingId/:skillId")
   .get(getSelfAssessment)
   .post(createSelfAssessmewnt);
+router.route("/:userId").get(getUserReviews);
 
 module.exports = router;

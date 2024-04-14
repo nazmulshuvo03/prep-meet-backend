@@ -4,6 +4,9 @@ const path = require("path");
 const { Review, SelfAssessment } = require("../models/review");
 const { _getSkillNameFromId } = require("./skill");
 const { totalSelfAssessmentPoint } = require("../helpers/point");
+const { Profile } = require("../models/user");
+const { WorkExperience } = require("../models/workExperience");
+const { Meeting } = require("../models/meeting");
 
 const getAllReviewQuestions = asyncWrapper(async (req, res) => {
   const { skillId } = req.params;
@@ -27,7 +30,7 @@ const getReview = asyncWrapper(async (req, res) => {
     where: {
       meetingId: meetingId,
       interviewerId: interviewerId,
-      userId: user.id,
+      reviewerId: user.id,
     },
   });
   if (!data) return res.fail("Data does not exist");
@@ -38,12 +41,12 @@ const createReview = asyncWrapper(async (req, res) => {
   const data = req.body;
   const user = res.locals.user;
   if (!user) return res.fail("User not found or not logged in", 404);
-  data.userId = user.id;
+  data.reviewerId = user.id;
   const exists = await Review.findOne({
     where: {
       meetingId: data.meetingId,
       interviewerId: data.interviewerId,
-      userId: user.id,
+      reviewerId: user.id,
     },
   });
   if (exists) {
@@ -94,10 +97,40 @@ const createSelfAssessmewnt = asyncWrapper(async (req, res) => {
   }
 });
 
+const getUserReviews = asyncWrapper(async (req, res) => {
+  const { userId } = req.params;
+  const data = await Review.findAll({
+    where: {
+      interviewerId: userId,
+    },
+    include: [
+      {
+        model: Profile,
+        as: "reviewerProfile",
+        foreignKey: "reviewerId",
+        include: [
+          {
+            model: WorkExperience,
+            required: false,
+            where: { currentCompany: true },
+          },
+        ],
+      },
+      {
+        model: Meeting,
+        as: "meeting",
+        foreignKey: "meetingId",
+      },
+    ],
+  });
+  return res.success(data);
+});
+
 module.exports = {
   getAllReviewQuestions,
   getReview,
   createReview,
   getSelfAssessment,
   createSelfAssessmewnt,
+  getUserReviews,
 };
