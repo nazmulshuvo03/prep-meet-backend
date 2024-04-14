@@ -10,6 +10,9 @@ const { InterviewExperience } = require("../models/interviewExperience");
 const { profileQueryOptions } = require("../helpers/queries/profile");
 const { _getUsersLastMeeting } = require("./meeting");
 const { profileCompletionStatus } = require("../helpers/user");
+const { SelfAssessment } = require("../models/review");
+const { Skill } = require("../models/skill");
+const { Meeting } = require("../models/meeting");
 
 const getAllUserData = asyncWrapper(async (req, res) => {
   const userList = await User.findAll();
@@ -143,6 +146,41 @@ const checkProperty = asyncWrapper(async (req, res) => {
   res.success({ exists: false });
 });
 
+const getProgress = asyncWrapper(async (req, res) => {
+  const userProfile = res.locals.user;
+  if (!userProfile) return res.fail("User not found or not logged in", 404);
+  const formattedProgress = await Skill.findAll({
+    where: {
+      profession_id: userProfile.targetProfessionId,
+    },
+  });
+  for (let skill of formattedProgress) {
+    const saData = await SelfAssessment.findAll({
+      where: {
+        userId: userProfile.id,
+        skillId: skill.id,
+      },
+      include: [
+        {
+          model: Meeting,
+          as: "meeting",
+          foreignKey: "meetingId",
+        },
+      ],
+    });
+    skill.dataValues.notes = saData;
+    totalPoint = 0;
+    for (let data of saData) {
+      totalPoint += data.points;
+    }
+    skill.dataValues.totalPoint = totalPoint;
+    skill.dataValues.averagePoint = saData.length
+      ? totalPoint / saData.length
+      : 0;
+  }
+  res.success(formattedProgress);
+});
+
 module.exports = {
   _updateUserProfile,
   getAllUserData,
@@ -153,4 +191,5 @@ module.exports = {
   deleteUser,
   deleteAllUser,
   checkProperty,
+  getProgress,
 };

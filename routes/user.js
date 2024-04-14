@@ -7,6 +7,7 @@ const {
   deleteAllUser,
   getAllUserData,
   checkProperty,
+  getProgress,
 } = require("../controllers/user");
 
 const workExperienceRoutes = require("./workExperience");
@@ -24,11 +25,12 @@ router.use("/interviewExperience", interviewExperienceRoutes);
 router.route("/all/:userId?").get(getAllUserProfiles);
 router.route("/users").get(getAllUserData);
 router.route("/all").delete(deleteAllUser);
+router.route("/progress").get(getProgress);
+router.route("/check").post(checkProperty);
 router
   .route("/:userId")
   .get(getSingleUserProfile)
   .put(updateUserProfile)
   .delete(deleteUser);
-router.route("/check").post(checkProperty);
 
 module.exports = router;

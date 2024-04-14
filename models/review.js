@@ -55,6 +55,13 @@ const SelfAssessment = sequelize.define("selfAssessment", {
   points: DataTypes.FLOAT,
 });
 
+SelfAssessment.belongsTo(Meeting, {
+  foreignKey: "meetingId",
+  targetKey: "id",
+  onDelete: "CASCADE",
+  as: "meeting",
+});
+
 module.exports = {
   Review,
   SelfAssessment,
