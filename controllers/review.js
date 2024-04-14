@@ -19,7 +19,22 @@ const getAllReviewQuestions = asyncWrapper(async (req, res) => {
   }
 });
 
-const getOrCreateReview = asyncWrapper(async (req, res) => {
+const getReview = asyncWrapper(async (req, res) => {
+  const { meetingId, interviewerId } = req.params;
+  const user = res.locals.user;
+  if (!user) return res.fail("User not found or not logged in", 404);
+  const data = await Review.findOne({
+    where: {
+      meetingId: meetingId,
+      interviewerId: interviewerId,
+      userId: user.id,
+    },
+  });
+  if (!data) return res.fail("Data does not exist");
+  res.success(data);
+});
+
+const createReview = asyncWrapper(async (req, res) => {
   const data = req.body;
   const user = res.locals.user;
   if (!user) return res.fail("User not found or not logged in", 404);
@@ -32,18 +47,8 @@ const getOrCreateReview = asyncWrapper(async (req, res) => {
     },
   });
   if (exists) {
-    if (
-      (data.punctuality !== 0 && exists.punctuality !== data.punctuality) ||
-      (data.preparedness !== 0 && exists.preparedness !== data.preparedness) ||
-      (data.depthOfFeedback !== 0 &&
-        exists.depthOfFeedback !== data.depthOfFeedback) ||
-      (data.comments !== "" && exists.comments !== data.comments)
-    ) {
-      const updated = await exists.update(data);
-      return res.success(updated);
-    } else {
-      return res.success(exists);
-    }
+    const updated = await exists.update(data);
+    return res.success(updated);
   } else {
     const created = await Review.create(data);
     if (!created) return res.fail("Cound not create review");
@@ -91,7 +96,8 @@ const createSelfAssessmewnt = asyncWrapper(async (req, res) => {
 
 module.exports = {
   getAllReviewQuestions,
-  getOrCreateReview,
+  getReview,
+  createReview,
   getSelfAssessment,
   createSelfAssessmewnt,
 };
