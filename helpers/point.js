@@ -1,7 +1,7 @@
 const pointCountAnswerType1 = (answers) => {
   let count = 0;
   for (let answer of answers) {
-    if (answer === 2) count += 1;
+    if (answer === 1) count += 1;
   }
   return count;
 };
