@@ -33,6 +33,12 @@ Review.belongsTo(Meeting, {
   as: "meeting",
 });
 
+Profile.hasMany(Review, {
+  foreignKey: "interviewerId",
+  sourceKey: "id",
+  onDelete: "SET NULL",
+});
+
 const SelfAssessment = sequelize.define("selfAssessment", {
   id: {
     type: DataTypes.UUID,

@@ -10,9 +10,81 @@ const { InterviewExperience } = require("../models/interviewExperience");
 const { profileQueryOptions } = require("../helpers/queries/profile");
 const { _getUsersLastMeeting } = require("./meeting");
 const { profileCompletionStatus } = require("../helpers/user");
-const { SelfAssessment } = require("../models/review");
+const { SelfAssessment, Review } = require("../models/review");
 const { Skill } = require("../models/skill");
 const { Meeting } = require("../models/meeting");
+
+const _getUserProfile = async (userId) => {
+  const today = new Date().getTime();
+
+  const user = await Profile.findOne({
+    where: { id: userId },
+    include: [
+      {
+        model: Profession,
+        as: "targetProfession",
+        foreignKey: "targetProfessionId",
+      },
+      {
+        model: WorkExperience,
+      },
+      Education,
+      InterviewExperience,
+      {
+        model: Availability,
+        required: false,
+        where: {
+          dayHour: {
+            [Op.gte]: today,
+          },
+        },
+      },
+      {
+        model: Review,
+        required: false,
+        foreignKey: "interviewerId",
+        include: [
+          {
+            model: Profile,
+            as: "reviewerProfile",
+            foreignKey: "reviewerId",
+            include: [
+              {
+                model: WorkExperience,
+                required: false,
+                where: { currentCompany: true },
+              },
+            ],
+          },
+          {
+            model: Meeting,
+            as: "meeting",
+            foreignKey: "meetingId",
+          },
+        ],
+      },
+    ],
+    order: [
+      ["availabilities", "dayHourUTC", "ASC"],
+      ["workExperiences", "startDate", "DESC"],
+      ["education", "year_of_graduation", "DESC"],
+    ],
+  });
+  return user;
+};
+
+const _updateUserProfile = async (res, userId, updatedFields) => {
+  if (Object.keys(updatedFields).length === 0)
+    return res.fail("No fields provided for update", BAD_REQUEST);
+
+  const user = await Profile.findByPk(userId);
+  if (!user) return res.fail("User data not found", NOT_FOUND);
+
+  const updatedUser = await user.update(updatedFields);
+  if (!updatedUser) return res.fail("User data update failed");
+
+  return updatedUser;
+};
 
 const getAllUserData = asyncWrapper(async (req, res) => {
   const userList = await User.findAll();
@@ -50,6 +122,11 @@ const getAllUserProfiles = asyncWrapper(async (req, res) => {
       },
       WorkExperience,
       InterviewExperience,
+      {
+        model: Review,
+        required: false,
+        foreignKey: "interviewerId",
+      },
     ],
   });
   for (let user of userList) {
@@ -61,55 +138,13 @@ const getAllUserProfiles = asyncWrapper(async (req, res) => {
 
 const getSingleUserProfile = asyncWrapper(async (req, res) => {
   const { userId } = req.params;
-  const today = new Date().getTime();
   if (!userId) return res.fail("Invalid user ID", BAD_REQUEST);
 
-  const user = await Profile.findOne({
-    where: { id: userId },
-    include: [
-      {
-        model: Profession,
-        as: "targetProfession",
-        foreignKey: "targetProfessionId",
-      },
-      {
-        model: WorkExperience,
-      },
-      Education,
-      InterviewExperience,
-      {
-        model: Availability,
-        required: false,
-        where: {
-          dayHour: {
-            [Op.gte]: today,
-          },
-        },
-      },
-    ],
-    order: [
-      ["availabilities", "dayHourUTC", "ASC"],
-      ["workExperiences", "startDate", "DESC"],
-      ["education", "year_of_graduation", "DESC"],
-    ],
-  });
+  const user = await _getUserProfile(userId);
 
   if (!user) return res.fail("User data not found", NOT_FOUND);
   res.success(user);
 });
-
-const _updateUserProfile = async (res, userId, updatedFields) => {
-  if (Object.keys(updatedFields).length === 0)
-    return res.fail("No fields provided for update", BAD_REQUEST);
-
-  const user = await Profile.findByPk(userId);
-  if (!user) return res.fail("User data not found", NOT_FOUND);
-
-  const updatedUser = await user.update(updatedFields);
-  if (!updatedUser) return res.fail("User data update failed");
-
-  return updatedUser;
-};
 
 const updateUserProfile = asyncWrapper(async (req, res) => {
   const { userId } = req.params;
@@ -208,6 +243,7 @@ const getProgress = asyncWrapper(async (req, res) => {
 });
 
 module.exports = {
+  _getUserProfile,
   _updateUserProfile,
   getAllUserData,
   getAllUserProfiles,

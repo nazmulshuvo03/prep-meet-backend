@@ -4,7 +4,7 @@ const { Op } = require("sequelize");
 const asyncWrapper = require("../middlewares/async");
 const { User, Profile } = require("../models/user");
 const { sendVerificationEmail } = require("../helpers/emailVerification");
-const { _updateUserProfile } = require("./user");
+const { _updateUserProfile, _getUserProfile } = require("./user");
 const {
   getAccessTokenFromAuth,
   getAccessTokenFromRefreshToken,
@@ -34,36 +34,7 @@ const _createToken = (data) => {
 };
 
 const _handleLoginResponse = async (req, res, userId) => {
-  const today = new Date().getTime();
-  const profile = await Profile.findOne({
-    where: { id: userId },
-    include: [
-      {
-        model: Profession,
-        as: "targetProfession",
-        foreignKey: "targetProfessionId",
-      },
-      {
-        model: WorkExperience,
-      },
-      Education,
-      InterviewExperience,
-      {
-        model: Availability,
-        required: false,
-        where: {
-          dayHour: {
-            [Op.gte]: today,
-          },
-        },
-      },
-    ],
-    order: [
-      ["availabilities", "dayHourUTC", "ASC"],
-      ["workExperiences", "startDate", "DESC"],
-      ["education", "year_of_graduation", "DESC"],
-    ],
-  });
+  const profile = await _getUserProfile(userId);
   const completionStatus = await profileCompletionStatus(profile.dataValues.id);
   const contentType = req.headers["content-type"];
   if (contentType.startsWith("application/x-www-form-urlencoded")) {
