@@ -165,6 +165,32 @@ const getProgress = asyncWrapper(async (req, res) => {
           model: Meeting,
           as: "meeting",
           foreignKey: "meetingId",
+          include: [
+            {
+              model: Profile,
+              as: "initiatorProfile",
+              foreignKey: "initiator",
+              include: [
+                {
+                  model: WorkExperience,
+                  required: false,
+                  where: { currentCompany: true },
+                },
+              ],
+            },
+            {
+              model: Profile,
+              as: "acceptorProfile",
+              foreignKey: "acceptor",
+              include: [
+                {
+                  model: WorkExperience,
+                  required: false,
+                  where: { currentCompany: true },
+                },
+              ],
+            },
+          ],
         },
       ],
     });
