@@ -11,7 +11,7 @@ const profileQueryOptions = (queryParameters, userProfile) => {
           id: {
             [Op.ne]: id,
           },
-          // targetProfessionId, // Activate this to get users only with same target profession
+          targetProfessionId, // Activate this to get users only with same target profession
         }
       : {},
     order: [
@@ -34,6 +34,11 @@ const profileQueryOptions = (queryParameters, userProfile) => {
           { firstName: { [Op.iLike]: `%${value}%` } },
           { lastName: { [Op.iLike]: `%${value}%` } },
         ];
+      } else if (param === "userName") {
+        // Handling search by userName
+        queryOptions.where = {
+          userName: { [Op.iLike]: `%${value}%` },
+        };
       } else if (param === "companiesOfInterest") {
         // Handling search by companiesOfInterest
         queryOptions.where.companiesOfInterest = {
