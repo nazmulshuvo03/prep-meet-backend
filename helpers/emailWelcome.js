@@ -12,7 +12,7 @@ const sendWelcomeEmail = async (props) => {
   const compiledTemplate = ejs.compile(templateContent);
 
   const mailOptions = {
-    from: `Team PrepMeet <${process.env.EMAIL_SENDER}>`,
+    from: `Team Candidace <${process.env.EMAIL_SENDER}>`,
     to: props.receiver,
     subject: "Welcome to Candidace",
     html: compiledTemplate(props),
