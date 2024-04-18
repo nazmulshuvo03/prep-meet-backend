@@ -1,6 +1,8 @@
 const sequelize = require("../db");
 const { DataTypes } = require("sequelize");
 const { Profile } = require("./user");
+const { WorkExperience } = require("./workExperience");
+const { InterviewExperience } = require("./interviewExperience");
 
 const ExperienceLevel = sequelize.define(
   "experienceLevel",
@@ -48,6 +50,7 @@ const Companies = sequelize.define(
 Profile.hasOne(ExperienceLevel, {
   as: "targetRole",
   foreignKey: "experienceLevel",
+  onDelete: "SET NULL",
 });
 
 module.exports = {

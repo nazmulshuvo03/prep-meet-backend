@@ -12,14 +12,12 @@ const {
 
 const workExperienceRoutes = require("./workExperience");
 const educationRoutes = require("./education");
-const companiesOfInterestRoutes = require("./companiesOfInterest");
 const interviewExperienceRoutes = require("./interviewExperience");
 
 const router = Router();
 
 router.use("/workExperience", workExperienceRoutes);
 router.use("/education", educationRoutes);
-router.use("/companiesOfInterest", companiesOfInterestRoutes);
 router.use("/interviewExperience", interviewExperienceRoutes);
 
 router.route("/all/:userId?").get(getAllUserProfiles);

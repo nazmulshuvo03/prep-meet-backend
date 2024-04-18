@@ -60,10 +60,6 @@ const Profile = sequelize.define("profile", {
 Profile.belongsTo(User, { foreignKey: "id", onDelete: "CASCADE" });
 User.hasOne(Profile, { foreignKey: "id", onDelete: "CASCADE" });
 
-Profession.hasMany(Profile, {
-  foreignKey: "targetProfessionId",
-  onDelete: "CASCADE",
-});
 Profile.belongsTo(Profession, {
   foreignKey: "targetProfessionId",
   as: "targetProfession",
