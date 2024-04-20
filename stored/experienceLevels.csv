@@ -1,5 +1,7 @@
 id,name
-1,Entry level (IC less than 5 YOE)
-2,Mid level (IC with 5-8 YOE)
-3,Senior level (IC and people management)
-4,Executive level (People management)
+1,Intern
+2,Entry level (IC less than 5 YOE)
+3,Mid level (IC with 5-8 YOE)
+4,Senior level (IC and people management)
+5,Executive level (People management)
+6,Undecided
