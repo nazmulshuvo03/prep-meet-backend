@@ -3,17 +3,23 @@ const {
   getAllExperienceLevels,
   getAllPreparationStages,
   getAllCompanies,
-  createCompany,
   postCompanyData,
   deleteCompanyData,
+  postExperienceLevelsData,
+  postPreparationStagesData,
 } = require("../controllers/static");
 
 const router = Router();
 
-router.route("/experienceLevels").get(getAllExperienceLevels);
-router.route("/preparationStages").get(getAllPreparationStages);
-router.route("/companies").get(getAllCompanies).post(createCompany);
-router.route("/companies/all").post(postCompanyData);
+router
+  .route("/experienceLevels")
+  .get(getAllExperienceLevels)
+  .post(postExperienceLevelsData);
+router
+  .route("/preparationStages")
+  .get(getAllPreparationStages)
+  .post(postPreparationStagesData);
+router.route("/companies").get(getAllCompanies).post(postCompanyData);
 router.route("/companies/:id").delete(deleteCompanyData);
 
 module.exports = router;

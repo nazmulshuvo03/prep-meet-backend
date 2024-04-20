@@ -7,35 +7,8 @@ const {
 const fs = require("fs");
 const path = require("path");
 
-const getAllExperienceLevels = asyncWrapper(async (req, res) => {
-  const data = await ExperienceLevel.findAll();
-  res.success(data);
-});
-
-const getAllPreparationStages = asyncWrapper(async (req, res) => {
-  const data = await PreparationStage.findAll();
-  res.success(data);
-});
-
-const getAllCompanies = asyncWrapper(async (req, res) => {
-  const data = await Companies.findAll();
-  res.success(data);
-});
-
-const createCompany = asyncWrapper(async (req, res) => {
-  const model = {
-    id: req.body.id,
-    name: req.body.name,
-    symbol: req.body.symbol,
-    country: req.body.country,
-  };
-  const created = await Companies.create(model);
-  res.success(created);
-});
-
-const postCompanyData = asyncWrapper(async (req, res) => {
-  await Companies.destroy({ where: {} });
-  const filePath = path.join(__dirname, "../stored/companies.csv");
+const _insertDataInTable = async (fileName, tableName) => {
+  const filePath = path.join(__dirname, `../stored/${fileName}.csv`);
   const csvData = [];
 
   fs.readFile(filePath, "utf8", async (err, data) => {
@@ -53,10 +26,42 @@ const postCompanyData = asyncWrapper(async (req, res) => {
         rowData[header] = row[index];
       });
       csvData.push(rowData);
-      await Companies.create(rowData);
+      await tableName.create(rowData);
     }
     // console.log("Parsed CSV data:", csvData);
   });
+};
+
+const getAllExperienceLevels = asyncWrapper(async (req, res) => {
+  const data = await ExperienceLevel.findAll();
+  res.success(data);
+});
+
+const postExperienceLevelsData = asyncWrapper(async (req, res) => {
+  await ExperienceLevel.destroy({ where: {} });
+  await _insertDataInTable("experienceLevels", ExperienceLevel);
+  res.success("Data Updated");
+});
+
+const getAllPreparationStages = asyncWrapper(async (req, res) => {
+  const data = await PreparationStage.findAll();
+  res.success(data);
+});
+
+const postPreparationStagesData = asyncWrapper(async (req, res) => {
+  await ExperienceLevel.destroy({ where: {} });
+  await _insertDataInTable("experienceLevels", ExperienceLevel);
+  res.success("Data Updated");
+});
+
+const getAllCompanies = asyncWrapper(async (req, res) => {
+  const data = await Companies.findAll();
+  res.success(data);
+});
+
+const postCompanyData = asyncWrapper(async (req, res) => {
+  await Companies.destroy({ where: {} });
+  await _insertDataInTable("companies", Companies);
   res.success("Data Updated");
 });
 
@@ -72,9 +77,10 @@ const deleteCompanyData = asyncWrapper(async (req, res) => {
 
 module.exports = {
   getAllExperienceLevels,
+  postExperienceLevelsData,
   getAllPreparationStages,
+  postPreparationStagesData,
   getAllCompanies,
-  createCompany,
   postCompanyData,
   deleteCompanyData,
 };

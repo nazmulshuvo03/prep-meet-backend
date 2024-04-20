@@ -1,8 +1,6 @@
 const sequelize = require("../db");
 const { DataTypes } = require("sequelize");
 const { Profile } = require("./user");
-const { WorkExperience } = require("./workExperience");
-const { InterviewExperience } = require("./interviewExperience");
 
 const ExperienceLevel = sequelize.define(
   "experienceLevel",
