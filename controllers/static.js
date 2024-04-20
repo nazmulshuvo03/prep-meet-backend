@@ -49,8 +49,8 @@ const getAllPreparationStages = asyncWrapper(async (req, res) => {
 });
 
 const postPreparationStagesData = asyncWrapper(async (req, res) => {
-  await ExperienceLevel.destroy({ where: {} });
-  await _insertDataInTable("experienceLevels", ExperienceLevel);
+  await PreparationStage.destroy({ where: {} });
+  await _insertDataInTable("preparationStages", PreparationStage);
   res.success("Data Updated");
 });
 
