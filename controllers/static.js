@@ -34,6 +34,7 @@ const createCompany = asyncWrapper(async (req, res) => {
 });
 
 const postCompanyData = asyncWrapper(async (req, res) => {
+  await Companies.destroy({ where: {} });
   const filePath = path.join(__dirname, "../stored/companies.csv");
   const csvData = [];
 
