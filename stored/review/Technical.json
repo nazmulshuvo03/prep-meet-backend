@@ -3,100 +3,101 @@
   "type1": [
     {
       "id": 104101,
-      "text": "Did you ask between 3-5 clarification questions at the start of the interview?"
+      "text": "Did you ask clarifying questions to understand the key requirements and constraints?"
     },
     {
       "id": 104102,
-      "text": "Did all your clarification questions have a strategic aspect related to assessing severity/scope of the problem?"
+      "text": "Did you propose a high-level system architecture/design before going into details?"
     },
     {
       "id": 104103,
-      "text": "Did you explicitly state at least one assumption made during the interview?"
+      "text": "Did you identify and discuss the key components/modules of the system?"
     },
     {
-      "id": 104104,
-      "text": "Were you able to list at least 3 user needs/motivations for the product?"
+      "id": 104104,  
+      "text": "Did you consider and address bottlenecks, scalability, and performance concerns?"
     },
     {
       "id": 104105,
-      "text": "Did you link any user motivation to the company's mission?"
+      "text": "Did you factor in reliability, availability, and fault-tolerance aspects?"
     },
     {
       "id": 104106,
-      "text": "Did you mention at least 3 industry trends?"
+      "text": "Did you discuss data storage and management requirements/solutions?"
     },
     {
       "id": 104107,
-      "text": "Did you identify at least 3 meaningful vectors/considerations for user segmentation?"
+      "text": "Did you touch upon security and privacy considerations where relevant?"
     },
     {
       "id": 104108,
-      "text": "Were you able to list at least 3 major pain points/opportunities for each user segment?"
+      "text": "Did you explore different tradeoffs and design alternatives objectively?"
     },
     {
       "id": 104109,
-      "text": "Did you propose a specific methodology/framework to prioritise the identified pain points?"
+      "text": "Did you justify your design choices based on stated requirements and principles?"
     },
     {
-      "id": 104110,
-      "text": "Did your proposed solution directly address the core prioritised pain point?"
+      "id": 104110, 
+      "text": "Did you discuss potential future enhancements or limitations transparently?"
     }
   ],
   "type2": [
     {
       "id": 104201,
-      "text": "How well did you identify industry trends and their potential impact?",
+      "text": "How well did you decompose the problem into logical components?",
       "options": [
-        "Did not mention any industry trends",
-        "Mentioned 1-2 generic trends not specific to the product space",
-        "Mentioned 3-4 relevant trends but did not discuss their impact",
-        "Discussed 3-4 relevant trends and their high-level impact",
-        "Provided insightful analysis of multiple trends and their nuanced impact on users, business, competition"
+        "Did not break down the problem into any components/modules",
+        "Decomposed the system ad-hoc without a clear approach",
+        "Identified key components but missed some important ones",
+        "Decomposed the system into appropriate components/layers",
+        "Provided a thorough, structured decomposition of all required components"
       ]
     },
     {
       "id": 104202,
-      "text": "How effectively did you demonstrate understanding of the competitive landscape?",
+      "text": "How effectively did you estimate scale and forecast needs?",  
       "options": [
-        "Did not discuss any competitors",
-        "Named 1-2 competitors but did not analyze them",
-        "Analyzed 3-4 competitors at a surface level",
-        "Provided good analysis of 3-4 key competitors and their differentiation",
-        "Provided nuanced analysis of multiple competitors, their strengths/weaknesses, and what it takes to succeed"
+        "Did not discuss scale or any capacity needs",
+        "Made hand-wavy estimates without any calculations",
+        "Estimated scale based on some data points but with flaws",
+        "Provided reasonable estimations for current and future scale",
+        "Outlined a comprehensive calculation of scale and capacity forecasting"
       ]
     },
     {
       "id": 104203,
-      "text": "How well did you empathize with user pain points across different segments?",
+      "text": "How pragmatically did you evaluate tradeoffs between design choices?",
       "options": [
-        "Did not identify any user pain points",
-        "Listed 1-2 generic pain points lacking user perspective",
-        "Listed 3-4 relevant pain points but from a product/business view",
-        "Discussed 3-4 pain points from the user's perspective for each segment",
-        "Demonstrated deep empathy by vividly capturing user frustrations for multiple segments"
+        "Did not discuss any tradeoffs between different options",
+        "Mentioned some tradeoffs but no objective evaluation",
+        "Evaluated tradeoffs between a couple of options/dimensions",
+        "Objectively discussed key tradeoffs between multiple design choices", 
+        "Provided a structured framework to evaluate all key design tradeoffs"
       ]
     },
     {
       "id": 104204,
-      "text": "How reasonable and feasible were the assumptions you stated?",
+      "text": "How well did you incorporate principles of scalable system design?",
       "options": [
-        "Did not explicitly state any assumptions",
-        "Stated some invalid or far-fetched assumptions",
-        "Stated reasonable but very generic assumptions",
-        "Stated specific, realistic assumptions relevant to the product space",
-        "Stated nuanced, insightful assumptions showing deep domain understanding"
+        "Did not consider scalability or distributed systems concepts",
+        "Mentioned some buzzwords like caching, load balancing without depth",
+        "Discussed either scalability or distributed principles partially",
+        "Incorporated core scalability and distributed systems principles",
+        "Seamlessly integrated advanced scalability and systems design patterns"
       ]
     },
     {
       "id": 104205,
-      "text": "How well did you tie your solution to the company's mission and principles?",
+      "text": "How crisply did you communicate and sell your system design approach?",
       "options": [
-        "Did not mention the company's mission",
-        "Mentioned the mission statement verbatim but did not tie it back",
-        "Made a surface-level connection between the solution and mission",
-        "Linked the solution's impact to the key aspects of the mission",
-        "Proposed a solution firmly grounded in the company's core mission and principles"
-      ]
+        "Did not articulate the high-level design approach or motivation",
+        "High-level messaging was unclear or frequently got lost in details",
+        "Communicated the core approach reasonably well with some inconsistencies",
+        "Explained the overarching design approach coherently with pros and cons",
+        "Delivered a clear, compelling pitch for the chosen system design approach"
+
+     ]
     }
   ]
 }

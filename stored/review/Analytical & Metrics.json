@@ -3,99 +3,99 @@
   "type1": [
     {
       "id": 102101,
-      "text": "Did you ask between 3-5 clarification questions at the start of the interview?"
+      "text": "Did you ask clarifying questions to understand the key metrics and their definitions?"
     },
     {
       "id": 102102,
-      "text": "Did all your clarification questions have a strategic aspect related to assessing severity/scope of the problem?"
+      "text": "Did you identify the applicable metric categories (acquisition, engagement, monetization, etc.)?"
     },
     {
       "id": 102103,
-      "text": "Did you explicitly state at least one assumption made during the interview?"
+      "text": "Did you propose specific metrics to track the product's core performance?"
     },
     {
       "id": 102104,
-      "text": "Were you able to list at least 3 user needs/motivations for the product?"
+      "text": "Did you discuss any counter-metrics or metrics to monitor potential risks?"
     },
     {
       "id": 102105,
-      "text": "Did you link any user motivation to the company's mission?"
+      "text": "Did you relate the metrics back to the key business objectives and user needs?"
     },
     {
       "id": 102106,
-      "text": "Did you mention at least 3 industry trends?"
+      "text": "Did you showcase understanding of metric calculation methodologies?"
     },
     {
       "id": 102107,
-      "text": "Did you identify at least 3 meaningful vectors/considerations for user segmentation?"
+      "text": "Did you highlight any data limitations or quality concerns for the proposed metrics?"
     },
     {
       "id": 102108,
-      "text": "Were you able to list at least 3 major pain points/opportunities for each user segment?"
+      "text": "Did you suggest ways to analyze metric trends over time or across cohorts?"
     },
     {
       "id": 102109,
-      "text": "Did you propose a specific methodology/framework to prioritise the identified pain points?"
+      "text": "Did you propose a testing strategy to measure the impact of product changes?"
     },
     {
       "id": 102110,
-      "text": "Did your proposed solution directly address the core prioritised pain point?"
+      "text": "Did you discuss any relevant tools or dashboards for metric tracking and analysis?"
     }
   ],
   "type2": [
     {
       "id": 102201,
-      "text": "How well did you identify industry trends and their potential impact?",
+      "text": "How well did you prioritize the most important metrics for the business?",
       "options": [
-        "Did not mention any industry trends",
-        "Mentioned 1-2 generic trends not specific to the product space",
-        "Mentioned 3-4 relevant trends but did not discuss their impact",
-        "Discussed 3-4 relevant trends and their high-level impact",
-        "Provided insightful analysis of multiple trends and their nuanced impact on users, business, competition"
+        "Did not discuss any metrics prioritization",
+        "Discussed prioritization but did not propose a framework",
+        "Proposed a basic prioritization framework like AARRR",
+        "Proposed a tailored prioritization framework for the product space",
+        "Proposed a nuanced, comprehensive prioritization framework linking metrics to business goals"
       ]
     },
     {
       "id": 102202,
-      "text": "How effectively did you demonstrate understanding of the competitive landscape?",
+      "text": "How insightful was your analysis of metric trends, segments, and cohorts?",
       "options": [
-        "Did not discuss any competitors",
-        "Named 1-2 competitors but did not analyze them",
-        "Analyzed 3-4 competitors at a surface level",
-        "Provided good analysis of 3-4 key competitors and their differentiation",
-        "Provided nuanced analysis of multiple competitors, their strengths/weaknesses, and what it takes to succeed"
+        "Did not discuss any trend or segment analysis",
+        "Discussed basic trend analysis but no segmentation",
+        "Explored trends across basic segments like demographics",
+        "Analyzed trends across relevant user/product segments and cohorts",
+        "Provided deep insights by analyzing intersectional trends across multiple meaningful segments"
       ]
     },
     {
       "id": 102203,
-      "text": "How well did you empathize with user pain points across different segments?",
+      "text": "How solid was your methodology for metric calculation and data quality checks?",
       "options": [
-        "Did not identify any user pain points",
-        "Listed 1-2 generic pain points lacking user perspective",
-        "Listed 3-4 relevant pain points but from a product/business view",
-        "Discussed 3-4 pain points from the user's perspective for each segment",
-        "Demonstrated deep empathy by vividly capturing user frustrations for multiple segments"
+        "Did not discuss any metric calculation methodologies",
+        "Mentioned calculation formulas but with flaws or inconsistencies",
+        "Outlined metric calculation steps but did not cover data quality",
+        "Provided a sound metric calculation methodology with basic data quality checks",
+        "Outlined a robust, comprehensive methodology covering calculation, data quality, and limitations"
       ]
     },
     {
       "id": 102204,
-      "text": "How reasonable and feasible were the assumptions you stated?",
+      "text": "How effectively did you identify counter-metrics and potential risks?",
       "options": [
-        "Did not explicitly state any assumptions",
-        "Stated some invalid or far-fetched assumptions",
-        "Stated reasonable but very generic assumptions",
-        "Stated specific, realistic assumptions relevant to the product space",
-        "Stated nuanced, insightful assumptions showing deep domain understanding"
+        "Did not discuss any counter-metrics or risks",
+        "Mentioned 1-2 generic risks without corresponding counter-metrics",
+        "Listed some counter-metrics but did not explain their importance",
+        "Identified appropriate counter-metrics and explained their significance",
+        "Outlined specific risks, insightful counter-metrics, and mitigation strategies"
       ]
     },
     {
       "id": 102205,
-      "text": "How well did you tie your solution to the company's mission and principles?",
+      "text": "How well did you tie the metrics strategy to core business/user goals?",
       "options": [
-        "Did not mention the company's mission",
-        "Mentioned the mission statement verbatim but did not tie it back",
-        "Made a surface-level connection between the solution and mission",
-        "Linked the solution's impact to the key aspects of the mission",
-        "Proposed a solution firmly grounded in the company's core mission and principles"
+        "Did not relate metrics back to any key goals",
+        "Made a surface-level connection between metrics and goals",
+        "Aligned some metrics with stated goals but inconsistently",
+        "Explicitly mapped all key metrics to core business/user goals",
+        "Provided a cohesive metrics strategy fully grounded in core goals"
       ]
     }
   ]
