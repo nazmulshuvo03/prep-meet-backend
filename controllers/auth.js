@@ -80,7 +80,7 @@ const signupUser = asyncWrapper(async (req, res) => {
   setTimeout(() => {
     // clearInterval(interval);
     sendWelcomeEmail({
-      name: "There",
+      name: "there",
       receiver: email,
     });
   }, 1 * 60 * 1000); // 1 minute
