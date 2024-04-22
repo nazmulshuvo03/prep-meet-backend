@@ -14,7 +14,7 @@ const sendWelcomeEmail = async (props) => {
   const mailOptions = {
     from: `Team Candidace <${process.env.EMAIL_SENDER}>`,
     to: props.receiver,
-    subject: "Welcome to Candidace",
+    subject: "Congratulations on starting your interview prep journey!",
     html: compiledTemplate(props),
   };
 
