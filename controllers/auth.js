@@ -1,20 +1,13 @@
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
-const { Op } = require("sequelize");
 const asyncWrapper = require("../middlewares/async");
-const { User, Profile } = require("../models/user");
+const { User } = require("../models/user");
 const { sendVerificationEmail } = require("../helpers/emailVerification");
 const { _updateUserProfile, _getUserProfile } = require("./user");
 const {
   getAccessTokenFromAuth,
-  getAccessTokenFromRefreshToken,
   redirectToOAuthURL,
 } = require("../helpers/oAuth");
-const { Profession } = require("../models/profession");
-const { WorkExperience } = require("../models/workExperience");
-const { Education } = require("../models/education");
-const { InterviewExperience } = require("../models/interviewExperience");
-const { Availability } = require("../models/availability");
 const { generateUsername } = require("../helpers/string");
 const { profileCompletionStatus } = require("../helpers/user");
 const { sendWelcomeEmail } = require("../helpers/emailWelcome");
