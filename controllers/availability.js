@@ -2,6 +2,7 @@ const { Op } = require("sequelize");
 const asyncWrapper = require("../middlewares/async");
 const { Availability } = require("../models/availability");
 const { profileCompletionStatus } = require("../helpers/user");
+const MIXPANEL_TRACK = require("../helpers/mixpanel");
 
 const _getAvailabilityById = async (id) => {
   const found = await Availability.findByPk(id);
@@ -64,6 +65,11 @@ const createAvailabilityData = asyncWrapper(async (req, res) => {
       interviewNote,
     };
     const created = await Availability.create(model);
+    MIXPANEL_TRACK({
+      name: "Availability Added",
+      data: { avaiabilityId: created.id, availableTime: created.dayHourUTC },
+      id: userId,
+    });
     if (!created)
       res.fail("Availability data could not be created for this user");
     created.dataValues.completionStatus = await profileCompletionStatus(userId);

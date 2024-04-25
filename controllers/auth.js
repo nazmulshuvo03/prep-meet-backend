@@ -55,12 +55,12 @@ const signupUser = asyncWrapper(async (req, res) => {
     password: hashedPassword,
   };
   const user = await User.create(model);
+  const token = _createToken({ id: user.id });
   MIXPANEL_TRACK({
     name: "Signup",
-    data: { email: user.email, type: user.type },
+    data: { email: user.email, type: user.type, targetProfessionId },
     id: user.id,
   });
-  const token = _createToken({ id: user.id });
   res.cookie(TOKEN_COOKIE_NAME, token, COOKIE_OPTIONS);
   const updatedProfile = await _updateUserProfile(res, user.id, {
     firstName,
