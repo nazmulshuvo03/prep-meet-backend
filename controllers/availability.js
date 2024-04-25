@@ -65,13 +65,13 @@ const createAvailabilityData = asyncWrapper(async (req, res) => {
       interviewNote,
     };
     const created = await Availability.create(model);
+    if (!created)
+      res.fail("Availability data could not be created for this user");
     MIXPANEL_TRACK({
       name: "Availability Added",
       data: { avaiabilityId: created.id, availableTime: created.dayHourUTC },
       id: userId,
     });
-    if (!created)
-      res.fail("Availability data could not be created for this user");
     created.dataValues.completionStatus = await profileCompletionStatus(userId);
     res.success(created);
   }
@@ -82,6 +82,11 @@ const deleteAvailabilityData = asyncWrapper(async (req, res) => {
   if (!avaiabilityId) res.fail("Invalid availability ID", BAD_REQUEST);
   const found = await Availability.findOne({ where: { id: avaiabilityId } });
   found.destroy();
+  MIXPANEL_TRACK({
+    name: "Availability Deleted",
+    data: { avaiabilityId },
+    id: found.dataValues.userId,
+  });
   const completionStatus = await profileCompletionStatus(found.userId);
   res.success(completionStatus);
 });

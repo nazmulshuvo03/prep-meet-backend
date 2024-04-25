@@ -13,6 +13,7 @@ const { profileCompletionStatus } = require("../helpers/user");
 const { SelfAssessment, Review } = require("../models/review");
 const { Skill } = require("../models/skill");
 const { Meeting } = require("../models/meeting");
+const MIXPANEL_TRACK = require("../helpers/mixpanel");
 
 const _getUserProfile = async (userId) => {
   const today = new Date().getTime();
@@ -82,6 +83,16 @@ const _updateUserProfile = async (res, userId, updatedFields) => {
 
   const updatedUser = await user.update(updatedFields);
   if (!updatedUser) return res.fail("User data update failed");
+  if (
+    user.dataValues.companiesOfInterest.length === 0 &&
+    updatedFields.companiesOfInterest.length >= 1
+  ) {
+    MIXPANEL_TRACK({
+      name: "First Target Company Adeed",
+      data: { companies: updatedFields.companiesOfInterest },
+      id: user.dataValues.id,
+    });
+  }
 
   return updatedUser;
 };

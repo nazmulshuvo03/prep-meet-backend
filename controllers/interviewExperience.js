@@ -1,6 +1,14 @@
 const { BAD_REQUEST, NOT_FOUND } = require("../constants/errorCodes");
+const MIXPANEL_TRACK = require("../helpers/mixpanel");
 const asyncWrapper = require("../middlewares/async");
 const { InterviewExperience } = require("../models/interviewExperience");
+
+const _ifUsersFirstInterviewExperience = async (userId) => {
+  const data = await InterviewExperience.findOne({
+    where: { user_id: userId },
+  });
+  return !!data;
+};
 
 const getAllInterviewExperience = asyncWrapper(async (req, res) => {
   const list = await InterviewExperience.findAll();
@@ -8,8 +16,18 @@ const getAllInterviewExperience = asyncWrapper(async (req, res) => {
 });
 
 const createInterviewExperience = asyncWrapper(async (req, res) => {
-  const dataModel = req.body;
-  const created = await InterviewExperience.create(dataModel);
+  const model = req.body;
+
+  const userHasIE = await _ifUsersFirstInterviewExperience(req.body.user_id);
+  if (!userHasIE) {
+    MIXPANEL_TRACK({
+      name: "First Interview Experience Added",
+      data: model,
+      id: model.user_id,
+    });
+  }
+
+  const created = await InterviewExperience.create(model);
   if (!created) return res.fail("Interview Experience could not be added");
   res.success(created);
 });

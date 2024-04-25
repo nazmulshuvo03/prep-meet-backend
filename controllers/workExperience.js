@@ -1,4 +1,5 @@
 const { BAD_REQUEST, NOT_FOUND } = require("../constants/errorCodes");
+const MIXPANEL_TRACK = require("../helpers/mixpanel");
 const { profileCompletionStatus } = require("../helpers/user");
 const asyncWrapper = require("../middlewares/async");
 const { WorkExperience } = require("../models/workExperience");
@@ -15,6 +16,13 @@ const _getUserCurrentCompany = async (userId) => {
     where: { user_id: userId, currentCompany: true },
   });
   return data;
+};
+
+const _ifUsersFirstWorkExperience = async (userId) => {
+  const data = await WorkExperience.findOne({
+    where: { user_id: userId },
+  });
+  return !!data;
 };
 
 const getAllWorkExp = asyncWrapper(async (req, res) => {
@@ -45,6 +53,15 @@ const createWorkExp = asyncWrapper(async (req, res) => {
     if (existingCurrentCompany)
       return res.fail("You already have a current company");
     model.currentCompany = true;
+  }
+
+  const userHasWE = await _ifUsersFirstWorkExperience(req.body.user_id);
+  if (!userHasWE) {
+    MIXPANEL_TRACK({
+      name: "First Work Experience Added",
+      data: model,
+      id: model.user_id,
+    });
   }
 
   const created = await WorkExperience.create(model);

@@ -10,6 +10,7 @@ const {
 const { NOT_FOUND, UNPROCESSABLE_DATA } = require("../constants/errorCodes");
 const { createEvent, createMeeting } = require("../helpers/meeting");
 const { WorkExperience } = require("../models/workExperience");
+const MIXPANEL_TRACK = require("../helpers/mixpanel");
 
 const _getUserProfile = async (userId) => {
   const found = await Profile.findByPk(userId);
@@ -121,6 +122,16 @@ const createMeetingData = asyncWrapper(async (req, res) => {
   const meetingCreated = await Meeting.create(model);
   if (!meetingCreated)
     return res.fail("Meeting could not be created for this user");
+
+  MIXPANEL_TRACK({
+    name: "Interview Scheduled",
+    data: {
+      initiatorId: availabilityData.userId,
+      acceptorId,
+      interviewTime: availabilityData.dayHourUTC,
+    },
+    id: acceptorId,
+  });
 
   const updated = await _updateAvailabilityState(availabilityId, "BOOKED");
   if (!updated)
