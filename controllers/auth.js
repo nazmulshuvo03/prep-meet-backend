@@ -11,6 +11,7 @@ const {
 const { generateUsername } = require("../helpers/string");
 const { profileCompletionStatus } = require("../helpers/user");
 const { sendWelcomeEmail } = require("../helpers/emailWelcome");
+const MIXPANEL_TRACK = require("../helpers/mixpanel");
 
 const TOKEN_COOKIE_NAME = "prepMeetToken";
 const MAX_AGE = 30 * 24 * 60 * 60;
@@ -54,6 +55,11 @@ const signupUser = asyncWrapper(async (req, res) => {
     password: hashedPassword,
   };
   const user = await User.create(model);
+  MIXPANEL_TRACK({
+    name: "Signup",
+    data: { email: user.email, type: user.type },
+    id: user.id,
+  });
   const token = _createToken({ id: user.id });
   res.cookie(TOKEN_COOKIE_NAME, token, COOKIE_OPTIONS);
   const updatedProfile = await _updateUserProfile(res, user.id, {
@@ -87,6 +93,11 @@ const loginUser = asyncWrapper(async (req, res) => {
     if (auth) {
       const token = _createToken({ id: user.id });
       res.cookie(TOKEN_COOKIE_NAME, token, COOKIE_OPTIONS);
+      MIXPANEL_TRACK({
+        name: "Login",
+        data: { email: user.email, type: user.type },
+        id: user.id,
+      });
       _handleLoginResponse(req, res, user.id);
     } else {
       return res.fail("Incorrect password", 422);
