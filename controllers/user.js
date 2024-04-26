@@ -84,7 +84,9 @@ const _updateUserProfile = async (res, userId, updatedFields) => {
   const updatedUser = await user.update(updatedFields);
   if (!updatedUser) return res.fail("User data update failed");
   if (
+    user.dataValues.companiesOfInterest &&
     user.dataValues.companiesOfInterest.length === 0 &&
+    updatedFields.companies &&
     updatedFields.companiesOfInterest.length >= 1
   ) {
     MIXPANEL_TRACK({
