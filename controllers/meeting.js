@@ -18,15 +18,23 @@ const _getUserProfile = async (userId) => {
 };
 
 const _getUsersLastMeeting = async (userId) => {
+  const today = new Date().getTime();
+
   const data = await Meeting.findOne({
     where: {
       [Op.and]: [
         {
           [Op.or]: [{ initiator: userId }, { acceptor: userId }],
         },
+        {
+          dayHour: {
+            [Op.lte]: today,
+          },
+        },
       ],
     },
     order: [["dayHour", "DESC"]],
+    limit: 1,
   });
   return data;
 };

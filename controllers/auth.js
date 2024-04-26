@@ -108,6 +108,12 @@ const loginUser = asyncWrapper(async (req, res) => {
 });
 
 const logoutUser = asyncWrapper(async (req, res) => {
+  const { userId } = req.body;
+  MIXPANEL_TRACK({
+    name: "Logout",
+    data: {},
+    id: userId,
+  });
   res.cookie(TOKEN_COOKIE_NAME, "", { maxAge: 1 });
   res.cookie("user", null, { maxAge: 1 });
   res.success("User logged out");
