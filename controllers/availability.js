@@ -31,7 +31,9 @@ const _createAvailability = async (data) => {
   const created = await Availability.create(data);
   if (!created)
     res.fail("Availability data could not be created for this user");
-  created.dataValues.completionStatus = await profileCompletionStatus(userId);
+  created.dataValues.completionStatus = await profileCompletionStatus(
+    data.userId
+  );
   return created;
 };
 
@@ -53,6 +55,7 @@ const _generateAvailabilityFromRecurrent = async (data) => {
       dayHourUTC,
       practiceAreas,
       interviewNote,
+      isRecurring: true,
     };
     await _createAvailability(model);
   }

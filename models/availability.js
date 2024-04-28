@@ -18,6 +18,7 @@ const Availability = sequelize.define("availability", {
   },
   practiceAreas: { type: DataTypes.ARRAY(DataTypes.UUID), defaultValue: [] },
   interviewNote: DataTypes.TEXT,
+  isRecurring: { type: DataTypes.BOOLEAN, defaultValue: false },
 });
 
 const RecurrentAvailability = sequelize.define("recurrentAvailability", {
