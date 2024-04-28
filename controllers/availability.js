@@ -142,6 +142,12 @@ const createRecurrentData = asyncWrapper(async (req, res) => {
   res.success(created);
 });
 
+const getRecurrentData = asyncWrapper(async (req, res) => {
+  const userId = res.locals.user.id;
+  const data = await RecurrentAvailability.findAll({ where: { userId } });
+  res.success(data);
+});
+
 const generateAvailabilityFromRecurrent = asyncWrapper(async (req, res) => {
   const recurrents = await RecurrentAvailability.findAll();
   for (let occurence of recurrents) {
@@ -160,5 +166,6 @@ module.exports = {
   deleteAvailabilityData,
   deleteAllAvailabilityData,
   createRecurrentData,
+  getRecurrentData,
   generateAvailabilityFromRecurrent,
 };
