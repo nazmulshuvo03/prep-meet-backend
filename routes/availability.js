@@ -5,6 +5,8 @@ const {
   getUserAvailability,
   createAvailabilityData,
   deleteAvailabilityData,
+  createRecurrentData,
+  generateAvailabilityFromRecurrent,
 } = require("../controllers/availability");
 
 const router = Router();
@@ -16,5 +18,7 @@ router
 router.route("/user/:userId").get(getUserAvailability);
 router.route("/:avaiabilityId").delete(deleteAvailabilityData);
 router.route("/").post(createAvailabilityData);
+router.route("/recurrent").post(createRecurrentData);
+router.route("/recurrent/generate").post(generateAvailabilityFromRecurrent);
 
 module.exports = router;

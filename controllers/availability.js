@@ -1,8 +1,12 @@
 const { Op } = require("sequelize");
 const asyncWrapper = require("../middlewares/async");
-const { Availability } = require("../models/availability");
+const {
+  Availability,
+  RecurrentAvailability,
+} = require("../models/availability");
 const { profileCompletionStatus } = require("../helpers/user");
 const MIXPANEL_TRACK = require("../helpers/mixpanel");
+const { getDateOfIndexDay } = require("../helpers/timeDate");
 
 const _getAvailabilityById = async (id) => {
   const found = await Availability.findByPk(id);
@@ -21,6 +25,37 @@ const _updateAvailabilityState = async (avaiabilityId, state) => {
     },
   });
   return found.update({ state });
+};
+
+const _createAvailability = async (data) => {
+  const created = await Availability.create(data);
+  if (!created)
+    res.fail("Availability data could not be created for this user");
+  created.dataValues.completionStatus = await profileCompletionStatus(userId);
+  return created;
+};
+
+const _generateAvailabilityFromRecurrent = async (data) => {
+  const { userId, weekday, hour, practiceAreas, interviewNote } = data;
+  const dayHourUTC = getDateOfIndexDay(weekday);
+  dayHourUTC.setUTCHours(hour, 0, 0, 0);
+  const dayHour = dayHourUTC.getTime();
+  const found = await Availability.findOne({
+    where: {
+      userId,
+      dayHour,
+    },
+  });
+  if (!found) {
+    const model = {
+      userId,
+      dayHour,
+      dayHourUTC,
+      practiceAreas,
+      interviewNote,
+    };
+    await _createAvailability(model);
+  }
 };
 
 const getAllAvailabilityData = asyncWrapper(async (req, res) => {
@@ -64,15 +99,12 @@ const createAvailabilityData = asyncWrapper(async (req, res) => {
       practiceAreas,
       interviewNote,
     };
-    const created = await Availability.create(model);
-    if (!created)
-      res.fail("Availability data could not be created for this user");
+    const created = await _createAvailability(model);
     MIXPANEL_TRACK({
       name: "Availability Added",
       data: { avaiabilityId: created.id, availableTime: created.dayHourUTC },
       id: userId,
     });
-    created.dataValues.completionStatus = await profileCompletionStatus(userId);
     res.success(created);
   }
 });
@@ -96,6 +128,28 @@ const deleteAllAvailabilityData = asyncWrapper(async (req, res) => {
   res.success("Availability table cleared");
 });
 
+const createRecurrentData = asyncWrapper(async (req, res) => {
+  const model = {
+    weekday: req.body.weekday,
+    hour: req.body.hour,
+    userId: req.body.userId,
+    practiceAreas: req.body.practiceAreas,
+    interviewNote: req.body.interviewNote,
+  };
+  const created = await RecurrentAvailability.create(model);
+  if (!created)
+    res.fail("Recurrent Availability data could not be created for this user");
+  res.success(created);
+});
+
+const generateAvailabilityFromRecurrent = asyncWrapper(async (req, res) => {
+  const recurrents = await RecurrentAvailability.findAll();
+  for (let occurence of recurrents) {
+    await _generateAvailabilityFromRecurrent(occurence);
+  }
+  res.success("Success");
+});
+
 module.exports = {
   _getAvailabilityById,
   _getAvailabilityByBody,
@@ -105,4 +159,6 @@ module.exports = {
   createAvailabilityData,
   deleteAvailabilityData,
   deleteAllAvailabilityData,
+  createRecurrentData,
+  generateAvailabilityFromRecurrent,
 };

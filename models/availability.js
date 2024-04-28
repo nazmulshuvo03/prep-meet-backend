@@ -20,6 +20,20 @@ const Availability = sequelize.define("availability", {
   interviewNote: DataTypes.TEXT,
 });
 
+const RecurrentAvailability = sequelize.define("recurrentAvailability", {
+  id: {
+    type: DataTypes.UUID,
+    defaultValue: Sequelize.UUIDV4,
+    primaryKey: true,
+    allowNull: false,
+  },
+  weekday: { type: DataTypes.INTEGER, allowNull: false },
+  hour: { type: DataTypes.INTEGER, allowNull: false },
+  userId: { type: DataTypes.UUID, allowNull: false },
+  practiceAreas: { type: DataTypes.ARRAY(DataTypes.UUID), defaultValue: [] },
+  interviewNote: DataTypes.TEXT,
+});
+
 Availability.belongsTo(Profile, {
   foreignKey: "userId",
   targetKey: "id",
@@ -32,4 +46,5 @@ Profile.hasMany(Availability, {
 
 module.exports = {
   Availability,
+  RecurrentAvailability,
 };
