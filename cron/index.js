@@ -1,19 +1,18 @@
 const cron = require("node-cron");
+const {
+  generateAvailabilityFromRecurrent,
+} = require("../controllers/availability");
 
-// Define cron job 1
-cron.schedule("0 0 * * *", () => {
-  console.log("Cron job 1: This runs every day at 12 AM");
+/**
+  0 for minute (0th minute)
+  23 for hour (11th hour, which is 11 PM)
+  * for day of the month (every day)
+  * for month (every month)
+  0 for day of the week (Sunday)
+ */
+
+cron.schedule("0 23 * * 0", () => {
+  generateAvailabilityFromRecurrent();
 });
 
-// Define cron job 2
-cron.schedule("0 12 * * *", () => {
-  console.log("Cron job 2: This runs every day at 12 PM");
-});
-
-// Define cron job 3
-cron.schedule("*/5 * * * *", () => {
-  console.log("Cron job 3: This runs every 5 minutes");
-});
-
-// Export the cron jobs if needed
 module.exports = { cron };
