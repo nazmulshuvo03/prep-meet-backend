@@ -135,7 +135,7 @@ const createRecurrentData = asyncWrapper(async (req, res) => {
   const model = {
     weekday: req.body.weekday,
     hour: req.body.hour,
-    userId: req.body.userId,
+    userId: res.locals.user.id,
     practiceAreas: req.body.practiceAreas,
     interviewNote: req.body.interviewNote,
   };
@@ -149,6 +149,16 @@ const getRecurrentData = asyncWrapper(async (req, res) => {
   const userId = res.locals.user.id;
   const data = await RecurrentAvailability.findAll({ where: { userId } });
   res.success(data);
+});
+
+const deleteRecurrentData = asyncWrapper(async (req, res) => {
+  const { recurrentId } = req.params;
+  if (!recurrentId) res.fail("Invalid content ID", BAD_REQUEST);
+  const found = await RecurrentAvailability.findOne({
+    where: { id: recurrentId },
+  });
+  found.destroy();
+  res.success("Deleted");
 });
 
 const generateAvailabilityFromRecurrent = asyncWrapper(async (req, res) => {
@@ -170,5 +180,6 @@ module.exports = {
   deleteAllAvailabilityData,
   createRecurrentData,
   getRecurrentData,
+  deleteRecurrentData,
   generateAvailabilityFromRecurrent,
 };
