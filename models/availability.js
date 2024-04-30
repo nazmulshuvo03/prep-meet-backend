@@ -33,6 +33,7 @@ const RecurrentAvailability = sequelize.define("recurrentAvailability", {
   userId: { type: DataTypes.UUID, allowNull: false },
   practiceAreas: { type: DataTypes.ARRAY(DataTypes.UUID), defaultValue: [] },
   interviewNote: DataTypes.TEXT,
+  timezone: DataTypes.STRING,
 });
 
 Availability.belongsTo(Profile, {

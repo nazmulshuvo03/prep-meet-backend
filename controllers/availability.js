@@ -38,9 +38,9 @@ const _createAvailability = async (data) => {
 };
 
 const _generateAvailabilityFromRecurrent = async (data) => {
-  const { userId, weekday, hour, practiceAreas, interviewNote } = data;
-  const dayHourUTC = getDateOfIndexDay(weekday);
-  dayHourUTC.setUTCHours(hour, 0, 0, 0);
+  const { userId, weekday, hour, practiceAreas, interviewNote, timezone } =
+    data;
+  const dayHourUTC = getDateOfIndexDay(weekday, hour, timezone);
   const dayHour = dayHourUTC.getTime();
   const found = await Availability.findOne({
     where: {
@@ -138,6 +138,7 @@ const createRecurrentData = asyncWrapper(async (req, res) => {
     userId: res.locals.user.id,
     practiceAreas: req.body.practiceAreas,
     interviewNote: req.body.interviewNote,
+    timezone: req.body.timezone,
   };
   const created = await RecurrentAvailability.create(model);
   if (!created)
