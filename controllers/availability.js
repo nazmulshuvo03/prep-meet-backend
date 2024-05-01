@@ -27,14 +27,30 @@ const _updateAvailabilityState = async (avaiabilityId, state) => {
   return found.update({ state });
 };
 
-const _createAvailability = async (data) => {
-  const created = await Availability.create(data);
-  if (!created)
-    res.fail("Availability data could not be created for this user");
-  created.dataValues.completionStatus = await profileCompletionStatus(
-    data.userId
-  );
-  return created;
+const _createAvailability = async (data, sendFailMessage = false) => {
+  const found = await Availability.findOne({
+    where: {
+      userId: data.userId,
+      dayHour: data.dayHour,
+    },
+  });
+  if (found && sendFailMessage) {
+    res.fail("Already added");
+  }
+  if (!found) {
+    const created = await Availability.create(data);
+    if (!created)
+      res.fail("Availability data could not be created for this user");
+    MIXPANEL_TRACK({
+      name: "Availability Added",
+      data: { avaiabilityId: created.id, availableTime: created.dayHourUTC },
+      id: data.userId,
+    });
+    created.dataValues.completionStatus = await profileCompletionStatus(
+      data.userId
+    );
+    return created;
+  }
 };
 
 const _generateAvailabilityFromRecurrent = async (data) => {
@@ -42,23 +58,15 @@ const _generateAvailabilityFromRecurrent = async (data) => {
     data;
   const dayHourUTC = getDateOfIndexDay(weekday, hour, timezone);
   const dayHour = dayHourUTC.getTime();
-  const found = await Availability.findOne({
-    where: {
-      userId,
-      dayHour,
-    },
-  });
-  if (!found) {
-    const model = {
-      userId,
-      dayHour,
-      dayHourUTC,
-      practiceAreas,
-      interviewNote,
-      isRecurring: true,
-    };
-    await _createAvailability(model);
-  }
+  const model = {
+    userId,
+    dayHour,
+    dayHourUTC,
+    practiceAreas,
+    interviewNote,
+    isRecurring: true,
+  };
+  await _createAvailability(model);
 };
 
 const getAllAvailabilityData = asyncWrapper(async (req, res) => {
@@ -86,30 +94,15 @@ const getUserAvailability = asyncWrapper(async (req, res) => {
 const createAvailabilityData = asyncWrapper(async (req, res) => {
   const { userId, dayHourUTC, practiceAreas, interviewNote } = req.body;
   const dayHour = new Date(dayHourUTC).getTime();
-  const found = await Availability.findOne({
-    where: {
-      userId,
-      dayHour,
-    },
-  });
-  if (found) {
-    res.fail("Already added");
-  } else {
-    const model = {
-      userId,
-      dayHour,
-      dayHourUTC,
-      practiceAreas,
-      interviewNote,
-    };
-    const created = await _createAvailability(model);
-    MIXPANEL_TRACK({
-      name: "Availability Added",
-      data: { avaiabilityId: created.id, availableTime: created.dayHourUTC },
-      id: userId,
-    });
-    res.success(created);
-  }
+  const model = {
+    userId,
+    dayHour,
+    dayHourUTC,
+    practiceAreas,
+    interviewNote,
+  };
+  const created = await _createAvailability(model, true);
+  res.success(created);
 });
 
 const deleteAvailabilityData = asyncWrapper(async (req, res) => {
@@ -132,18 +125,34 @@ const deleteAllAvailabilityData = asyncWrapper(async (req, res) => {
 });
 
 const createRecurrentData = asyncWrapper(async (req, res) => {
+  const { weekday, hour, practiceAreas, interviewNote, timezone } = req.body;
   const model = {
-    weekday: req.body.weekday,
-    hour: req.body.hour,
+    weekday,
+    hour,
     userId: res.locals.user.id,
-    practiceAreas: req.body.practiceAreas,
-    interviewNote: req.body.interviewNote,
-    timezone: req.body.timezone,
+    practiceAreas,
+    interviewNote,
+    timezone,
   };
-  const created = await RecurrentAvailability.create(model);
-  if (!created)
+  const createdRec = await RecurrentAvailability.create(model);
+  if (!createdRec)
     res.fail("Recurrent Availability data could not be created for this user");
-  res.success(created);
+
+  const dayHourUTC = getDateOfIndexDay(weekday, hour, timezone);
+  const dayHour = dayHourUTC.getTime();
+  const avlModel = {
+    userId: res.locals.user.id,
+    dayHour,
+    dayHourUTC,
+    practiceAreas,
+    interviewNote,
+    isRecurring: true,
+  };
+  const createdAvl = await _createAvailability(avlModel);
+  res.success({
+    recurrent: createdRec,
+    availablity: createdAvl,
+  });
 });
 
 const getRecurrentData = asyncWrapper(async (req, res) => {
