@@ -1,3 +1,4 @@
+const { capitalize } = require("../helpers/string");
 const asyncWrapper = require("../middlewares/async");
 const {
   ExperienceLevel,
@@ -55,7 +56,9 @@ const postPreparationStagesData = asyncWrapper(async (req, res) => {
 });
 
 const getAllCompanies = asyncWrapper(async (req, res) => {
-  const data = await Companies.findAll();
+  const data = await Companies.findAll({
+    order: [["name", "ASC"]],
+  });
   res.success(data);
 });
 
@@ -65,7 +68,16 @@ const postCompanyData = asyncWrapper(async (req, res) => {
   res.success("Data Updated");
 });
 
-const deleteCompanyData = asyncWrapper(async (req, res) => {
+const createCompany = asyncWrapper(async (req, res) => {
+  const { name } = req.body;
+  const model = {
+    name: capitalize(name),
+  };
+  const created = await Companies.create(model);
+  res.success(created);
+});
+
+const deleteCompany = asyncWrapper(async (req, res) => {
   const { id } = req.params;
   await Companies.destroy({
     where: {
@@ -82,5 +94,6 @@ module.exports = {
   postPreparationStagesData,
   getAllCompanies,
   postCompanyData,
-  deleteCompanyData,
+  createCompany,
+  deleteCompany,
 };
