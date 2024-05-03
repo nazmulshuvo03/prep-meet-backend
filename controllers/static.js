@@ -73,6 +73,12 @@ const createCompany = asyncWrapper(async (req, res) => {
   const model = {
     name: capitalize(name),
   };
+  const found = await Companies.findOne({
+    where: {
+      name: model.name,
+    },
+  });
+  if (found) return res.success(found);
   const created = await Companies.create(model);
   res.success(created);
 });
