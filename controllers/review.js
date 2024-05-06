@@ -13,16 +13,13 @@ const getAllReviewQuestions = asyncWrapper(async (req, res) => {
   const skillName = await _getSkillNameFromId(skillId);
 
   try {
-    const filePath = path.join(
-      __dirname,
-      `../stored/review/${skillName}1.json`
-    );
+    const filePath = path.join(__dirname, `../stored/review/${skillName}.json`);
     const dataFile = JSON.parse(fs.readFileSync(filePath, "utf8"));
     return res.success(dataFile);
   } catch (err) {
     return res.fail({
       ...err,
-      message: `Questions not found for ${skillName}`,
+      message: `Notes data not found for ${skillName}`,
     });
   }
 });
