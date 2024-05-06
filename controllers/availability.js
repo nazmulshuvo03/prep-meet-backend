@@ -27,7 +27,7 @@ const _updateAvailabilityState = async (avaiabilityId, state) => {
   return found.update({ state });
 };
 
-const _createAvailability = async (data, sendFailMessage = false) => {
+const _createAvailability = async (res, data, sendFailMessage = false) => {
   const found = await Availability.findOne({
     where: {
       userId: data.userId,
@@ -53,7 +53,7 @@ const _createAvailability = async (data, sendFailMessage = false) => {
   }
 };
 
-const _generateAvailabilityFromRecurrent = async (data) => {
+const _generateAvailabilityFromRecurrent = async (res, data) => {
   const { userId, weekday, hour, practiceAreas, interviewNote, timezone } =
     data;
   const dayHourUTC = getDateOfIndexDay(weekday, hour, timezone);
@@ -66,7 +66,7 @@ const _generateAvailabilityFromRecurrent = async (data) => {
     interviewNote,
     isRecurring: true,
   };
-  await _createAvailability(model);
+  await _createAvailability(res, model);
 };
 
 const getAllAvailabilityData = asyncWrapper(async (req, res) => {
@@ -101,7 +101,7 @@ const createAvailabilityData = asyncWrapper(async (req, res) => {
     practiceAreas,
     interviewNote,
   };
-  const created = await _createAvailability(model, true);
+  const created = await _createAvailability(res, model, true);
   res.success(created);
 });
 
@@ -148,7 +148,7 @@ const createRecurrentData = asyncWrapper(async (req, res) => {
     interviewNote,
     isRecurring: true,
   };
-  const createdAvl = await _createAvailability(avlModel);
+  const createdAvl = await _createAvailability(res, avlModel);
   res.success({
     recurrent: createdRec,
     availablity: createdAvl,
@@ -174,7 +174,7 @@ const deleteRecurrentData = asyncWrapper(async (req, res) => {
 const generateAvailabilityFromRecurrent = asyncWrapper(async (req, res) => {
   const recurrents = await RecurrentAvailability.findAll();
   for (let occurence of recurrents) {
-    await _generateAvailabilityFromRecurrent(occurence);
+    await _generateAvailabilityFromRecurrent(res, occurence);
   }
   res.success("Success");
 });
