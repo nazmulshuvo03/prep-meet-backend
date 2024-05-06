@@ -115,9 +115,8 @@ const createUser = asyncWrapper(async (req, res) => {
 });
 
 const getAllUserProfiles = asyncWrapper(async (req, res) => {
-  const { userId } = req.params;
+  const userProfile = res.locals.user;
   const queryParameters = req.query;
-  const userProfile = await Profile.findByPk(userId);
   const queryOptions = profileQueryOptions(queryParameters, userProfile);
   const today = new Date().getTime();
   const userList = await Profile.findAll({
