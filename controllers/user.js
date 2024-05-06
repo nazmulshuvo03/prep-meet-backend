@@ -1,7 +1,10 @@
 const { Op } = require("sequelize");
 const { BAD_REQUEST, NOT_FOUND } = require("../constants/errorCodes");
 const asyncWrapper = require("../middlewares/async");
-const { Availability } = require("../models/availability");
+const {
+  Availability,
+  RecurrentAvailability,
+} = require("../models/availability");
 const { Profession } = require("../models/profession");
 const { User, Profile } = require("../models/user");
 const { WorkExperience } = require("../models/workExperience");
@@ -39,6 +42,10 @@ const _getUserProfile = async (userId) => {
             [Op.gte]: today,
           },
         },
+      },
+      {
+        model: RecurrentAvailability,
+        required: false,
       },
       {
         model: Review,

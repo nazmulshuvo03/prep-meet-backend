@@ -1,5 +1,8 @@
 const { Op } = require("sequelize");
-const { Availability } = require("../models/availability");
+const {
+  Availability,
+  RecurrentAvailability,
+} = require("../models/availability");
 const { Profile } = require("../models/user");
 const { WorkExperience } = require("../models/workExperience");
 
@@ -17,6 +20,10 @@ const profileCompletionStatus = async (profileId) => {
               [Op.gte]: new Date().getTime(),
             },
           },
+        },
+        {
+          model: RecurrentAvailability,
+          required: false,
         },
       ],
       order: [
@@ -38,7 +45,9 @@ const profileCompletionStatus = async (profileId) => {
         profile.workExperiences && profile.workExperiences.length
       ),
       availabilities: !!(
-        profile.availabilities && profile.availabilities.length
+        (profile.availabilities && profile.availabilities.length) ||
+        (profile.recurrentAvailabilities &&
+          profile.recurrentAvailabilities.length)
       ),
     };
   } catch (err) {

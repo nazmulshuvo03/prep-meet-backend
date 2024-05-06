@@ -46,6 +46,16 @@ Profile.hasMany(Availability, {
   onDelete: "CASCADE",
 });
 
+RecurrentAvailability.belongsTo(Profile, {
+  foreignKey: "userId",
+  targetKey: "id",
+  onDelete: "SET NULL",
+});
+Profile.hasMany(RecurrentAvailability, {
+  foreignKey: "userId",
+  onDelete: "CASCADE",
+});
+
 module.exports = {
   Availability,
   RecurrentAvailability,
