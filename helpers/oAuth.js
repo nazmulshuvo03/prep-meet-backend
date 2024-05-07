@@ -48,7 +48,7 @@ const generateOAuthURL = async () => {
 
 const getAccessTokenFromAuth = (authCode) => {
   const data = {
-    code: authCode,
+    code: authCode, // this code comes from the api "/auth/oauth/callback?code=authCode"
     client_id: keys.web.client_id,
     client_secret: keys.web.client_secret,
     redirect_uri: keys.web.redirect_uris[0],

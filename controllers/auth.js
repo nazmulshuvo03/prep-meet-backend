@@ -145,6 +145,9 @@ const meetAuth = asyncWrapper(async (req, res) => {
 });
 
 const oauthCallback = asyncWrapper(async (req, res) => {
+  // this authorizationCode can be received from Google developer playground
+  // by using the OAuth client ID and secret received in Google cloud console OAuth client
+  // and this API should be used like this "/auth/oauth/callback?code=authorizationCode"
   const authorizationCode = req.query.code;
   if (authorizationCode) {
     getAccessTokenFromAuth(authorizationCode);

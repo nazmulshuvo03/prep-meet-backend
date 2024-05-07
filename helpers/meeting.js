@@ -68,7 +68,7 @@ const createEvent = async (
   const endTime = new Date(endTimeUnix).toISOString();
 
   const event = {
-    summary: "Meet Prep Meeting",
+    summary: "Candidace Meeting",
     location: "Google Meet",
     description: await sendMeetingEmail(meetingProps),
     start: {
