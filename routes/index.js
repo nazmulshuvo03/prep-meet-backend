@@ -25,11 +25,11 @@ router.use("/auth", authRoutes);
 router.use("/file", fileRoutes);
 router.use("/profession", professionRoutes);
 router.use("/user", userRoutes);
-router.use(requireAuth);
+router.use("/static", staticRoutes);
 router.use("/skill", skillRoutes);
+router.use(requireAuth);
 router.use("/availability", availabilityRoutes);
 router.use("/meeting", meetingRoutes);
-router.use("/static", staticRoutes);
 router.use("/review", reviewRoutes);
 
 module.exports = router;
