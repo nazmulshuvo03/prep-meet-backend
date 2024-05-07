@@ -1,2 +1,8 @@
-<div>You have a meeting at Candidace.fyi</div>
-<a href="<%= meetingLink %>" target="_blank">Join Here</a>
+<p>
+  <div>
+    <a href="<%= process.env.DASHBOARD_URL %>" target="_blank">Candidace</a> has scheduled a meeting for you which was initiated by <a href="<%= process.env.DASHBOARD_URL %>/public-profile/<%= initiatorUserId %>" target="_blank">@<%= initiatorUserName %></a> and accepted by <a href="<%= process.env.DASHBOARD_URL %>/public-profile/<%= acceptorUserId %>" target="_blank">@<%= acceptorUserName %></a>
+  </div>
+</p>
+<p>
+  Please <a href="<%= meetingLink %>" target="_blank">Join Here</a>
+</p>
