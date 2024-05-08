@@ -7,13 +7,17 @@ const { totalSelfAssessmentPoint } = require("../helpers/point");
 const { Profile } = require("../models/user");
 const { WorkExperience } = require("../models/workExperience");
 const { Meeting } = require("../models/meeting");
+const { removeSpace } = require("../helpers/string");
 
 const getAllReviewQuestions = asyncWrapper(async (req, res) => {
   const { skillId } = req.params;
   const skillName = await _getSkillNameFromId(skillId);
 
   try {
-    const filePath = path.join(__dirname, `../stored/review/${skillName}.json`);
+    const filePath = path.join(
+      __dirname,
+      `../stored/review/${removeSpace(skillName)}.json`
+    );
     const dataFile = JSON.parse(fs.readFileSync(filePath, "utf8"));
     return res.success(dataFile);
   } catch (err) {

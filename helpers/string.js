@@ -11,7 +11,10 @@ const generateUsername = () => {
 
 const capitalize = (str) => str.charAt(0).toUpperCase() + str.slice(1);
 
+const removeSpace = (str) => str.replace(/\s/g, "");
+
 module.exports = {
   generateUsername,
   capitalize,
+  removeSpace,
 };
