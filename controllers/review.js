@@ -14,14 +14,12 @@ const getAllReviewQuestions = asyncWrapper(async (req, res) => {
   const skillName = await _getSkillNameFromId(skillId);
 
   try {
-    if (skillName) {
-      const filePath = path.join(
-        __dirname,
-        `../stored/review/${removeSpace(skillName)}.json`
-      );
-      const dataFile = JSON.parse(fs.readFileSync(filePath, "utf8"));
-      return res.success(dataFile);
-    }
+    const filePath = path.join(
+      __dirname,
+      `../stored/review/${skillName ? removeSpace(skillName) : "Empty"}.json`
+    );
+    const dataFile = JSON.parse(fs.readFileSync(filePath, "utf8"));
+    return res.success(dataFile);
   } catch (err) {
     return res.fail({
       ...err,
