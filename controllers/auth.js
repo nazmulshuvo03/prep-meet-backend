@@ -89,11 +89,7 @@ const signupUser = asyncWrapper(async (req, res) => {
   });
   if (updatedProfile) _handleLoginResponse(req, res, user.id);
 
-  // let secondsPassed = 0;
-  // let interval = setInterval(() => {
-  //   secondsPassed++;
-  //   console.log(`Seconds passed for: ${email}: ${secondsPassed}`);
-  // }, 1 * 1000);
+  await _createEmailVerification(user.id, user.email);
 
   setTimeout(() => {
     // clearInterval(interval);
