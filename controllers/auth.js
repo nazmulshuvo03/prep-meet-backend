@@ -148,11 +148,16 @@ const resendEmailVerification = asyncWrapper(async (req, res) => {
 const validateEmailVerification = asyncWrapper(async (req, res) => {
   const { userId, token } = req.body;
   if (userId !== res.locals.user.id) return res.fail("User does not match");
-  const data = await Verification.findOne({ where: { userId } });
-  if (data.dataValues.token === token) {
-    return res.success("Email Verified");
-  } else {
-    return res.fail("Email verification failed");
+  const user = await Profile.findByPk(userId);
+  if (user && user.dataValues && !user.dataValues.email_verified) {
+    const data = await Verification.findOne({ where: { userId } });
+    if (data && data.dataValues.token === token) {
+      user.update({ email_verified: true });
+      data.destroy();
+      return res.success("Email Verified");
+    } else {
+      return res.fail("Email verification failed");
+    }
   }
 });
 
