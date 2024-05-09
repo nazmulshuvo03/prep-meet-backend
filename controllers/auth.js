@@ -1,8 +1,7 @@
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
 const asyncWrapper = require("../middlewares/async");
-const { User } = require("../models/user");
-const { sendVerificationEmail } = require("../helpers/emailVerification");
+const { User, Verification, Profile } = require("../models/user");
 const { _updateUserProfile, _getUserProfile } = require("./user");
 const {
   getAccessTokenFromAuth,
@@ -10,8 +9,12 @@ const {
 } = require("../helpers/oAuth");
 const { generateUsername } = require("../helpers/string");
 const { profileCompletionStatus } = require("../helpers/user");
-const { sendWelcomeEmail } = require("../helpers/emailWelcome");
+const {
+  sendWelcomeEmail,
+  sendVerificationEmail,
+} = require("../helpers/emails");
 const MIXPANEL_TRACK = require("../helpers/mixpanel");
+const crypto = require("crypto");
 
 const TOKEN_COOKIE_NAME = "prepMeetToken";
 const MAX_AGE = 30 * 24 * 60 * 60;
@@ -41,6 +44,22 @@ const _handleLoginResponse = async (req, res, userId) => {
       completionStatus,
     });
   }
+};
+
+const _createEmailVerification = async (userId, receiver) => {
+  const token = crypto.randomBytes(32).toString("hex");
+  const found = await Verification.findOne({
+    where: { userId },
+  });
+  if (found) {
+    found.update({ token });
+  } else {
+    await Verification.create({
+      userId,
+      token,
+    });
+  }
+  await sendVerificationEmail({ token, receiver });
 };
 
 const signupUser = asyncWrapper(async (req, res) => {
@@ -119,29 +138,22 @@ const logoutUser = asyncWrapper(async (req, res) => {
   res.success("User logged out");
 });
 
-const verifyEmail = asyncWrapper(async (req, res) => {
-  try {
-    const data = await sendVerificationEmail();
-    return res.success(data);
-  } catch (err) {
-    return res.fail(err.message);
-  }
+const resendEmailVerification = asyncWrapper(async (req, res) => {
+  const user = await Profile.findOne({ where: { id: res.locals.user.id } });
+  if (!user) return res.fail("User not found");
+  await _createEmailVerification(user.id, user.email);
+  res.success("Email sent");
 });
 
-const meetAuth = asyncWrapper(async (req, res) => {
-  const fs = require("fs");
-  const filePath = "./token.json";
-  fs.access(filePath, fs.constants.F_OK, (err) => {
-    // if no token file -> redirect to OAuth page to generate token file with access token
-    if (err) {
-      console.error("Error: File does not exist");
-      redirectToOAuthURL();
-    }
-    // if there is a token file -> try to create meet
-
-    // if create meeting fails -> try using refresh token to create new access token
-    console.log("File exists");
-  });
+const validateEmailVerification = asyncWrapper(async (req, res) => {
+  const { userId, token } = req.body;
+  if (userId !== res.locals.user.id) return res.fail("User does not match");
+  const data = await Verification.findOne({ where: { userId } });
+  if (data.dataValues.token === token) {
+    return res.success("Email Verified");
+  } else {
+    return res.fail("Email verification failed");
+  }
 });
 
 const oauthCallback = asyncWrapper(async (req, res) => {
@@ -163,6 +175,7 @@ module.exports = {
   signupUser,
   loginUser,
   logoutUser,
-  verifyEmail,
+  resendEmailVerification,
+  validateEmailVerification,
   oauthCallback,
 };

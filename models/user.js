@@ -11,7 +11,6 @@ const User = sequelize.define("user", {
   },
   email: { type: DataTypes.STRING, allowNull: false, unique: true },
   password: DataTypes.STRING,
-  email_varified: { type: DataTypes.BOOLEAN, defaultValue: false },
   type: {
     type: DataTypes.ENUM("BASIC", "PREMIUM", "ADMIN"),
     defaultValue: "BASIC",
@@ -33,6 +32,7 @@ const Profile = sequelize.define("profile", {
     type: DataTypes.STRING,
     allowNull: false,
   },
+  email_verified: { type: DataTypes.BOOLEAN, defaultValue: false },
   userName: DataTypes.STRING,
   firstName: DataTypes.STRING,
   lastName: DataTypes.STRING,
@@ -57,12 +57,28 @@ const Profile = sequelize.define("profile", {
   companiesOfInterest: DataTypes.ARRAY(DataTypes.INTEGER),
 });
 
+const Verification = sequelize.define("verification", {
+  id: {
+    type: DataTypes.INTEGER,
+    primaryKey: true,
+    autoIncrement: true,
+  },
+  userId: { type: DataTypes.UUID, allowNull: false },
+  token: DataTypes.STRING,
+});
+
 Profile.belongsTo(User, { foreignKey: "id", onDelete: "CASCADE" });
 User.hasOne(Profile, { foreignKey: "id", onDelete: "CASCADE" });
 
 Profile.belongsTo(Profession, {
   foreignKey: "targetProfessionId",
   as: "targetProfession",
+  onDelete: "SET NULL",
+});
+
+Verification.belongsTo(Profile, {
+  foreignKey: "userId",
+  targetKey: "id",
   onDelete: "SET NULL",
 });
 
@@ -102,4 +118,5 @@ Profile.beforeUpdate(async (profile, options) => {
 module.exports = {
   User,
   Profile,
+  Verification,
 };
