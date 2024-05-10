@@ -10,7 +10,8 @@
   <p>Hey <%= name %>,</p>
 
   <p>
-    Welcome to <a href="https://candidace.fyi/" target="_blank">Candidace.fyi</a>! I am thrilled to have you on board as
+    Welcome to <a href="<%= process.env.DASHBOARD_URL %>/" target="_blank">Candidace.fyi</a>! I am thrilled to have you
+    on board as
     you embark on your journey to land your dream job. As someone who has been through the rigours of the interview
     process, I can relate to the challenges you may face.
   </p>
@@ -29,7 +30,8 @@
   </p>
 
   <p>
-    That's where <a href="https://candidace.fyi/" target="_blank">Candidace.fyi</a> comes in. Our platform connects you
+    That's where <a href="<%= process.env.DASHBOARD_URL %>/" target="_blank">Candidace.fyi</a> comes in. Our platform
+    connects you
     with like-minded professionals, allowing you to practise mock interviews and receive valuable & actionable feedback.
     Studies suggest that practising 8-10 mock interviews can significantly reduce interview anxiety and improve your
     chances of acing the real interview.
@@ -40,7 +42,7 @@
     us recommend relevant peers, ensuring you get the best possible practice sessions.
   </p>
 
-  <p><a href="https://candidace.fyi/profile" target="_blank">Complete Your Profile Now!</a></p>
+  <p><a href="<%= process.env.DASHBOARD_URL %>/profile" target="_blank">Complete Your Profile Now!</a></p>
 
   <p>
     Practising with others offers numerous benefits. You'll gain exposure to diverse perspectives, learn from
@@ -50,7 +52,8 @@
 
   <p>
     We are only starting out and any bit of help to get more professionals like you will make this community a better
-    place. I encourage you to share <a href="https://candidace.fyi/" target="_blank">Candidace.fyi</a> with your
+    place. I encourage you to share <a href="<%= process.env.DASHBOARD_URL %>/" target="_blank">Candidace.fyi</a> with
+    your
     network, as a larger community means more opportunities for quality practice sessions. Together, we can help each
     other succeed and land those dream jobs.
 
@@ -63,12 +66,13 @@
   <p>
   <div>Sincerely,</div>
   <div>Vishwa Srivastava</div>
-  <a href="https://candidace.fyi/" target="_blank" style="font-size: 13px; font-weight: 600;">Candidace.fyi</a>
+  <a href="<%= process.env.DASHBOARD_URL %>/" target="_blank"
+    style="font-size: 13px; font-weight: 600;">Candidace.fyi</a>
   </p>
 
   <p>
-    P.S. Don't forget to check out my <a href="https://candidace.fyi/user/0054fbc6-7c6e-4c03-a9dd-647d4e6744f2"
-      target="_blank">profile</a>
+    P.S. Don't forget to check out my <a
+      href="<%= process.env.DASHBOARD_URL %>/user/0054fbc6-7c6e-4c03-a9dd-647d4e6744f2" target="_blank">profile</a>
     and connect with me for some mock interview practice or any feedback on how we can make this platform better!
   </p>
 
