@@ -6,7 +6,7 @@ const {
   createOAuthClient,
   getAccessTokenFromRefreshToken,
 } = require("./oAuth");
-const { sendMeetingEmail } = require("./emailMeeting");
+const { getMeetingEmailTemplate } = require("./emails");
 
 const TOKEN_PATH = "./token.json";
 
@@ -70,7 +70,7 @@ const createEvent = async (
   const event = {
     summary: "Candidace Meeting",
     location: "Google Meet",
-    description: await sendMeetingEmail(meetingProps),
+    description: getMeetingEmailTemplate(meetingProps),
     start: {
       dateTime: startTime,
     },

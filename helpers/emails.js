@@ -13,6 +13,11 @@ const getCompiledFile = (fileName = "empty") => {
   return compiledTemplate;
 };
 
+const getMeetingEmailTemplate = (meetingProps) => {
+  const compiledTemplate = getCompiledFile("meeting");
+  return compiledTemplate(meetingProps);
+};
+
 const sendWelcomeEmail = async (props) => {
   const compiledTemplate = getCompiledFile("welcome");
 
@@ -21,6 +26,19 @@ const sendWelcomeEmail = async (props) => {
     to: props.receiver,
     subject: "Congratulations on starting your interview prep journey!",
     html: compiledTemplate(props),
+  };
+
+  await transporter.sendMail(mailOptions);
+};
+
+const sendMeetingEmail = async (props) => {
+  const template = getMeetingEmailTemplate(props);
+
+  const mailOptions = {
+    from: `Team Candidace <${process.env.EMAIL_SENDER}>`,
+    to: props.receiver,
+    subject: "Test Meeting Email!",
+    html: template,
   };
 
   await transporter.sendMail(mailOptions);
@@ -40,6 +58,8 @@ const sendVerificationEmail = async (props) => {
 };
 
 module.exports = {
+  getMeetingEmailTemplate,
   sendWelcomeEmail,
+  sendMeetingEmail,
   sendVerificationEmail,
 };
