@@ -1,4 +1,4 @@
-const cron = require("node-cron");
+const schedule = require("node-schedule");
 const {
   generateAvailabilityFromRecurrent,
 } = require("../controllers/availability");
@@ -10,9 +10,12 @@ const {
   * for month (every month)
   0 for day of the week (Sunday)
  */
-
-cron.schedule("0 23 * * 0", () => {
+schedule.scheduleJob("0 23 * * 0", () => {
   generateAvailabilityFromRecurrent();
 });
 
-module.exports = { cron };
+// schedule.scheduleJob("* * * * *", () =>
+//   console.log("Schedule run ", new Date())
+// );
+
+module.exports = schedule;

@@ -12,6 +12,7 @@ const { responseMiddleware } = require("./middlewares/Response");
 const { requestLogger } = require("./middlewares/logger");
 // const viewRoutes = require("./routes/view");
 const configureCors = require("./middlewares/cors");
+const schedule = require("./schedule");
 
 // const liveReloadServer = livereload.createServer();
 // liveReloadServer.watch(path.join(__dirname, "views"));
