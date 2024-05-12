@@ -2,6 +2,7 @@ const schedule = require("node-schedule");
 const {
   generateAvailabilityFromRecurrent,
 } = require("../controllers/availability");
+const { sendAllUserProfileCompletionReminder } = require("../controllers/auth");
 
 /**
   0 for minute (0th minute)
@@ -12,6 +13,10 @@ const {
  */
 schedule.scheduleJob("0 23 * * 0", () => {
   generateAvailabilityFromRecurrent();
+});
+
+schedule.scheduleJob("0 18 * * *", () => {
+  sendAllUserProfileCompletionReminder();
 });
 
 // schedule.scheduleJob("* * * * *", () =>

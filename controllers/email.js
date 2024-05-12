@@ -2,6 +2,7 @@ const {
   sendWelcomeEmail,
   sendMeetingEmail,
   sendVerificationEmail,
+  sendProfileCompletionReminderEmail,
 } = require("../helpers/emails");
 const asyncWrapper = require("../middlewares/async");
 
@@ -21,6 +22,10 @@ const testEmail = asyncWrapper(async (req, res) => {
   } else if (type === "verification") {
     // props: { receiver, token }
     sendVerificationEmail(props);
+    res.success(`Email sent to ${props.receiver}`);
+  } else if (type === "profile_reminder") {
+    // props: { receiver, userId, day }
+    sendProfileCompletionReminderEmail(props);
     res.success(`Email sent to ${props.receiver}`);
   } else res.fail("Email type is not provided");
 });

@@ -8,10 +8,14 @@ const {
   redirectToOAuthURL,
 } = require("../helpers/oAuth");
 const { generateUsername } = require("../helpers/string");
-const { profileCompletionStatus } = require("../helpers/user");
+const {
+  profileCompletionStatus,
+  isProfileComplete,
+} = require("../helpers/user");
 const {
   sendWelcomeEmail,
   sendVerificationEmail,
+  sendProfileCompletionReminderEmail,
 } = require("../helpers/emails");
 const MIXPANEL_TRACK = require("../helpers/mixpanel");
 const crypto = require("crypto");
@@ -171,6 +175,49 @@ const oauthCallback = asyncWrapper(async (req, res) => {
   }
 });
 
+const sendAllUserProfileCompletionReminder = asyncWrapper(async (req, res) => {
+  const users = await User.findAll();
+  const today = new Date();
+
+  for (let user of users) {
+    const createdAt = new Date(user.createdAt);
+    const createdAtWithoutTime = new Date(
+      createdAt.getFullYear(),
+      createdAt.getMonth(),
+      createdAt.getDate()
+    );
+    const todayWithoutTime = new Date(
+      today.getFullYear(),
+      today.getMonth(),
+      today.getDate()
+    );
+    const timeDifference = Math.abs(todayWithoutTime - createdAtWithoutTime);
+    const daysSinceCreation = Math.ceil(timeDifference / (1000 * 60 * 60 * 24));
+
+    if (!(await isProfileComplete(user.id))) {
+      if (daysSinceCreation === 1) {
+        sendProfileCompletionReminderEmail({
+          receiver: user.email,
+          userId: user.id,
+          day: 1,
+        });
+      } else if (daysSinceCreation === 3) {
+        sendProfileCompletionReminderEmail({
+          receiver: user.email,
+          userId: user.id,
+          day: 3,
+        });
+      } else {
+        sendProfileCompletionReminderEmail({
+          receiver: user.email,
+          userId: user.id,
+          day: 5,
+        });
+      }
+    }
+  }
+});
+
 module.exports = {
   TOKEN_COOKIE_NAME,
   signupUser,
@@ -179,4 +226,5 @@ module.exports = {
   resendEmailVerification,
   validateEmailVerification,
   oauthCallback,
+  sendAllUserProfileCompletionReminder,
 };

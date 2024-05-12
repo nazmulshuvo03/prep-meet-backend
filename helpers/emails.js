@@ -57,9 +57,23 @@ const sendVerificationEmail = async (props) => {
   await transporter.sendMail(mailOptions);
 };
 
+const sendProfileCompletionReminderEmail = async (props) => {
+  const compiledTemplate = getCompiledFile(`profile_reminder_day${props.day}`);
+
+  const mailOptions = {
+    from: `Team Candidace <${process.env.EMAIL_SENDER}>`,
+    to: props.receiver,
+    subject: "Reminder from Candidace",
+    html: compiledTemplate(props),
+  };
+
+  await transporter.sendMail(mailOptions);
+};
+
 module.exports = {
   getMeetingEmailTemplate,
   sendWelcomeEmail,
   sendMeetingEmail,
   sendVerificationEmail,
+  sendProfileCompletionReminderEmail,
 };

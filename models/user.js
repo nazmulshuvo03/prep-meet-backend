@@ -36,7 +36,6 @@ const Profile = sequelize.define("profile", {
   userName: DataTypes.STRING,
   firstName: DataTypes.STRING,
   lastName: DataTypes.STRING,
-  gender: DataTypes.STRING,
   photoURL: {
     type: DataTypes.STRING,
     defaultValue:
