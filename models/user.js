@@ -33,6 +33,10 @@ const Profile = sequelize.define("profile", {
     allowNull: false,
   },
   email_verified: { type: DataTypes.BOOLEAN, defaultValue: false },
+  timezone: {
+    type: DataTypes.STRING,
+    defaultValue: "America/New_York",
+  },
   userName: DataTypes.STRING,
   firstName: DataTypes.STRING,
   lastName: DataTypes.STRING,
@@ -54,6 +58,10 @@ const Profile = sequelize.define("profile", {
   experienceLevel: DataTypes.INTEGER,
   preparationStage: DataTypes.INTEGER,
   companiesOfInterest: DataTypes.ARRAY(DataTypes.INTEGER),
+  unsubscribed: {
+    type: DataTypes.BOOLEAN,
+    defaultValue: false,
+  },
 });
 
 const Verification = sequelize.define("verification", {

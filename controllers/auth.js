@@ -67,7 +67,7 @@ const _createEmailVerification = async (userId, receiver) => {
 };
 
 const signupUser = asyncWrapper(async (req, res) => {
-  const { email, password, firstName, lastName, targetProfessionId } = req.body;
+  const { email, password, targetProfessionId, timezone } = req.body;
   const exists = await User.findOne({ where: { email } });
   if (exists) {
     return res.fail("Email already exists");
@@ -86,10 +86,9 @@ const signupUser = asyncWrapper(async (req, res) => {
   });
   res.cookie(TOKEN_COOKIE_NAME, token, COOKIE_OPTIONS);
   const updatedProfile = await _updateUserProfile(res, user.id, {
-    firstName,
-    lastName,
     userName: generateUsername(),
     targetProfessionId,
+    timezone,
   });
   if (updatedProfile) _handleLoginResponse(req, res, user.id);
 
