@@ -2,7 +2,11 @@ const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
 const asyncWrapper = require("../middlewares/async");
 const { User, Verification, Profile } = require("../models/user");
-const { _updateUserProfile, _getUserProfile } = require("./user");
+const {
+  _updateUserProfile,
+  _getUserProfile,
+  _checkIfUserUnsubscribed,
+} = require("./user");
 const {
   getAccessTokenFromAuth,
   redirectToOAuthURL,
@@ -174,7 +178,7 @@ const oauthCallback = asyncWrapper(async (req, res) => {
   }
 });
 
-const sendAllUserProfileCompletionReminder = asyncWrapper(async (req, res) => {
+const sendAllUserProfileCompletionReminder = async () => {
   const users = await User.findAll();
   const today = new Date();
 
@@ -194,28 +198,30 @@ const sendAllUserProfileCompletionReminder = asyncWrapper(async (req, res) => {
     const daysSinceCreation = Math.ceil(timeDifference / (1000 * 60 * 60 * 24));
 
     if (!(await isProfileComplete(user.id))) {
-      if (daysSinceCreation === 1) {
-        sendProfileCompletionReminderEmail({
-          receiver: user.email,
-          userId: user.id,
-          day: 1,
-        });
-      } else if (daysSinceCreation === 3) {
-        sendProfileCompletionReminderEmail({
-          receiver: user.email,
-          userId: user.id,
-          day: 3,
-        });
-      } else if (daysSinceCreation === 5) {
-        sendProfileCompletionReminderEmail({
-          receiver: user.email,
-          userId: user.id,
-          day: 5,
-        });
-      }
+      if (!(await _checkIfUserUnsubscribed(user.id))) {
+        if (daysSinceCreation === 2) {
+          sendProfileCompletionReminderEmail({
+            receiver: user.email,
+            userId: user.id,
+            day: 1,
+          });
+        } else if (daysSinceCreation === 3) {
+          sendProfileCompletionReminderEmail({
+            receiver: user.email,
+            userId: user.id,
+            day: 3,
+          });
+        } else if (daysSinceCreation === 5) {
+          sendProfileCompletionReminderEmail({
+            receiver: user.email,
+            userId: user.id,
+            day: 5,
+          });
+        }
+      } else console.log(`Email ${user.email} unsubscribed`);
     }
   }
-});
+};
 
 module.exports = {
   TOKEN_COOKIE_NAME,

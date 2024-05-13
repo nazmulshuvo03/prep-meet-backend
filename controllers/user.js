@@ -106,6 +106,12 @@ const _updateUserProfile = async (res, userId, updatedFields) => {
   return updatedUser;
 };
 
+const _checkIfUserUnsubscribed = async (userId) => {
+  const found = await Profile.findByPk(userId);
+  if (!found) return false;
+  return found.unsubscribed;
+};
+
 const getAllUserData = asyncWrapper(async (req, res) => {
   const userList = await User.findAll();
   res.success(userList);
@@ -261,9 +267,20 @@ const getProgress = asyncWrapper(async (req, res) => {
   res.success(formattedProgress);
 });
 
+const switchEmailSubscription = asyncWrapper(async (req, res) => {
+  const userProfile = res.locals.user;
+  const { userId, status = true } = req.body;
+  if (userId !== userProfile.id)
+    return res.fail("You are not authorized for this profile");
+  const found = await Profile.findByPk(userId);
+  found.update({ unsubscribed: status });
+  res.success(found);
+});
+
 module.exports = {
   _getUserProfile,
   _updateUserProfile,
+  _checkIfUserUnsubscribed,
   getAllUserData,
   getAllUserProfiles,
   createUser,
@@ -273,4 +290,5 @@ module.exports = {
   deleteAllUser,
   checkProperty,
   getProgress,
+  switchEmailSubscription,
 };
