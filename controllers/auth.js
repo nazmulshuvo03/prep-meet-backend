@@ -206,7 +206,7 @@ const sendAllUserProfileCompletionReminder = asyncWrapper(async (req, res) => {
           userId: user.id,
           day: 3,
         });
-      } else {
+      } else if (daysSinceCreation === 5) {
         sendProfileCompletionReminderEmail({
           receiver: user.email,
           userId: user.id,
