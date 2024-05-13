@@ -27,7 +27,8 @@ const _updateAvailabilityState = async (avaiabilityId, state) => {
   return found.update({ state });
 };
 
-const _createAvailability = async (res, data, sendFailMessage = false) => {
+const _createAvailability = async (data, sendFailMessage = false) => {
+  let error = { type: "error", message: "" };
   const found = await Availability.findOne({
     where: {
       userId: data.userId,
@@ -35,12 +36,12 @@ const _createAvailability = async (res, data, sendFailMessage = false) => {
     },
   });
   if (found && sendFailMessage) {
-    res.fail("Already added");
+    error.message = "Already added";
   }
   if (!found) {
     const created = await Availability.create(data);
     if (!created)
-      res.fail("Availability data could not be created for this user");
+      error.message = "Availability data could not be created for this user";
     MIXPANEL_TRACK({
       name: "Availability Added",
       data: { avaiabilityId: created.id, availableTime: created.dayHourUTC },
@@ -50,23 +51,7 @@ const _createAvailability = async (res, data, sendFailMessage = false) => {
       data.userId
     );
     return created;
-  }
-};
-
-const _generateAvailabilityFromRecurrent = async (res, data) => {
-  const { userId, weekday, hour, practiceAreas, interviewNote, timezone } =
-    data;
-  const dayHourUTC = getDateOfIndexDay(weekday, hour, timezone);
-  const dayHour = dayHourUTC.getTime();
-  const model = {
-    userId,
-    dayHour,
-    dayHourUTC,
-    practiceAreas,
-    interviewNote,
-    isRecurring: true,
-  };
-  await _createAvailability(res, model);
+  } else return error;
 };
 
 const getAllAvailabilityData = asyncWrapper(async (req, res) => {
@@ -101,8 +86,10 @@ const createAvailabilityData = asyncWrapper(async (req, res) => {
     practiceAreas,
     interviewNote,
   };
-  const created = await _createAvailability(res, model, true);
-  res.success(created);
+  const created = await _createAvailability(model, true);
+  if (created.type && created.type === "error") {
+    res.fail(created.message);
+  } else res.success(created);
 });
 
 const deleteAvailabilityData = asyncWrapper(async (req, res) => {
@@ -148,11 +135,15 @@ const createRecurrentData = asyncWrapper(async (req, res) => {
     interviewNote,
     isRecurring: true,
   };
-  const createdAvl = await _createAvailability(res, avlModel);
-  res.success({
-    recurrent: createdRec,
-    availablity: createdAvl,
-  });
+  const createdAvl = await _createAvailability(avlModel);
+  if (created.type && created.type === "error") {
+    res.fail(created.message);
+  } else {
+    res.success({
+      recurrent: createdRec,
+      availablity: createdAvl,
+    });
+  }
 });
 
 const getRecurrentData = asyncWrapper(async (req, res) => {
@@ -171,13 +162,24 @@ const deleteRecurrentData = asyncWrapper(async (req, res) => {
   res.success("Deleted");
 });
 
-const generateAvailabilityFromRecurrent = asyncWrapper(async (req, res) => {
+const generateAvailabilityFromRecurrent = async () => {
   const recurrents = await RecurrentAvailability.findAll();
   for (let occurence of recurrents) {
-    await _generateAvailabilityFromRecurrent(res, occurence);
+    const { userId, weekday, hour, practiceAreas, interviewNote, timezone } =
+      occurence;
+    const dayHourUTC = getDateOfIndexDay(weekday, hour, timezone);
+    const dayHour = dayHourUTC.getTime();
+    const model = {
+      userId,
+      dayHour,
+      dayHourUTC,
+      practiceAreas,
+      interviewNote,
+      isRecurring: true,
+    };
+    await _createAvailability(model);
   }
-  res.success("Success");
-});
+};
 
 module.exports = {
   _getAvailabilityById,
