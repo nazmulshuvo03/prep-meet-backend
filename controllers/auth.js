@@ -7,10 +7,7 @@ const {
   _getUserProfile,
   _checkIfUserUnsubscribed,
 } = require("./user");
-const {
-  getAccessTokenFromAuth,
-  redirectToOAuthURL,
-} = require("../helpers/oAuth");
+const { getAccessTokenFromAuth } = require("../helpers/oAuth");
 const { generateUsername } = require("../helpers/string");
 const {
   profileCompletionStatus,
@@ -41,17 +38,10 @@ const _createToken = (data) => {
 const _handleLoginResponse = async (req, res, userId) => {
   const profile = await _getUserProfile(userId);
   const completionStatus = await profileCompletionStatus(profile.dataValues.id);
-  const contentType = req.headers["content-type"];
-  if (contentType.startsWith("application/x-www-form-urlencoded")) {
-    return res.redirect(
-      `${process.env.DASHBOARD_URL}/profile/${profile.dataValues.id}`
-    );
-  } else {
-    res.success({
-      ...profile.dataValues,
-      completionStatus,
-    });
-  }
+  res.success({
+    ...profile.dataValues,
+    completionStatus,
+  });
 };
 
 const _createEmailVerification = async (userId, receiver) => {
@@ -104,7 +94,7 @@ const signupUser = asyncWrapper(async (req, res) => {
       name: "there",
       receiver: email,
     });
-  }, 1 * 60 * 1000); // 1 minute
+  }, 5 * 60 * 1000); // 1 minute
 });
 
 const loginUser = asyncWrapper(async (req, res) => {
