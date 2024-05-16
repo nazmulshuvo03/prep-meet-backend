@@ -136,8 +136,8 @@ const createRecurrentData = asyncWrapper(async (req, res) => {
     isRecurring: true,
   };
   const createdAvl = await _createAvailability(avlModel);
-  if (created.type && created.type === "error") {
-    res.fail(created.message);
+  if (createdAvl.type && createdAvl.type === "error") {
+    res.fail(createdAvl.message);
   } else {
     res.success({
       recurrent: createdRec,
