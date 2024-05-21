@@ -20,6 +20,7 @@ const {
 } = require("../helpers/emails");
 const MIXPANEL_TRACK = require("../helpers/mixpanel");
 const crypto = require("crypto");
+const passport = require("passport");
 
 const TOKEN_COOKIE_NAME = "prepMeetToken";
 const MAX_AGE = 30 * 24 * 60 * 60;
@@ -154,6 +155,20 @@ const validateEmailVerification = asyncWrapper(async (req, res) => {
   }
 });
 
+const googleLogin = asyncWrapper(async () => {
+  passport.authenticate("google", { scope: ["profile", "email"] });
+});
+
+const googleLoginCallback = asyncWrapper(async () => {
+  passport.authenticate("google", { failureRedirect: "/" }),
+    (req, res) => {
+      console.log("google login callback: ", req, res);
+      const token = _createToken({ id: req.user.id });
+      res.cookie(TOKEN_COOKIE_NAME, token, COOKIE_OPTIONS);
+      _handleLoginResponse(req, res, req.user.id);
+    };
+});
+
 const oauthCallback = asyncWrapper(async (req, res) => {
   // this authorizationCode can be received from Google developer playground
   // by using the OAuth client ID and secret received in Google cloud console OAuth client
@@ -220,6 +235,8 @@ module.exports = {
   logoutUser,
   resendEmailVerification,
   validateEmailVerification,
+  googleLogin,
+  googleLoginCallback,
   oauthCallback,
   sendAllUserProfileCompletionReminder,
 };

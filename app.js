@@ -2,6 +2,8 @@ const express = require("express");
 const path = require("path");
 const bodyParser = require("body-parser");
 const cookieParser = require("cookie-parser");
+const passport = require("passport");
+const session = require("express-session");
 // const livereload = require("livereload");
 // const connectLiveReload = require("connect-livereload");
 
@@ -12,7 +14,8 @@ const { responseMiddleware } = require("./middlewares/Response");
 const { requestLogger } = require("./middlewares/logger");
 // const viewRoutes = require("./routes/view");
 const configureCors = require("./middlewares/cors");
-const schedule = require("./schedule");
+require("./schedule");
+require("./helpers/passport");
 
 // const liveReloadServer = livereload.createServer();
 // liveReloadServer.watch(path.join(__dirname, "views"));
@@ -37,6 +40,15 @@ app.use(cookieParser());
 app.use(requestLogger);
 app.use(responseMiddleware);
 // app.use(connectLiveReload());
+app.use(
+  session({
+    secret: process.env.PASSPORT_SECRET,
+    resave: false,
+    saveUninitialized: true,
+  })
+);
+app.use(passport.initialize());
+app.use(passport.session());
 
 // app.use("/", viewRoutes);
 app.use("/api/v1", Routes);
