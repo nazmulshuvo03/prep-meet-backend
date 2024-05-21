@@ -10,7 +10,7 @@ const User = sequelize.define("user", {
     allowNull: false,
   },
   email: { type: DataTypes.STRING, allowNull: false, unique: true },
-  password: DataTypes.STRING,
+  password: { type: DataTypes.STRING, allowNull: true },
   type: {
     type: DataTypes.ENUM("BASIC", "PREMIUM", "ADMIN"),
     defaultValue: "BASIC",
@@ -36,6 +36,15 @@ const Profile = sequelize.define("profile", {
   timezone: {
     type: DataTypes.STRING,
     defaultValue: "America/New_York",
+  },
+  authMedium: {
+    type: DataTypes.ENUM("EMAIL", "GOOGLE", "LINKEDIN"),
+    defaultValue: "EMAIL",
+  },
+  googleId: {
+    type: DataTypes.STRING,
+    unique: true,
+    allowNull: true,
   },
   userName: DataTypes.STRING,
   firstName: DataTypes.STRING,

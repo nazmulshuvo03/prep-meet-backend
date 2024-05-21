@@ -94,14 +94,17 @@ const signupUser = asyncWrapper(async (req, res) => {
       name: "there",
       receiver: email,
     });
-  }, 5 * 60 * 1000); // 1 minute
+  }, 5 * 60 * 1000); // 5 minutes
 });
 
 const loginUser = asyncWrapper(async (req, res) => {
   const { email, password } = req.body;
   const user = await User.findOne({ where: { email } });
   if (user) {
+    if (!user.password)
+      return res.fail("Authentication medium is not email and password");
     const auth = await bcrypt.compare(password, user.password);
+    console.log("login auth: ", auth);
     if (auth) {
       const token = _createToken({ id: user.id });
       res.cookie(TOKEN_COOKIE_NAME, token, COOKIE_OPTIONS);
@@ -116,6 +119,71 @@ const loginUser = asyncWrapper(async (req, res) => {
     }
   } else {
     return res.fail("Email does not exist", 422);
+  }
+});
+
+const googleAuth = asyncWrapper(async (req, res) => {
+  console.log("req.body: ", req.body);
+  const {
+    email,
+    email_verified,
+    family_name,
+    given_name,
+    picture,
+    sub,
+    timezone,
+    targetProfessionId,
+  } = req.body;
+  const user = await Profile.findOne({ where: { email } });
+  if (user) {
+    console.log("Found: ", user);
+    if (user.authMedium === "GOOGLE") {
+      const token = _createToken({ id: user.id });
+      res.cookie(TOKEN_COOKIE_NAME, token, COOKIE_OPTIONS);
+      MIXPANEL_TRACK({
+        name: "Login",
+        data: { email: user.email, type: user.type },
+        id: user.id,
+      });
+      _handleLoginResponse(req, res, user.id);
+    } else {
+      return res.fail("Your authentication medium is not Google");
+    }
+  } else {
+    if (!targetProfessionId)
+      return res.fail({ ...req.body, message: "PROFESSION_REQUIRED" });
+    const model = {
+      email,
+    };
+    const user = await User.create(model);
+    console.log("Created user: ", user);
+    const token = _createToken({ id: user.id });
+    MIXPANEL_TRACK({
+      name: "Signup",
+      data: { email: user.email, type: user.type, targetProfessionId },
+      id: user.id,
+    });
+    res.cookie(TOKEN_COOKIE_NAME, token, COOKIE_OPTIONS);
+    const updatedProfile = await _updateUserProfile(res, user.id, {
+      userName: generateUsername(),
+      email_verified,
+      targetProfessionId,
+      timezone,
+      firstName: given_name,
+      lastName: family_name,
+      photoURL: picture,
+      googleId: sub,
+      authMedium: "GOOGLE",
+    });
+    console.log("updated profile: ", updatedProfile);
+    if (updatedProfile) _handleLoginResponse(req, res, user.id);
+
+    setTimeout(() => {
+      sendWelcomeEmail({
+        name: "there",
+        receiver: email,
+      });
+    }, 5 * 60 * 1000);
   }
 });
 
@@ -217,6 +285,7 @@ module.exports = {
   TOKEN_COOKIE_NAME,
   signupUser,
   loginUser,
+  googleAuth,
   logoutUser,
   resendEmailVerification,
   validateEmailVerification,
