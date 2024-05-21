@@ -104,7 +104,6 @@ const loginUser = asyncWrapper(async (req, res) => {
     if (!user.password)
       return res.fail("Authentication medium is not email and password");
     const auth = await bcrypt.compare(password, user.password);
-    console.log("login auth: ", auth);
     if (auth) {
       const token = _createToken({ id: user.id });
       res.cookie(TOKEN_COOKIE_NAME, token, COOKIE_OPTIONS);
@@ -123,7 +122,6 @@ const loginUser = asyncWrapper(async (req, res) => {
 });
 
 const googleAuth = asyncWrapper(async (req, res) => {
-  console.log("req.body: ", req.body);
   const {
     email,
     email_verified,
@@ -136,7 +134,6 @@ const googleAuth = asyncWrapper(async (req, res) => {
   } = req.body;
   const user = await Profile.findOne({ where: { email } });
   if (user) {
-    console.log("Found: ", user);
     if (user.authMedium === "GOOGLE") {
       const token = _createToken({ id: user.id });
       res.cookie(TOKEN_COOKIE_NAME, token, COOKIE_OPTIONS);
@@ -156,7 +153,6 @@ const googleAuth = asyncWrapper(async (req, res) => {
       email,
     };
     const user = await User.create(model);
-    console.log("Created user: ", user);
     const token = _createToken({ id: user.id });
     MIXPANEL_TRACK({
       name: "Signup",
@@ -175,7 +171,6 @@ const googleAuth = asyncWrapper(async (req, res) => {
       googleId: sub,
       authMedium: "GOOGLE",
     });
-    console.log("updated profile: ", updatedProfile);
     if (updatedProfile) _handleLoginResponse(req, res, user.id);
 
     setTimeout(() => {
