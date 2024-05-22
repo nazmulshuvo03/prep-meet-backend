@@ -27,7 +27,7 @@ const InterviewExperience = sequelize.define("interviewExperience", {
 InterviewExperience.belongsTo(Profile, {
   foreignKey: "user_id",
   targetKey: "id",
-  onDelete: "SET NULL",
+  onDelete: "CASCADE",
 });
 
 Profile.hasMany(InterviewExperience, {

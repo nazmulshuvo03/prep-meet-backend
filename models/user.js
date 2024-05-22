@@ -95,7 +95,7 @@ Profile.belongsTo(Profession, {
 Verification.belongsTo(Profile, {
   foreignKey: "userId",
   targetKey: "id",
-  onDelete: "SET NULL",
+  onDelete: "CASCADE",
 });
 
 // Hook to update the email in the Profile table before updating a User

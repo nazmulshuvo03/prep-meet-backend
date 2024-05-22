@@ -46,7 +46,7 @@ const WorkExperience = sequelize.define("workExperience", {
 WorkExperience.belongsTo(Profile, {
   foreignKey: "user_id",
   targetKey: "id",
-  onDelete: "SET NULL",
+  onDelete: "CASCADE",
 });
 
 Profile.hasMany(WorkExperience, {

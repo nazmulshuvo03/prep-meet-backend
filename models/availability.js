@@ -39,7 +39,7 @@ const RecurrentAvailability = sequelize.define("recurrentAvailability", {
 Availability.belongsTo(Profile, {
   foreignKey: "userId",
   targetKey: "id",
-  onDelete: "SET NULL",
+  onDelete: "CASCADE",
 });
 Profile.hasMany(Availability, {
   foreignKey: "userId",
@@ -49,7 +49,7 @@ Profile.hasMany(Availability, {
 RecurrentAvailability.belongsTo(Profile, {
   foreignKey: "userId",
   targetKey: "id",
-  onDelete: "SET NULL",
+  onDelete: "CASCADE",
 });
 Profile.hasMany(RecurrentAvailability, {
   foreignKey: "userId",
