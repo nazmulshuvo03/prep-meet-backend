@@ -128,6 +128,11 @@ const createUser = asyncWrapper(async (req, res) => {
 });
 
 const getAllUserProfiles = asyncWrapper(async (req, res) => {
+  const userList = await Profile.findAll();
+  res.success(userList);
+});
+
+const getDashboardProfiles = asyncWrapper(async (req, res) => {
   const userProfile = res.locals.user;
   const queryParameters = req.query;
   const queryOptions = profileQueryOptions(queryParameters, userProfile);
@@ -283,6 +288,7 @@ module.exports = {
   _checkIfUserUnsubscribed,
   getAllUserData,
   getAllUserProfiles,
+  getDashboardProfiles,
   createUser,
   getSingleUserProfile,
   updateUserProfile,

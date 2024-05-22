@@ -8,6 +8,7 @@ const {
   checkProperty,
   getProgress,
   switchEmailSubscription,
+  getDashboardProfiles,
 } = require("../controllers/user");
 
 const workExperienceRoutes = require("./workExperience");
@@ -27,6 +28,7 @@ router.route("/users").get(getAllUserData);
 router.route("/progress").get(getProgress);
 router.route("/check").post(checkProperty);
 router.route("/all?").get(getAllUserProfiles);
+router.route("/dashboard?").get(getDashboardProfiles);
 router.route("/subscription").put(switchEmailSubscription);
 router.route("/:userId").put(updateUserProfile).delete(deleteUser);
 
