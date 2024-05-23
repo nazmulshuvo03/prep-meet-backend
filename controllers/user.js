@@ -128,7 +128,12 @@ const createUser = asyncWrapper(async (req, res) => {
 });
 
 const getAllUserProfiles = asyncWrapper(async (req, res) => {
-  const userList = await Profile.findAll();
+  const userList = await Profile.findAll({
+    order: [["createdAt", "DESC"]],
+  });
+  for (let user of userList) {
+    user.dataValues.completionStatus = await profileCompletionStatus(user.id);
+  }
   res.success(userList);
 });
 

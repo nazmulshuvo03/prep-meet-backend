@@ -217,6 +217,17 @@ const validateEmailVerification = asyncWrapper(async (req, res) => {
   }
 });
 
+const getAllVerificationToken = asyncWrapper(async (req, res) => {
+  const { userId } = req.params;
+  let list;
+  if (userId) {
+    list = await Verification.findOne({ where: { userId } });
+  } else {
+    list = await Verification.findAll();
+  }
+  res.success(list);
+});
+
 const oauthCallback = asyncWrapper(async (req, res) => {
   // this authorizationCode can be received from Google developer playground
   // by using the OAuth client ID and secret received in Google cloud console OAuth client
@@ -284,6 +295,7 @@ module.exports = {
   logoutUser,
   resendEmailVerification,
   validateEmailVerification,
+  getAllVerificationToken,
   oauthCallback,
   sendAllUserProfileCompletionReminder,
 };
