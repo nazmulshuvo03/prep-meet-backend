@@ -81,6 +81,15 @@ const _getUserProfile = async (userId) => {
   return user;
 };
 
+const _getUserType = async (userId) => {
+  const user = await User.findOne({
+    where: { id: userId },
+    attributes: ["type"],
+  });
+  if (!user) return null;
+  return user;
+};
+
 const _updateUserProfile = async (res, userId, updatedFields) => {
   if (Object.keys(updatedFields).length === 0)
     return res.fail("No fields provided for update", BAD_REQUEST);
@@ -289,6 +298,7 @@ const switchEmailSubscription = asyncWrapper(async (req, res) => {
 
 module.exports = {
   _getUserProfile,
+  _getUserType,
   _updateUserProfile,
   _checkIfUserUnsubscribed,
   getAllUserData,

@@ -6,6 +6,7 @@ const {
   _updateUserProfile,
   _getUserProfile,
   _checkIfUserUnsubscribed,
+  _getUserType,
 } = require("./user");
 const { getAccessTokenFromAuth } = require("../helpers/oAuth");
 const { generateUsername } = require("../helpers/string");
@@ -37,9 +38,11 @@ const _createToken = (data) => {
 
 const _handleLoginResponse = async (req, res, userId) => {
   const profile = await _getUserProfile(userId);
+  const userType = await _getUserType(userId);
   const completionStatus = await profileCompletionStatus(profile.dataValues.id);
   res.success({
     ...profile.dataValues,
+    ...userType.dataValues,
     completionStatus,
   });
 };
