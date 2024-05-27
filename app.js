@@ -2,8 +2,6 @@ const express = require("express");
 const path = require("path");
 const bodyParser = require("body-parser");
 const cookieParser = require("cookie-parser");
-// const livereload = require("livereload");
-// const connectLiveReload = require("connect-livereload");
 
 const config = require("./config");
 const Routes = require("./routes");
@@ -13,14 +11,6 @@ const { requestLogger } = require("./middlewares/logger");
 // const viewRoutes = require("./routes/view");
 const configureCors = require("./middlewares/cors");
 require("./schedule");
-
-// const liveReloadServer = livereload.createServer();
-// liveReloadServer.watch(path.join(__dirname, "views"));
-// liveReloadServer.server.once("connection", () => {
-//   setTimeout(() => {
-//     liveReloadServer.refresh("/");
-//   }, 100);
-// });
 
 const app = express();
 const port = config.PORT;
@@ -36,7 +26,6 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(requestLogger);
 app.use(responseMiddleware);
-// app.use(connectLiveReload());
 
 // app.use("/", viewRoutes);
 app.use("/api/v1", Routes);
