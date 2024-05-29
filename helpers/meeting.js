@@ -103,7 +103,37 @@ const createMeeting = async () => {
   }
 };
 
+const performMeetingRemove = async (eventId) => {
+  const auth = await getMeetingAuthentication();
+  if (auth.redirect) {
+    return { removed: false, redirect: true, redirectUrl: auth.redirectUrl };
+  }
+  const calendar = google.calendar({
+    version: "v3",
+    auth,
+  });
+
+  try {
+    await calendar.events.delete({
+      calendarId: "primary",
+      eventId: eventId,
+      sendUpdates: "all",
+    });
+    return {
+      removed: true,
+    };
+  } catch (err) {
+    return err;
+  }
+};
+
+const deleteEvent = async (eventId) => {
+  const response = await performMeetingRemove(eventId);
+  return response;
+};
+
 module.exports = {
   createMeeting,
   createEvent,
+  deleteEvent,
 };
