@@ -47,8 +47,9 @@ const performMeetingInsert = async (event) => {
     });
     return {
       created: true,
+      eventId: response.data.id,
       eventLink: response.data.htmlLink,
-      meetLink: response.data.hangoutLink,
+      // meetLink: response.data.hangoutLink,
     };
   } catch (err) {
     return err;

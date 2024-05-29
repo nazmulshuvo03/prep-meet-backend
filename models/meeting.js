@@ -23,6 +23,9 @@ const Meeting = sequelize.define("meeting", {
     type: DataTypes.STRING,
     allowNull: false,
   },
+  eventId: {
+    type: DataTypes.STRING,
+  },
   meet: {
     type: DataTypes.STRING,
     allowNull: false,

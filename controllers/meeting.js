@@ -131,6 +131,7 @@ const createMeetingData = asyncWrapper(async (req, res) => {
     dayHour: parseInt(availabilityData.dayHour),
     dayHourUTC: availabilityData.dayHourUTC,
     event: createdEvent.eventLink,
+    eventId: createdEvent.eventId,
     meet: meetingData.meeting,
     practiceAreas: availabilityData.practiceAreas,
     interviewNote: availabilityData.interviewNote,
@@ -162,9 +163,9 @@ const cancelMeeting = asyncWrapper(async (req, res) => {
   const { meetingId, userId } = req.body;
   const found = await Meeting.findByPk(meetingId);
   if (!found) res.fail("Meeting data not found");
-  const deletedEvent = await deleteEvent(found.event);
-  console.log("Deleted event: ", deletedEvent);
-  if (!deletedEvent) return res.fail("Meeting could not be deleted");
+  const deletedEvent = await deleteEvent(found.eventId);
+  if (!(deletedEvent && deletedEvent.removed))
+    return res.fail("Meeting could not be deleted");
   await Meeting.destroy({ where: { id: meetingId } });
   if (userId === found.acceptor || userId === found.initiator) {
     const availability = await _getAvailabilityByBody({
@@ -176,7 +177,7 @@ const cancelMeeting = asyncWrapper(async (req, res) => {
     if (!updated)
       res.fail("Availability state could not be updated", UNPROCESSABLE_DATA);
     found.destroy();
-    res.success("Meeting canceled");
+    res.success("Meeting cancelled");
   } else {
     res.fail("This meeting does not belong to you");
   }
