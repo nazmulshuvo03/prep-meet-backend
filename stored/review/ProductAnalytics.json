@@ -1,0 +1,102 @@
+{
+  "_id_structure": "2_two_digitFileSerialNumber(05)_questionType(1/2)_twoDigitQuestionSerialNumber(01)",
+  "type1": [
+    {
+      "id": 205101,
+      "text": "Did you demonstrate understanding of the product and its key features/use cases?"
+    },
+    {
+      "id": 205102,
+      "text": "Did you identify the relevant product metrics and KPIs to analyze?"
+    },
+    {
+      "id": 205103,
+      "text": "Did you propose data sources for capturing product usage and user behavior?"
+    },
+    {
+      "id": 205104,
+      "text": "Did you outline an approach for analyzing product funnels or user journeys?"
+    },
+    {
+      "id": 205105,
+      "text": "Did you discuss techniques for segmenting users or cohort analysis?"
+    },
+    {
+      "id": 205106,
+      "text": "Did you highlight insights into user engagement, retention, or conversion?"
+    },
+    {
+      "id": 205107,
+      "text": "Did you consider product experimentation or A/B testing methods?"
+    },
+    {
+      "id": 205108,
+      "text": "Did you showcase skills in quantifying business impact or revenue drivers?"
+    },
+    {
+      "id": 205109,
+      "text": "Did you effectively communicate insights in a way that resonates with product teams?"
+    },
+    {
+      "id": 205110,
+      "text": "Did you provide actionable recommendations for product improvements or optimizations?"
+    }
+  ],
+  "type2": [
+    {
+      "id": 205201,
+      "text": "How well did you frame the product analytics problem and prioritize key areas to analyze?",
+      "options": [
+        "Did not demonstrate clear understanding of the product analytics context",
+        "Struggled to identify relevant metrics, user perspectives or prioritize focus areas",
+        "Displayed basic knowledge of product analytics but lacked depth or nuance",
+        "Clearly prioritized and framed the key product analytics areas of importance",
+        "Provided a highly nuanced and comprehensive framing of the product analytics space"
+      ]
+    },
+    {
+      "id": 205202,
+      "text": "How effectively did you incorporate user behavior and product usage analysis?",
+      "options": [
+        "Response did not cover any user behavior or product usage elements",
+        "Mentioned user data or metrics without meaningful behavioral analysis",
+        "Displayed basic techniques like funnels or cohorts but lacked insight depth",
+        "Showcased strong analysis of user journeys, retention, and behavioral patterns",
+        "Provided compelling insights through advanced user behavior and usage mining"
+      ]
+    },
+    {
+      "id": 205203,
+      "text": "How well did you balance qualitative and quantitative analysis approaches?",
+      "options": [
+        "Analysis approach was completely quantitative without user perspective",
+        "Acknowledged need for user insights but did not incorporate effectively",
+        "Combined some qualitative data but still heavily weighted toward quantitative",
+        "Effectively balanced quantitative analysis with qualitative user research",
+        "Provided an exemplary multi-dimensional view integrating robust data and user focus"
+      ]
+    },
+    {
+      "id": 205204,
+      "text": "How strongly did your approach emphasize product experimentation and testing?",
+      "options": [
+        "Response did not cover any experimentation or testing elements",
+        "Mentioned testing but did not demonstrate understanding of exp. design",
+        "Displayed basic knowledge of A/B testing or experimentation principles",
+        "Clearly highlighted the importance of iterative testing and structured experiments",
+        "Provided a comprehensive experimentation strategy and framework"
+      ]
+    },
+    {
+      "id": 205205,
+      "text": "How impactfully did you communicate insights and recommendations?",
+      "options": [
+        "Lacked clear or actionable insights and recommendations for product teams",
+        "Provided recommendations but not quantified or tied to user/business impact",
+        "Communicated some insights but with gaps in quantification or prioritization",
+        "Clearly articulated prioritized, data-driven, and impactful recommendations",
+        "Delivered a highly compelling product analytics narrative quantifying key insights"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,102 @@
+{
+  "_id_structure": "2_two_digitFileSerialNumber(04)_questionType(1/2)_twoDigitQuestionSerialNumber(01)",
+  "type1": [
+    {
+      "id": 204101,
+      "text": "Did you clearly identify the key business problem or opportunity?"
+    },
+    {
+      "id": 204102,
+      "text": "Did you ask clarifying questions to gather additional context and requirements?"
+    },
+    {
+      "id": 204103,
+      "text": "Did you outline a structured approach for tackling the case study?"
+    },
+    {
+      "id": 204104,
+      "text": "Did you propose specific data sources and analytical techniques?"
+    },
+    {
+      "id": 204105,
+      "text": "Did you discuss potential challenges or limitations with the data or analysis?"
+    },
+    {
+      "id": 204106,
+      "text": "Did you highlight the key insights and recommendations from your analysis?"
+    },
+    {
+      "id": 204107,
+      "text": "Did you consider alternative perspectives or scenarios in your approach?"
+    },
+    {
+      "id": 204108,
+      "text": "Did you demonstrate business acumen and understanding of industry dynamics?"
+    },
+    {
+      "id": 204109,
+      "text": "Did you effectively communicate your thought process and rationale?"
+    },
+    {
+      "id": 204110,
+      "text": "Did you tie your recommendations back to the overarching business objectives?"
+    }
+  ],
+  "type2": [
+    {
+      "id": 204201,
+      "text": "How well did you structure your approach and break down the case into logical components?",
+      "options": [
+        "Approach was disorganized without a clear structure",
+        "Used a basic framework inconsistently or incompletely",
+        "Followed a structured approach but some components were unclear or missing",
+        "Clearly broke down the case using a relevant framework or structure",
+        "Perfectly structured approach tailored to the unique case context"
+      ]
+    },
+    {
+      "id": 204202,
+      "text": "How effectively did you apply data-driven analysis and quantitative reasoning?",
+      "options": [
+        "Response did not incorporate any data analysis or quantitative elements",
+        "Mentioned data or numbers without meaningful analysis or insights",
+        "Displayed basic analytical skills but lacked depth or rigor",
+        "Showcased strong quantitative abilities and insight-driven analysis",
+        "Provided compelling data-driven insights through advanced analytical techniques"
+      ]
+    },
+    {
+      "id": 204203,
+      "text": "How well did you handle ambiguity and make reasonable assumptions?",
+      "options": [
+        "Did not acknowledge or address any ambiguous elements",
+        "Struggled with ambiguity and made unreasonable or unsupported assumptions",
+        "Made some reasonable assumptions but did not fully address ambiguity",
+        "Effectively navigated ambiguity by making and validating key assumptions",
+        "Clearly articulated a structured approach for thriving in ambiguous situations"
+      ]
+    },
+    {
+      "id": 204204,
+      "text": "How strongly did your response demonstrate business judgment and strategic thinking?",
+      "options": [
+        "Response was solely tactical without any strategic considerations",
+        "Mentioned high-level business objectives but did not connect well to recommendations",
+        "Displayed some business acumen and strategic thinking inconsistently",
+        "Clearly incorporated business context and strategic considerations",
+        "Provided highly strategic recommendations aligned with overarching business goals"
+      ]
+    },
+    {
+      "id": 204205,
+      "text": "How persuasively did you communicate your insights and recommendations?",
+      "options": [
+        "Response lacked clear insights or recommendations",
+        "Provided recommendations but did not effectively support or articulate them",
+        "Communicated insights and recommendations with some gaps or lack of clarity",
+        "Clearly articulated well-supported insights and actionable recommendations",
+        "Delivered a highly compelling and influential presentation of insights and recommendations"
+      ]
+    }
+  ]
+}

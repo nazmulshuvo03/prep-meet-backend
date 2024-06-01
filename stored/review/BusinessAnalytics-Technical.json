@@ -1,0 +1,102 @@
+{
+  "_id_structure": "2_two_digitFileSerialNumber(02)_questionType(1/2)_twoDigitQuestionSerialNumber(01)",
+  "type1": [
+    {
+      "id": 202101,
+      "text": "Did you provide specific examples involving data analysis for business decisions?"
+    },
+    {
+      "id": 202102,
+      "text": "Did you clearly explain the business context and objectives?"
+    },
+    {
+      "id": 202103,
+      "text": "Did you describe the data sources and how you gathered requirements?"
+    },
+    {
+      "id": 202104,
+      "text": "Did you detail the analytical techniques or models you applied?"
+    },
+    {
+      "id": 202105,
+      "text": "Did you discuss the key performance indicators (KPIs) and metrics?"
+    },
+    {
+      "id": 202106,
+      "text": "Did you highlight the insights and recommendations from your analysis?"
+    },
+    {
+      "id": 202107,
+      "text": "Did you demonstrate problem-solving by overcoming data quality or stakeholder issues?"
+    },
+    {
+      "id": 202108,
+      "text": "Did you showcase collaboration with cross-functional teams or business partners?"
+    },
+    {
+      "id": 202109,
+      "text": "Did you highlight skills in data storytelling and presenting findings?"
+    },
+    {
+      "id": 202110,
+      "text": "Did you display business acumen and understanding of industry trends?"
+    }
+  ],
+  "type2": [
+    {
+      "id": 202201,
+      "text": "How well did you structure your responses with clear business problems, analytical approaches, and actionable recommendations?",
+      "options": [
+        "Responses were disorganized without a clear structure",
+        "Used a basic structure inconsistently or incompletely",
+        "Followed a structured format but some points were unclear or missing details",
+        "Clearly followed a structured format with appropriate details",
+        "Perfectly structured with concise and impactful details"
+      ]
+    },
+    {
+      "id": 202202,
+      "text": "How effectively did you demonstrate understanding of the business domain and industry?",
+      "options": [
+        "Examples did not showcase any business or industry knowledge",
+        "Mentioned business concepts without depth or context",
+        "Displayed working knowledge of the business and industry",
+        "Highlighted strong proficiency in applying business acumen to analysis",
+        "Provided compelling examples of leveraging deep industry expertise"
+      ]
+    },
+    {
+      "id": 202203,
+      "text": "How well did you handle data quality, ambiguity, or stakeholder challenges?",
+      "options": [
+        "Examples only involved clean data and clear requirements",
+        "Showed struggles with data issues or stakeholder misalignment",
+        "Demonstrated basic techniques like data cleaning or assumption clarification",
+        "Showcased ability to apply advanced methods for complex data or requirements",
+        "Clearly articulated structured frameworks for tackling data and stakeholder challenges"
+      ]
+    },
+    {
+      "id": 202204,
+      "text": "How strongly did your examples highlight business impact and data-driven decision making?",
+      "options": [
+        "Examples did not mention any business impact",
+        "Mentioned business problems but solutions were technically-focused",
+        "Displayed some consideration of business impacts in approach",
+        "Clearly made business objectives and impact the key priority",
+        "Provided powerful examples of driving strategic business decisions with data insights"
+      ]
+    },
+    {
+      "id": 202205,
+      "text": "How persuasively did you demonstrate skills in data storytelling and communication?",
+      "options": [
+        "Examples were solely technical analyses without clear communication",
+        "Mentioned presenting findings but did not elaborate on storytelling techniques",
+        "Displayed some data visualization and presentation skills inconsistently",
+        "Clearly articulated strategies for effective data storytelling and communication",
+        "Provided highly comprehensive examples covering data-driven storytelling and influence"
+      ]
+    }
+  ]
+}

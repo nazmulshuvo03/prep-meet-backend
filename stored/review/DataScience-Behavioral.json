@@ -1,0 +1,102 @@
+{
+  "_id_structure": "2_two_digitFileSerialNumber(03)_questionType(1/2)_twoDigitQuestionSerialNumber(01)",
+  "type1": [
+    {
+      "id": 203101,
+      "text": "Did you provide a specific example situation relevant to the role?"
+    },
+    {
+      "id": 203102,
+      "text": "Did you objectively describe the situation without judgmental statements?"
+    },
+    {
+      "id": 203103,
+      "text": "Did you clearly explain the context, challenges, and objectives involved?"
+    },
+    {
+      "id": 203104,
+      "text": "Did you detail the specific steps, analysis, or approach you took?"
+    },
+    {
+      "id": 203105,
+      "text": "Did you discuss what you learned or would do differently next time?"
+    },
+    {
+      "id": 203106,
+      "text": "Did you demonstrate problem-solving abilities through your thought process?"
+    },
+    {
+      "id": 203107,
+      "text": "Did you showcase self-awareness by acknowledging mistakes or areas for improvement?"
+    },
+    {
+      "id": 203108,
+      "text": "Did you highlight collaboration and working effectively with others?"
+    },
+    {
+      "id": 203109,
+      "text": "Did you display skills in communicating complex information clearly?"
+    },
+    {
+      "id": 203110,
+      "text": "Did you convey a passion for leveraging data to drive impact?"
+    }
+  ],
+  "type2": [
+    {
+      "id": 203201,
+      "text": "How well did you structure your responses using the STAR format (Situation, Task, Action, Result)?",
+      "options": [
+        "Responses were disorganized without a clear structure",
+        "Used the STAR format inconsistently or incompletely",
+        "Followed STAR format but some points were unclear or missing details",
+        "Clearly followed STAR format with appropriate situation details",
+        "Perfectly structured using STAR with concise and impactful details"
+      ]
+    },
+    {
+      "id": 203202,
+      "text": "How effectively did you demonstrate analytical and critical thinking abilities?",
+      "options": [
+        "Examples did not showcase any analytical or structured thinking",
+        "Mentioned analysis but actions were limited or lacked depth",
+        "Displayed basic analytical skills in straightforward situations",
+        "Highlighted strong analytical abilities in tackling complex problems",
+        "Provided compelling examples of leveraging advanced analytical techniques"
+      ]
+    },
+    {
+      "id": 203203,
+      "text": "How well did you handle ambiguity, changing priorities, or project constraints?",
+      "options": [
+        "Examples only involved low/no ambiguity or constraint situations",
+        "Showed struggles with ambiguity or constraints without clear approaches",
+        "Demonstrated basic approaches like making assumptions in ambiguous cases",
+        "Showcased ability to adapt plans and prioritize in changing environments",
+        "Clearly articulated structured frameworks for thriving amidst ambiguity"
+      ]
+    },
+    {
+      "id": 203204,
+      "text": "How strongly did your examples highlight customer/client focus and business impact?",
+      "options": [
+        "Examples did not mention any customer/client or business perspectives",
+        "Mentioned customers/clients but actions were analytically-focused",
+        "Displayed some consideration of customer needs and business impact",
+        "Clearly made customer/client needs and business objectives the key priority",
+        "Provided powerful examples directly linking analysis to customer/business value"
+      ]
+    },
+    {
+      "id": 203205,
+      "text": "How persuasively did you demonstrate skills in leadership, influence, and communication?",
+      "options": [
+        "Examples were purely individual contributor roles without leadership aspects",
+        "Mentioned team or stakeholder interactions but did not elaborate on influence",
+        "Displayed some leadership through guiding team tasks or information sharing",
+        "Clearly articulated strategies for motivating teams and influencing stakeholders",
+        "Provided comprehensive examples showcasing dynamic leadership and communication"
+      ]
+    }
+  ]
+}

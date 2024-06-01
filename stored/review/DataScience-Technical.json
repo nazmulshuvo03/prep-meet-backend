@@ -1,0 +1,102 @@
+{
+  "_id_structure": "2_two_digitFileSerialNumber(01)_questionType(1/2)_twoDigitQuestionSerialNumber(01)",
+  "type1": [
+    {
+      "id": 201101,
+      "text": "Did you provide specific examples involving data analysis, modeling, or coding?"
+    },
+    {
+      "id": 201102,
+      "text": "Did you clearly explain the data sources, features, and objectives?"
+    },
+    {
+      "id": 201103,
+      "text": "Did you describe the data cleaning and preprocessing steps taken?"
+    },
+    {
+      "id": 201104,
+      "text": "Did you detail the analytical techniques or models you applied?"
+    },
+    {
+      "id": 201105,
+      "text": "Did you discuss the evaluation metrics and model performance?"
+    },
+    {
+      "id": 201106,
+      "text": "Did you highlight any insights or business impacts from your analysis?"
+    },
+    {
+      "id": 201107,
+      "text": "Did you demonstrate problem-solving by overcoming data quality or technical issues?"
+    },
+    {
+      "id": 201108,
+      "text": "Did you showcase collaboration with cross-functional teams or stakeholders?"
+    },
+    {
+      "id": 201109,
+      "text": "Did you highlight skills in data visualization or communicating findings?"
+    },
+    {
+      "id": 201110,
+      "text": "Did you display curiosity and a passion for leveraging data to drive impact?"
+    }
+  ],
+  "type2": [
+    {
+      "id": 201201,
+      "text": "How well did you structure your responses with clear problem statements, approaches, and results?",
+      "options": [
+        "Responses were disorganized without a clear structure",
+        "Used a basic structure inconsistently or incompletely",
+        "Followed a structured format but some points were unclear or missing details",
+        "Clearly followed a structured format with appropriate details",
+        "Perfectly structured with concise and impactful details"
+      ]
+    },
+    {
+      "id": 201202,
+      "text": "How effectively did you demonstrate technical depth in data science tools and techniques?",
+      "options": [
+        "Examples did not showcase any specific technical skills",
+        "Mentioned basic tools or techniques without depth",
+        "Displayed working knowledge of some data science methods",
+        "Highlighted strong proficiency with multiple advanced tools and techniques",
+        "Provided compelling examples of expertise with cutting-edge data science capabilities"
+      ]
+    },
+    {
+      "id": 201203,
+      "text": "How well did you handle data quality, scale, or complexity challenges?",
+      "options": [
+        "Examples only involved small, clean datasets",
+        "Showed struggles with data issues without clear resolution approaches",
+        "Demonstrated basic techniques like filtering or sampling to address data challenges",
+        "Showcased ability to apply advanced methods for complex or large-scale data",
+        "Clearly articulated structured frameworks for tackling data quality and scale"
+      ]
+    },
+    {
+      "id": 201204,
+      "text": "How strongly did your examples highlight business impact and data-driven decision making?",
+      "options": [
+        "Examples did not mention any business context or impact",
+        "Mentioned business problems but solutions were technically-focused",
+        "Displayed some consideration of business impacts in approach",
+        "Clearly made business objectives and impact the key priority",
+        "Provided powerful examples of driving strategic business decisions with data insights"
+      ]
+    },
+    {
+      "id": 201205,
+      "text": "How persuasively did you demonstrate skills in experimental design and testing?",
+      "options": [
+        "Examples were solely descriptive analyses without experiments",
+        "Mentioned A/B testing but did not elaborate on experimental design principles",
+        "Displayed some understanding of experimental design inconsistently",
+        "Clearly articulated strategies for rigorous experiment design and analysis",
+        "Provided highly comprehensive examples covering experimental design, testing, and insights"
+      ]
+    }
+  ]
+}
