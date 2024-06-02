@@ -1,0 +1,102 @@
+{
+  "_id_structure": "3_two_digitFileSerialNumber(02)_questionType(1/2)_twoDigitQuestionSerialNumber(01)",
+  "type1": [
+    {
+      "id": 302101,
+      "text": "Did you listen carefully to understand the question being asked?"
+    },
+    {
+      "id": 302102,
+      "text": "Did you state your key assumptions upfront?"
+    },
+    {
+      "id": 302103,
+      "text": "Did you break down the problem into logical components?"
+    },
+    {
+      "id": 302104,
+      "text": "Did you use relative estimates or analogies to simplify the calculation?"
+    },
+    {
+      "id": 302105,
+      "text": "Did you perform the arithmetic calculations correctly?"
+    },
+    {
+      "id": 302106,
+      "text": "Did you round numbers appropriately for the context?"
+    },
+    {
+      "id": 302107,
+      "text": "Did you sense-check your final answer for reasonableness?"
+    },
+    {
+      "id": 302108,
+      "text": "Did you communicate your thought process clearly?"
+    },
+    {
+      "id": 302109,
+      "text": "Did you revise your assumptions if the interviewer provided new information?"
+    },
+    {
+      "id": 302110,
+      "text": "Did you keep your answer concise instead of overcomplicating?"
+    }
+  ],
+  "type2": [
+    {
+      "id": 302201,
+      "text": "How structured was your approach to the guesstimate?",
+      "options": [
+        "No clear approach, jumped straight into assumptions",
+        "Broke it down partially but missing key components",
+        "Followed a basic structured approach",
+        "Deployed an insightful framework to break it down",
+        "Comprehensive, innovative problem restructuring"
+      ]
+    },
+    {
+      "id": 302202,
+      "text": "How reasonable were the assumptions you made?",
+      "options": [
+        "Assumptions lacked rationale or were wildly inaccurate",
+        "Some assumptions made sense, others felt unrealistic",
+        "Assumptions were generally reasonable",
+        "Well-justified, researched assumptions fitting the context",
+        "Thoughtful, unique, and realistically conservative assumptions"
+      ]
+    },
+    {
+      "id": 302203,
+      "text": "How comfortable were you with quantitative calculations?",
+      "options": [
+        "Unable to perform any calculations successfully",
+        "Got stuck on basic arithmetic multiple times",
+        "Completed straightforward calculations correctly",
+        "Handled complex calculations with some minor errors",
+        "Expertly worked through multi-step math with proper rounding"
+      ]
+    },
+    {
+      "id": 302204,
+      "text": "How effectively did you explain your process?",
+      "options": [
+        "Struggled to articulate reasoning behind steps",
+        "Explained approach but some gaps in clarity",
+        "Walkthrough was straightforward and easy to follow",
+        "Excellent framing of why/how for each component",
+        "Flawlessly clear, engaging, and insightful explanation"
+      ]
+    },
+    {
+      "id": 302205,
+      "text": "How did you adapt when the interviewer provided new information?",
+      "options": [
+        "Repeatedly asked for clarification instead of moving forward",
+        "Stuck to original assumptions/approach despite new info",
+        "Attempted to modify a few assumptions based on new info",
+        "Nimbly adjusted approach to account for key new data points",
+        "Seamlessly pivoted and developed innovative new strategies"
+      ]
+    }
+  ]
+}

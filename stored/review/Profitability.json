@@ -1,0 +1,102 @@
+{
+  "_id_structure": "3_two_digitFileSerialNumber(01)_questionType(1/2)_twoDigitQuestionSerialNumber(01)",
+  "type1": [
+    {
+      "id": 301101,
+      "text": "Did you identify the key profit drivers and cost components for the business?"
+    },
+    {
+      "id": 301102,
+      "text": "Did you analyze trends in revenue, costs, and profitability over time?"
+    },
+    {
+      "id": 301103,
+      "text": "Did you segment profitability by product/service, customer, region etc.?"
+    },
+    {
+      "id": 301104,
+      "text": "Did you explore potential root causes behind profitability issues?"
+    },
+    {
+      "id": 301105,
+      "text": "Did you propose specific actions to improve pricing strategy?"
+    },
+    {
+      "id": 301106,
+      "text": "Did you recommend ways to optimize the company's cost structure?"
+    },
+    {
+      "id": 301107,
+      "text": "Did you consider process improvements or operational efficiencies?"
+    },
+    {
+      "id": 301108,
+      "text": "Did you evaluate opportunities for revenue growth initiatives?"
+    },
+    {
+      "id": 301109,
+      "text": "Did you prioritize your recommendations based on impact and feasibility?"
+    },
+    {
+      "id": 301110,
+      "text": "Did you quantify the potential profitability upside of your proposals?"
+    }
+  ],
+  "type2": [
+    {
+      "id": 301201,
+      "text": "How well did you structure your profitability analysis and recommendations?",
+      "options": [
+        "Began without a clear approach",
+        "Used an incomplete or flawed framework",
+        "Followed a basic profitability framework",
+        "Deployed a tailored, insightful structure",
+        "Provided a comprehensive, innovative profitability analysis"
+      ]
+    },
+    {
+      "id": 301202,
+      "text": "How effectively did you apply quantitative and analytical skills?",
+      "options": [
+        "Relied entirely on qualitative factors",
+        "Attempted some analysis but with flaws",
+        "Performed standard financial calculations",
+        "Conducted robust quantitative modeling",
+        "Provided sophisticated data-driven insights"
+      ]
+    },
+    {
+      "id": 301203,
+      "text": "How well did you consider the big picture business context?",
+      "options": [
+        "Recommendations showed narrow perspective",
+        "Acknowledged some broader factors",
+        "Weighed most major business considerations",
+        "Integrated strategic, operational, and financial drivers",
+        "Holistic view synthesizing all relevant contexts"
+      ]
+    },
+    {
+      "id": 301204,
+      "text": "How persuasively did you convey practical and impactful recommendations?",
+      "options": [
+        "Proposals lacked specifics or rationale",
+        "Recommendations seemed unrealistic",
+        "Ideas were reasonable but modest impact",
+        "Detailed, well-justified, high-impact plans",
+        "Innovative, prioritized, quantified recommendations"
+      ]
+    },
+    {
+      "id": 301205,
+      "text": "How clearly did you tailor the profitability case to the client's situation?",
+      "options": [
+        "Applied a generic, one-size-fits-all approach",
+        "Acknowledged client specifics but did not integrate well",
+        "Incorporated some relevant client context",
+        "Customized profitability drivers to the client",
+        "Uniquely tailored, bespoke recommendations"
+      ]
+    }
+  ]
+}

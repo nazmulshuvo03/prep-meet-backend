@@ -1,0 +1,102 @@
+{
+  "_id_structure": "3_two_digitFileSerialNumber(05)_questionType(1/2)_twoDigitQuestionSerialNumber(01)",
+  "type1": [
+    {
+      "id": 305101,
+      "text": "Did you assess the company's current market position and trajectory?"
+    },
+    {
+      "id": 305102,
+      "text": "Did you analyze the company's product/service offering and value prop?"
+    },
+    {
+      "id": 305103,
+      "text": "Did you segment and size the addressable market opportunity?"
+    },
+    {
+      "id": 305104,
+      "text": "Did you evaluate the competitive landscape and competitive advantages?"
+    },
+    {
+      "id": 305105,
+      "text": "Did you explore different go-to-market models or channel strategies?"
+    },
+    {
+      "id": 305106,
+      "text": "Did you recommend pricing and positioning approaches?"
+    },
+    {
+      "id": 305107,
+      "text": "Did you outline a marketing strategy to drive awareness and demand?"
+    },
+    {
+      "id": 305108,
+      "text": "Did you consider partnerships or ecosystem opportunities?"
+    },
+    {
+      "id": 305109,
+      "text": "Did you develop a high-level execution plan for the growth strategy?"
+    },
+    {
+      "id": 305110,
+      "text": "Did you quantify the potential revenue upside from your recommendations?"
+    }
+  ],
+  "type2": [
+    {
+      "id": 305201,
+      "text": "How well did you structure the go-to-market/growth strategy?",
+      "options": [
+        "No clear approach, jumped between topics disjointedly",
+        "Mentioned some relevant areas but lacking overarching structure",
+        "Followed a standard go-to-market or strategy framework",
+        "Tailored the structure insightfully to the specific situation",
+        "Innovative, cohesive architecture for the growth plan"
+      ]
+    },
+    {
+      "id": 305202,
+      "text": "How thoroughly did you analyze the market and competitive dynamics?",
+      "options": [
+        "Surface-level with no substantive market research or insights",
+        "Explored market partially but missed several key factors",
+        "Conducted standard market sizing, segmentation, competitor analysis",
+        "Integrated multiple lenses into a nuanced market assessment",
+        "Sophisticated competitive analysis unlocking unique perspectives"
+      ]
+    },
+    {
+      "id": 305203,
+      "text": "How insightful were your go-to-market strategy recommendations?",
+      "options": [
+        "Generic recommendations lacking specifics for this company",
+        "Mentioned typical strategies but did not elaborate much",
+        "Reasonable, textbook suggestions for go-to-market approach",
+        "Creative, tailored ideas accounting for the company's advantages",
+        "Groundbreaking, evidence-backed, highly customized proposals"
+      ]
+    },
+    {
+      "id": 305204,
+      "text": "How well did you incorporate operational considerations?",
+      "options": [
+        "Ignored execution risks and operational requirements",
+        "Mentioned some high-level sales/marketing enablement needs",
+        "Incorporated sales force and capability building implications",
+        "Accounted for technology and process support needed",
+        "Cohesive operational roadmap covering all key enablers"
+      ]
+    },
+    {
+      "id": 305205,
+      "text": "How effectively did you quantify and prioritize the opportunities?",
+      "options": [
+        "Did not attempt any sizing of the market or potential impact",
+        "Tried some high-level sizing but with gaps or flaws",
+        "Properly sized and prioritized the most obvious opportunities",
+        "Comprehensive quantification and prioritization framework",
+        "Precise modeling with nuanced qualitative prioritization as well"
+      ]
+    }
+  ]
+}

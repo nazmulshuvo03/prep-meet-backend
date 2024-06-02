@@ -1,0 +1,102 @@
+{
+  "_id_structure": "3_two_digitFileSerialNumber(03)_questionType(1/2)_twoDigitQuestionSerialNumber(01)",
+  "type1": [
+    {
+      "id": 303101,
+      "text": "Did you assess the strategic rationale and fit for the proposed M&A deal?"
+    },
+    {
+      "id": 303102,
+      "text": "Did you analyze potential revenue synergies from the combination?"
+    },
+    {
+      "id": 303103,
+      "text": "Did you evaluate cost synergy opportunities from consolidation?"
+    },
+    {
+      "id": 303104,
+      "text": "Did you examine financial impacts like tax benefits or dis-synergies?"
+    },
+    {
+      "id": 303105,
+      "text": "Did you consider integration risks and challenges in your analysis?"
+    },
+    {
+      "id": 303106,
+      "text": "Did you reference relevant regulatory or antitrust considerations?"
+    },
+    {
+      "id": 303107,
+      "text": "Did you estimate a reasonable valuation range for the target?"
+    },
+    {
+      "id": 303108,
+      "text": "Did you evaluate alternative M&A targets or organic growth paths?"
+    },
+    {
+      "id": 303109,
+      "text": "Did you weigh pros and cons of the deal through objective criteria?"
+    },
+    {
+      "id": 303110,
+      "text": "Did you provide a clear, fact-based recommendation on the M&A?"
+    }
+  ],
+  "type2": [
+    {
+      "id": 303201,
+      "text": "How well did you structure the M&A analysis?",
+      "options": [
+        "No clear approach, jumped between topics haphazardly",
+        "Mentioned some relevant areas but lack of framework",
+        "Followed a standard M&A framework or process",
+        "Tailored the structure insightfully to the specific situation",
+        "Deployed a comprehensive, innovative M&A architecture"
+      ]
+    },
+    {
+      "id": 303202,
+      "text": "How thoroughly did you evaluate strategic considerations?",
+      "options": [
+        "Looked only at financials with no strategic angle",
+        "Mentioned strategy at high level but did not analyze in-depth",
+        "Explored most major strategic factors like market position",
+        "Integrated multiple strategic lenses beyond standard areas",
+        "Provided sophisticated, nuanced strategic perspectives"
+      ]
+    },
+    {
+      "id": 303203,
+      "text": "How effectively did you model and analyze the deal economics?",
+      "options": [
+        "Did not attempt any financial evaluation or modeling",
+        "Tried some analysis but with major calculation errors",
+        "Performed standard accretion/dilution and synergy estimates",
+        "Built quality financial model integrating multiple factors",
+        "Thoughtful, robust model with insightful sensitivity analyses"
+      ]
+    },
+    {
+      "id": 303204,
+      "text": "How well did you incorporate organizational considerations?",
+      "options": [
+        "Ignored integration and human capital implications",
+        "Mentioned culture or restructuring challenges briefly",
+        "Incorporated some change management and people factors",
+        "Weighed strategic, financial, and organizational dimensions",
+        "Provided well-rounded, pragmatic organisational insights"
+      ]
+    },
+    {
+      "id": 303205,
+      "text": "How convincing was your final recommendation?",
+      "options": [
+        "Did not formulate a clear point of view on whether to pursue",
+        "Recommendation contradicted analysis or lacked solid reasoning",
+        "Provided a reasonable recommendation fitting the baseline data",
+        "Articulated a nuanced recommendation accounting for tradeoffs",
+        "Persuasive, fact-based recommendation with risks/mitigations"
+      ]
+    }
+  ]
+}
