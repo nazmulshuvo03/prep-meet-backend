@@ -4,13 +4,6 @@ const { profileCompletionStatus } = require("../helpers/user");
 const asyncWrapper = require("../middlewares/async");
 const { WorkExperience } = require("../models/workExperience");
 
-const _getWorxExperiencesOfProfession = async (profession_id) => {
-  const data = await WorkExperience.findAll({
-    where: { professionId: profession_id },
-  });
-  return data;
-};
-
 const _getUserCurrentCompany = async (userId) => {
   const data = await WorkExperience.findOne({
     where: { user_id: userId, currentCompany: true },
@@ -115,7 +108,6 @@ const deleteWorkExp = asyncWrapper(async (req, res) => {
 });
 
 module.exports = {
-  _getWorxExperiencesOfProfession,
   _getUserCurrentCompany,
   getAllWorkExp,
   createWorkExp,

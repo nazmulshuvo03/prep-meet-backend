@@ -3,11 +3,8 @@ const { BAD_REQUEST } = require("../constants/errorCodes");
 const asyncWrapper = require("../middlewares/async");
 const { Profession } = require("../models/profession");
 const { Skill, ExperienceType } = require("../models/skill");
-const {
-  _getSkillsOfProfession,
-  _getExperienceTypesOfProfession,
-} = require("./skill");
-const { _getWorxExperiencesOfProfession } = require("./workExperience");
+const { _getSkillsOfProfession } = require("./skill");
+const { _getExperienceTypesOfProfession } = require("./experienceTypes");
 
 const getAllProfessions = asyncWrapper(async (_req, res) => {
   const pfList = await Profession.findAll({
@@ -80,9 +77,6 @@ const deleteProfession = asyncWrapper(async (req, res) => {
   const connectedExpTypes = await _getExperienceTypesOfProfession(profId);
   if (connectedExpTypes && connectedExpTypes.length)
     return res.fail("You have Experience Types connected to this profession");
-  const connectedWorkExp = await _getWorxExperiencesOfProfession(profId);
-  if (connectedWorkExp && connectedWorkExp.length)
-    return res.fail("You have Work experiences connected to this profession");
   await Profession.destroy({
     where: { id: profId },
   });
