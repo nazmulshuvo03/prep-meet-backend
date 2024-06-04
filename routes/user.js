@@ -9,6 +9,7 @@ const {
   getProgress,
   switchEmailSubscription,
   getDashboardProfiles,
+  updateUserLastVisit,
 } = require("../controllers/user");
 
 const workExperienceRoutes = require("./workExperience");
@@ -30,6 +31,7 @@ router.route("/check").post(checkProperty);
 router.route("/all?").get(getAllUserProfiles);
 router.route("/dashboard?").get(getDashboardProfiles);
 router.route("/subscription").put(switchEmailSubscription);
+router.route("/lastVisit").put(updateUserLastVisit);
 router.route("/:userId").put(updateUserProfile).delete(deleteUser);
 
 module.exports = router;

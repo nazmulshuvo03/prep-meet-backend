@@ -71,6 +71,7 @@ const Profile = sequelize.define("profile", {
     type: DataTypes.BOOLEAN,
     defaultValue: false,
   },
+  lastVisit: DataTypes.DATE,
 });
 
 const Verification = sequelize.define("verification", {

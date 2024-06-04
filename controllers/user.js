@@ -296,6 +296,13 @@ const switchEmailSubscription = asyncWrapper(async (req, res) => {
   res.success(found);
 });
 
+const updateUserLastVisit = asyncWrapper(async (req, res) => {
+  const userProfile = res.locals.user;
+  const { lastVisit } = req.body;
+  userProfile.update({ lastVisit });
+  res.success("Success");
+});
+
 module.exports = {
   _getUserProfile,
   _getUserType,
@@ -312,4 +319,5 @@ module.exports = {
   checkProperty,
   getProgress,
   switchEmailSubscription,
+  updateUserLastVisit,
 };
