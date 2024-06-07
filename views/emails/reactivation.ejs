@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+
+<body style="color: #333;">
+  <p>Hey there,</p>
+
+  <p>
+    We have not seen you for a long time. You can visit our <a href="<%= process.env.DASHBOARD_URL %>/people"
+      target="_blank">People</a> page to meet new people and your <a
+      href="<%= process.env.DASHBOARD_URL %>/public-profile/<%= userId %>" target="_blank">profile</a> page to provide
+    new schedule.
+  </p>
+
+  <div>
+    <p>
+    <div>Sincerely,</div>
+    <div>Team Candidace,</div>
+    <a href="<%= process.env.DASHBOARD_URL %>/" target="_blank" style="font-size: 13px; font-weight: 600;">Candidace</a>
+    </p>
+
+    <p>
+      —---------------------------------------------
+    </p>
+
+    <p>Follow us on <a href="https://www.linkedin.com/company/102830578/" target="_blank">LinkedIn</a></p>
+    <a href="<%= process.env.DASHBOARD_URL %>/unsubscribe/<%= userId %>" target="_blank">unsubscribe</a>
+  </div>
+</body>
+
+</html>

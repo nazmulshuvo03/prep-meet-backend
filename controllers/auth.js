@@ -2,22 +2,13 @@ const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
 const asyncWrapper = require("../middlewares/async");
 const { User, Verification, Profile } = require("../models/user");
-const {
-  _updateUserProfile,
-  _getUserProfile,
-  _checkIfUserUnsubscribed,
-  _getUserType,
-} = require("./user");
+const { _updateUserProfile, _getUserProfile, _getUserType } = require("./user");
 const { getAccessTokenFromAuth } = require("../helpers/oAuth");
 const { generateUsername } = require("../helpers/string");
-const {
-  profileCompletionStatus,
-  isProfileComplete,
-} = require("../helpers/user");
+const { profileCompletionStatus } = require("../helpers/user");
 const {
   sendWelcomeEmail,
   sendVerificationEmail,
-  sendProfileCompletionReminderEmail,
 } = require("../helpers/emails");
 const MIXPANEL_TRACK = require("../helpers/mixpanel");
 const crypto = require("crypto");
@@ -245,51 +236,6 @@ const oauthCallback = asyncWrapper(async (req, res) => {
   }
 });
 
-const sendAllUserProfileCompletionReminder = async () => {
-  const users = await User.findAll();
-  const today = new Date();
-
-  for (let user of users) {
-    const createdAt = new Date(user.createdAt);
-    const createdAtWithoutTime = new Date(
-      createdAt.getFullYear(),
-      createdAt.getMonth(),
-      createdAt.getDate()
-    );
-    const todayWithoutTime = new Date(
-      today.getFullYear(),
-      today.getMonth(),
-      today.getDate()
-    );
-    const timeDifference = Math.abs(todayWithoutTime - createdAtWithoutTime);
-    const daysSinceCreation = Math.ceil(timeDifference / (1000 * 60 * 60 * 24));
-
-    if (!(await isProfileComplete(user.id))) {
-      if (!(await _checkIfUserUnsubscribed(user.id))) {
-        if (daysSinceCreation === 2) {
-          sendProfileCompletionReminderEmail({
-            receiver: user.email,
-            userId: user.id,
-            day: 1,
-          });
-        } else if (daysSinceCreation === 3) {
-          sendProfileCompletionReminderEmail({
-            receiver: user.email,
-            userId: user.id,
-            day: 3,
-          });
-        } else if (daysSinceCreation === 5) {
-          sendProfileCompletionReminderEmail({
-            receiver: user.email,
-            userId: user.id,
-            day: 5,
-          });
-        }
-      } else console.log(`Email ${user.email} unsubscribed`);
-    }
-  }
-};
-
 module.exports = {
   TOKEN_COOKIE_NAME,
   signupUser,
@@ -300,5 +246,4 @@ module.exports = {
   validateEmailVerification,
   getAllVerificationToken,
   oauthCallback,
-  sendAllUserProfileCompletionReminder,
 };
