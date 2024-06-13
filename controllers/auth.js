@@ -56,6 +56,9 @@ const _createEmailVerification = async (userId, receiver) => {
 
 const signupUser = asyncWrapper(async (req, res) => {
   const { email, password, targetProfessionId, timezone } = req.body;
+  if (!email) return res.fail("Email is required");
+  if (!password) return res.fail("Password is required");
+  if (!targetProfessionId) return res.fail("Career path is required");
   const exists = await User.findOne({ where: { email } });
   if (exists) {
     return res.fail("Email already exists");
