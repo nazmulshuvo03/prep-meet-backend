@@ -7,6 +7,7 @@ const availabilityRoutes = require("./availability");
 const meetingRoutes = require("./meeting");
 const staticRoutes = require("./static");
 const reviewRoutes = require("./review");
+const messageRoutes = require("./message");
 const fileRoutes = require("./file");
 const { requireAuth } = require("../middlewares/auth");
 const { checkUser } = require("../middlewares/user");
@@ -31,5 +32,6 @@ router.use(requireAuth);
 router.use("/availability", availabilityRoutes);
 router.use("/meeting", meetingRoutes);
 router.use("/review", reviewRoutes);
+router.use("/message", messageRoutes);
 
 module.exports = router;
