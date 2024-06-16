@@ -1,7 +1,8 @@
 const { Message } = require("../models/message");
-const { User } = require("../models/user");
+const { Profile } = require("../models/user");
 const asyncWrapper = require("../middlewares/async");
 const { NOT_FOUND } = require("../constants/errorCodes");
+const { Op } = require("sequelize");
 
 exports.sendMessage = asyncWrapper(async (req, res) => {
   const { senderId, receiverId, subject, body } = req.body;
@@ -9,7 +10,7 @@ exports.sendMessage = asyncWrapper(async (req, res) => {
     return res.fail("Invalid input data", BAD_REQUEST);
 
   const message = await Message.create({ senderId, receiverId, subject, body });
-  res.success(message, CREATED);
+  res.success(message);
 });
 
 exports.getInbox = asyncWrapper(async (req, res) => {
@@ -18,7 +19,7 @@ exports.getInbox = asyncWrapper(async (req, res) => {
   // Find all messages where the current user is the receiver, grouped by sender
   const messages = await Message.findAll({
     where: { receiverId: userId },
-    include: [{ model: User, as: "sender" }],
+    include: [{ model: Profile, as: "sender" }],
     order: [
       ["isRead", "ASC"], // Unread messages first
       ["createdAt", "DESC"], // Latest message first
@@ -46,7 +47,7 @@ exports.getSentMessages = asyncWrapper(async (req, res) => {
   // Find all messages where the current user is the sender, grouped by receiver
   const messages = await Message.findAll({
     where: { senderId: userId },
-    include: [{ model: User, as: "receiver" }],
+    include: [{ model: Profile, as: "receiver" }],
     order: [
       ["isRead", "ASC"], // Unread messages first
       ["createdAt", "DESC"], // Latest message first
@@ -83,8 +84,8 @@ exports.getChatbox = asyncWrapper(async (req, res) => {
       ],
     },
     include: [
-      { model: User, as: "sender" },
-      { model: User, as: "receiver" },
+      { model: Profile, as: "sender" },
+      { model: Profile, as: "receiver" },
     ],
     order: [["createdAt", "ASC"]], // Oldest messages first
   });
@@ -99,8 +100,8 @@ exports.getMessageById = asyncWrapper(async (req, res) => {
 
   const message = await Message.findByPk(id, {
     include: [
-      { model: User, as: "sender" },
-      { model: User, as: "receiver" },
+      { model: Profile, as: "sender" },
+      { model: Profile, as: "receiver" },
     ],
   });
   if (!message) return res.fail("Message not found", NOT_FOUND);

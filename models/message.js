@@ -1,6 +1,6 @@
 const { DataTypes, Sequelize } = require("sequelize");
 const sequelize = require("../db");
-const { User } = require("./user");
+const { Profile } = require("./user");
 
 const Message = sequelize.define("message", {
   id: {
@@ -13,7 +13,7 @@ const Message = sequelize.define("message", {
     type: DataTypes.UUID,
     allowNull: false,
     references: {
-      model: User,
+      model: Profile,
       key: "id",
     },
   },
@@ -21,7 +21,7 @@ const Message = sequelize.define("message", {
     type: DataTypes.UUID,
     allowNull: false,
     references: {
-      model: User,
+      model: Profile,
       key: "id",
     },
   },
@@ -39,9 +39,9 @@ const Message = sequelize.define("message", {
   },
 });
 
-User.hasMany(Message, { as: "sentMessages", foreignKey: "senderId" });
-User.hasMany(Message, { as: "receivedMessages", foreignKey: "receiverId" });
-Message.belongsTo(User, { as: "sender", foreignKey: "senderId" });
-Message.belongsTo(User, { as: "receiver", foreignKey: "receiverId" });
+Profile.hasMany(Message, { as: "sentMessages", foreignKey: "senderId" });
+Profile.hasMany(Message, { as: "receivedMessages", foreignKey: "receiverId" });
+Message.belongsTo(Profile, { as: "sender", foreignKey: "senderId" });
+Message.belongsTo(Profile, { as: "receiver", foreignKey: "receiverId" });
 
 module.exports = { Message };
