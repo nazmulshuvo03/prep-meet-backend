@@ -1,7 +1,7 @@
 const { Message } = require("../models/message");
 const { Profile } = require("../models/user");
 const asyncWrapper = require("../middlewares/async");
-const { NOT_FOUND } = require("../constants/errorCodes");
+const { NOT_FOUND, BAD_REQUEST } = require("../constants/errorCodes");
 const { Op } = require("sequelize");
 
 exports.sendMessage = asyncWrapper(async (req, res) => {
@@ -106,6 +106,25 @@ exports.getMessageById = asyncWrapper(async (req, res) => {
   });
   if (!message) return res.fail("Message not found", NOT_FOUND);
   res.success(message);
+});
+
+exports.markMessagesAsRead = asyncWrapper(async (req, res) => {
+  const userId = res.locals.user.id;
+  const { otherUserId } = req.body;
+  if (!userId || !otherUserId)
+    return res.fail("Invalid input data", BAD_REQUEST);
+
+  await Message.update(
+    { isRead: true },
+    {
+      where: {
+        senderId: otherUserId,
+        receiverId: userId,
+        isRead: false,
+      },
+    }
+  );
+  res.success("Messages marked as read");
 });
 
 exports.deleteMessage = asyncWrapper(async (req, res) => {
