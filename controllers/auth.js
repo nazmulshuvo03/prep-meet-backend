@@ -9,21 +9,21 @@ const { profileCompletionStatus } = require("../helpers/user");
 const {
   sendWelcomeEmail,
   sendVerificationEmail,
+  sendForgetPasswordEmail,
 } = require("../helpers/emails");
 const MIXPANEL_TRACK = require("../helpers/mixpanel");
 const crypto = require("crypto");
-
-const TOKEN_COOKIE_NAME = "prepMeetToken";
-const MAX_AGE = 30 * 24 * 60 * 60;
-const COOKIE_OPTIONS = {
-  httpOnly: true,
-  maxAge: MAX_AGE * 1000,
-  // domain: 'candidace.fyi', // for using same cookie in different application
-};
+const { NOT_FOUND } = require("../constants/errorCodes");
+const { decodeToken } = require("../middlewares/user");
+const {
+  TOKEN_COOKIE_NAME,
+  TOKEN_MAX_AGE,
+  COOKIE_OPTIONS,
+} = require("../constants/cookie");
 
 const _createToken = (data) => {
   return jwt.sign(data, process.env.JWT_SECRET, {
-    expiresIn: MAX_AGE,
+    expiresIn: TOKEN_MAX_AGE,
   });
 };
 
@@ -52,6 +52,26 @@ const _createEmailVerification = async (userId, receiver) => {
     });
   }
   await sendVerificationEmail({ token, receiver });
+};
+
+const _createForgetPassword = async (userId, receiver) => {
+  const token = _createToken({
+    email: receiver,
+    verificationType: "FORGET_PASSWORD",
+  });
+  const found = await Verification.findOne({
+    where: { userId, verificationType: "FORGET_PASSWORD" },
+  });
+  if (found) {
+    found.update({ token });
+  } else {
+    await Verification.create({
+      userId,
+      token,
+      verificationType: "FORGET_PASSWORD",
+    });
+  }
+  await sendForgetPasswordEmail({ token, receiver });
 };
 
 const signupUser = asyncWrapper(async (req, res) => {
@@ -214,6 +234,38 @@ const validateEmailVerification = asyncWrapper(async (req, res) => {
   }
 });
 
+const sendForgetPassword = asyncWrapper(async (req, res) => {
+  const { email } = req.body;
+  if (!email) res.fail("You have not provided any email address", NOT_FOUND);
+  const user = await Profile.findOne({ where: { email } });
+  if (!user) res.fail("Email not found", NOT_FOUND);
+  await _createForgetPassword(user.id, user.email);
+  res.success(
+    "Email sent to this address. Please check your inbox and reset password"
+  );
+});
+
+const resetPassword = asyncWrapper(async (req, res) => {
+  const { token, password } = req.body;
+  const { email, verificationType } = decodeToken(token);
+  const user = await User.findOne({ where: { email } });
+  if (!user) return res.fail("User not found", NOT_FOUND);
+  const data = await Verification.findOne({
+    where: {
+      userId: user.id,
+      verificationType,
+    },
+  });
+  if (data && data.dataValues.token === token) {
+    const hashedPassword = await bcrypt.hash(password, 10);
+    user.update({ password: hashedPassword });
+    data.destroy();
+    return res.success("Password updated. Please login");
+  } else {
+    return res.fail("Mismatched token");
+  }
+});
+
 const getAllVerificationToken = asyncWrapper(async (req, res) => {
   const { userId } = req.params;
   let list;
@@ -249,4 +301,6 @@ module.exports = {
   validateEmailVerification,
   getAllVerificationToken,
   oauthCallback,
+  sendForgetPassword,
+  resetPassword,
 };

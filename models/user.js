@@ -81,6 +81,11 @@ const Verification = sequelize.define("verification", {
     autoIncrement: true,
   },
   userId: { type: DataTypes.UUID, allowNull: false },
+  verificationType: {
+    type: DataTypes.ENUM("EMAIL_VERIFICATION", "FORGET_PASSWORD"),
+    allowNull: false,
+    defaultValue: "EMAIL_VERIFICATION",
+  },
   token: DataTypes.STRING,
 });
 

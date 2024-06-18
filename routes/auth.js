@@ -8,6 +8,8 @@ const {
   validateEmailVerification,
   googleAuth,
   getAllVerificationToken,
+  sendForgetPassword,
+  resetPassword,
 } = require("../controllers/auth");
 
 const router = Router();
@@ -20,5 +22,7 @@ router.route("/resendEmailVerification").post(resendEmailVerification);
 router.route("/validateEmailVerification").post(validateEmailVerification);
 router.route("/tokens/:userId?").get(getAllVerificationToken);
 router.route("/oauth/callback").get(oauthCallback);
+router.route("/forgetPassword").post(sendForgetPassword);
+router.route("/resetPassword").post(resetPassword);
 
 module.exports = router;

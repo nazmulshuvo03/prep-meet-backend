@@ -50,7 +50,7 @@ const sendVerificationEmail = async (props) => {
   const mailOptions = {
     from: `Team Candidace <${process.env.EMAIL_SENDER}>`,
     to: props.receiver,
-    subject: "Email verification",
+    subject: "Verify Candidace Email",
     html: compiledTemplate(props),
   };
 
@@ -83,6 +83,19 @@ const sendReactivationReminderEmail = async (props) => {
   await transporter.sendMail(mailOptions);
 };
 
+const sendForgetPasswordEmail = async (props) => {
+  const compiledTemplate = getCompiledFile("forget_password");
+
+  const mailOptions = {
+    from: `Team Candidace <${process.env.EMAIL_SENDER}>`,
+    to: props.receiver,
+    subject: "Reset your Candidace Password",
+    html: compiledTemplate(props),
+  };
+
+  await transporter.sendMail(mailOptions);
+};
+
 module.exports = {
   getMeetingEmailTemplate,
   sendWelcomeEmail,
@@ -90,4 +103,5 @@ module.exports = {
   sendVerificationEmail,
   sendProfileCompletionReminderEmail,
   sendReactivationReminderEmail,
+  sendForgetPasswordEmail,
 };
