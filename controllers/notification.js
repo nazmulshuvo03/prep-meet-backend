@@ -1,5 +1,6 @@
 const asyncWrapper = require("../middlewares/async");
 const { Notification } = require("../models/notification");
+const { getIo, getSocketUsers } = require("../socket");
 
 const getAllNotifications = asyncWrapper(async (req, res) => {
   const { userId } = req.params;
@@ -18,6 +19,12 @@ const createNotification = asyncWrapper(async (req, res) => {
   const notification = await Notification.create({ userId, title, message });
   if (!notification) {
     return res.fail("Notification could not be created");
+  }
+  const io = getIo();
+  const socketUsers = getSocketUsers();
+  const socketId = socketUsers[userId];
+  if (socketId) {
+    io.to(socketId).emit("notification", notification);
   }
   res.success(notification);
 });

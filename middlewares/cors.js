@@ -4,6 +4,11 @@ const cors = require("cors");
 
 // const environment = process.env.NODE_ENV || "local";
 
+const corsOptions = {
+  origin: true,
+  credentials: true,
+};
+
 // function (origin, callback) {
 //       console.log(origin);
 //       if (!origin) {
@@ -23,10 +28,7 @@ const cors = require("cors");
 //     }
 
 function configureCors() {
-  return cors({
-    origin: true,
-    credentials: true,
-  });
+  return cors(corsOptions);
 }
 
-module.exports = configureCors;
+module.exports = { corsOptions, configureCors };
