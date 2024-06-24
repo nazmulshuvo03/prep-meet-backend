@@ -8,13 +8,17 @@ const getAllNotifications = asyncWrapper(async (req, res) => {
     where: { userId },
     order: [["createdAt", "DESC"]],
   });
+  const unreadNotifications = await Notification.findAll({
+    where: { userId, read: false },
+    order: [["createdAt", "DESC"]],
+  });
   const unreadCount = await Notification.count({
     where: { userId, read: false },
   });
   if (!notifications) {
     return res.fail("No notifications found for this user");
   }
-  res.success({ notifications, unreadCount });
+  res.success({ notifications, unreadNotifications, unreadCount });
 });
 
 const createNotification = asyncWrapper(async (req, res) => {
