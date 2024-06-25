@@ -5,7 +5,8 @@ const { NOT_FOUND, BAD_REQUEST } = require("../constants/errorCodes");
 const { Op } = require("sequelize");
 
 exports.sendMessage = asyncWrapper(async (req, res) => {
-  const { senderId, receiverId, subject, body } = req.body;
+  const senderId = res.locals.user.id;
+  const { receiverId, subject, body } = req.body;
   if (!senderId || !receiverId || !body)
     return res.fail("Invalid input data", BAD_REQUEST);
 
@@ -13,12 +14,45 @@ exports.sendMessage = asyncWrapper(async (req, res) => {
   res.success(message);
 });
 
+exports.getAllMessages = asyncWrapper(async (req, res) => {
+  const userId = res.locals.user.id;
+
+  // Find all messages where the current user is the receiver, grouped by sender
+  const messages = await Message.findAll({
+    where: {
+      [Op.or]: [{ senderId: userId }, { receiverId: userId }],
+    },
+    include: [
+      { model: Profile, as: "sender" },
+      { model: Profile, as: "receiver" },
+    ],
+    order: [
+      ["isRead", "ASC"], // Unread messages first
+      ["createdAt", "DESC"], // Latest message first
+    ],
+  });
+
+  // Group messages by sender and only keep the latest one
+  const uniqueMessages = [];
+  const seenSenders = new Set();
+
+  messages.forEach((message) => {
+    if (!seenSenders.has(message.senderId)) {
+      uniqueMessages.push(message);
+      seenSenders.add(message.senderId);
+    }
+  });
+
+  if (!uniqueMessages.length) return res.fail("No messages found", NOT_FOUND);
+  res.success(uniqueMessages);
+});
+
 exports.getInbox = asyncWrapper(async (req, res) => {
   const userId = res.locals.user.id;
 
   // Find all messages where the current user is the receiver, grouped by sender
   const messages = await Message.findAll({
-    where: { receiverId: userId },
+    where: { receiverId: userId, isRead: false },
     include: [{ model: Profile, as: "sender" }],
     order: [
       ["isRead", "ASC"], // Unread messages first
