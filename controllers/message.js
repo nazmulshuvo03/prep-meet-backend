@@ -2,7 +2,8 @@ const { Message } = require("../models/message");
 const { Profile } = require("../models/user");
 const asyncWrapper = require("../middlewares/async");
 const { NOT_FOUND, BAD_REQUEST } = require("../constants/errorCodes");
-const { Op } = require("sequelize");
+const { Op, Sequelize } = require("sequelize");
+const { getIo, getSocketUsers } = require("../socket");
 
 exports.sendMessage = asyncWrapper(async (req, res) => {
   const senderId = res.locals.user.id;
@@ -11,6 +12,19 @@ exports.sendMessage = asyncWrapper(async (req, res) => {
     return res.fail("Invalid input data", BAD_REQUEST);
 
   const message = await Message.create({ senderId, receiverId, subject, body });
+  // Fetch the sender's profile
+  const sender = await Profile.findByPk(senderId);
+
+  // Add the sender's profile to the message object
+  message.dataValues.sender = sender;
+
+  const io = getIo();
+  const socketUsers = getSocketUsers();
+  const socketId = socketUsers[receiverId];
+  if (socketId) {
+    io.to(socketId).emit("message", message);
+  }
+
   res.success(message);
 });
 
@@ -34,16 +48,17 @@ exports.getAllMessages = asyncWrapper(async (req, res) => {
 
   // Group messages by sender and only keep the latest one
   const uniqueMessages = [];
-  const seenSenders = new Set();
+  const seenUsers = new Set();
 
   messages.forEach((message) => {
-    if (!seenSenders.has(message.senderId)) {
+    const interactionUserId =
+      message.senderId === userId ? message.receiverId : message.senderId;
+    if (!seenUsers.has(interactionUserId)) {
       uniqueMessages.push(message);
-      seenSenders.add(message.senderId);
+      seenUsers.add(interactionUserId);
     }
   });
 
-  if (!uniqueMessages.length) return res.fail("No messages found", NOT_FOUND);
   res.success(uniqueMessages);
 });
 
@@ -52,7 +67,7 @@ exports.getInbox = asyncWrapper(async (req, res) => {
 
   // Find all messages where the current user is the receiver, grouped by sender
   const messages = await Message.findAll({
-    where: { receiverId: userId, isRead: false },
+    where: { receiverId: userId },
     include: [{ model: Profile, as: "sender" }],
     order: [
       ["isRead", "ASC"], // Unread messages first
@@ -71,8 +86,21 @@ exports.getInbox = asyncWrapper(async (req, res) => {
     }
   });
 
-  if (!uniqueMessages.length) return res.fail("No messages found", NOT_FOUND);
-  res.success(uniqueMessages);
+  // Count unique senders with unread messages
+  const unreadCountResult = await Message.findAll({
+    where: { receiverId: userId, isRead: false },
+    attributes: [
+      [Sequelize.fn("DISTINCT", Sequelize.col("senderId")), "senderId"],
+    ],
+    group: ["senderId"],
+  });
+
+  const unreadCount = unreadCountResult.length;
+
+  res.success({
+    inboxMessages: uniqueMessages,
+    unreadCount,
+  });
 });
 
 exports.getSentMessages = asyncWrapper(async (req, res) => {
