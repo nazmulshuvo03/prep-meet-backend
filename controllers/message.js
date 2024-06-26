@@ -12,11 +12,12 @@ exports.sendMessage = asyncWrapper(async (req, res) => {
     return res.fail("Invalid input data", BAD_REQUEST);
 
   const message = await Message.create({ senderId, receiverId, subject, body });
-  // Fetch the sender's profile
-  const sender = await Profile.findByPk(senderId);
 
-  // Add the sender's profile to the message object
+  const sender = await Profile.findByPk(senderId);
   message.dataValues.sender = sender;
+
+  const receiver = await Profile.findByPk(receiverId);
+  message.dataValues.receiver = receiver;
 
   const io = getIo();
   const socketUsers = getSocketUsers();
@@ -68,7 +69,10 @@ exports.getInbox = asyncWrapper(async (req, res) => {
   // Find all messages where the current user is the receiver, grouped by sender
   const messages = await Message.findAll({
     where: { receiverId: userId },
-    include: [{ model: Profile, as: "sender" }],
+    include: [
+      { model: Profile, as: "sender" },
+      { model: Profile, as: "receiver" },
+    ],
     order: [
       ["isRead", "ASC"], // Unread messages first
       ["createdAt", "DESC"], // Latest message first
