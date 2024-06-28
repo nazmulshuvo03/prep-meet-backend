@@ -6,6 +6,7 @@ const socketUsers = {};
 
 const initSocket = (server) => {
   io = socketIo(server, {
+    path: "/api/socket.io",
     cors: corsOptions,
   });
 
