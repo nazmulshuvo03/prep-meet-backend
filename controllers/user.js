@@ -185,9 +185,11 @@ const getSingleUserProfile = asyncWrapper(async (req, res) => {
   if (!userId) return res.fail("Invalid user ID", BAD_REQUEST);
 
   const user = await _getUserProfile(userId);
-
   if (!user) return res.fail("User data not found", NOT_FOUND);
-  res.success(user);
+
+  const completionStatus = await profileCompletionStatus(userId);
+
+  res.success({ ...user.dataValues, completionStatus });
 });
 
 const updateUserProfile = asyncWrapper(async (req, res) => {
